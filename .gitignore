@@ -45,3 +45,9 @@ app.*.map.json
 android/key.properties
 android/local.properties
 android/app/key.jks
+
+# Analysis documentation (generated)
+/docs/
+
+# Claude flow files
+.claude-flow/

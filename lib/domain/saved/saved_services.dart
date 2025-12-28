@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fluxtube/domain/core/failure/main_failure.dart';
 import 'package:fluxtube/domain/saved/models/local_store.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 abstract class SavedServices {
   Future<Either<MainFailure, List<LocalStoreVideoInfo>>> addVideoInfo(

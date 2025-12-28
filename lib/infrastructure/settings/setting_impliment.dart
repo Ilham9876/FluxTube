@@ -11,7 +11,7 @@ import 'package:fluxtube/domain/settings/models/settings_db.dart';
 import 'package:fluxtube/domain/settings/settings_service.dart';
 import 'package:fluxtube/domain/subscribes/models/subscribe.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../core/settings.dart';

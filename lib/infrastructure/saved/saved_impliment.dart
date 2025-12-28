@@ -4,7 +4,7 @@ import 'package:fluxtube/domain/saved/models/local_store.dart';
 import 'package:fluxtube/domain/saved/saved_services.dart';
 import 'package:fluxtube/infrastructure/settings/setting_impliment.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 @LazySingleton(as: SavedServices)
 class SavedImplimentation extends SavedServices {

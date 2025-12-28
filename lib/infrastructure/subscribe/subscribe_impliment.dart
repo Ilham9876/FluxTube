@@ -3,7 +3,7 @@ import 'package:fluxtube/domain/core/failure/main_failure.dart';
 import 'package:fluxtube/domain/subscribes/models/subscribe.dart';
 import 'package:fluxtube/domain/subscribes/subscribe_services.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 import '../settings/setting_impliment.dart';
 
