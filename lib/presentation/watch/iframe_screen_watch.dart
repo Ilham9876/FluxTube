@@ -22,37 +22,41 @@ class IFramScreenWatch extends StatefulWidget {
 
 class _IFramScreenWatchState extends State<IFramScreenWatch> {
   @override
-  Widget build(BuildContext context) {
-    BlocProvider.of<WatchBloc>(context).add(WatchEvent.togglePip(value: false));
-    BlocProvider.of<SavedBloc>(context)
-        .add(const SavedEvent.getAllVideoInfoList());
-    BlocProvider.of<SavedBloc>(context)
-        .add(SavedEvent.checkVideoInfo(id: widget.id));
-    BlocProvider.of<SubscribeBloc>(context)
-        .add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId));
+  void initState() {
+    super.initState();
+    // Dispatch events once when screen initializes
+    final watchBloc = BlocProvider.of<WatchBloc>(context);
+    final savedBloc = BlocProvider.of<SavedBloc>(context);
+    final subscribeBloc = BlocProvider.of<SubscribeBloc>(context);
 
+    watchBloc.add(WatchEvent.togglePip(value: false));
+    watchBloc.add(WatchEvent.getExplodeWatchInfo(id: widget.id));
+    watchBloc.add(WatchEvent.getExplodeMuxStreamInfo(id: widget.id));
+    watchBloc.add(WatchEvent.getExplodeRelatedVideoInfo(id: widget.id));
+    watchBloc.add(WatchEvent.getSubtitles(id: widget.id));
+
+    savedBloc.add(const SavedEvent.getAllVideoInfoList());
+    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id));
+    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, settingsState) {
       return BlocBuilder<WatchBloc, WatchState>(buildWhen: (previous, current) {
         return previous.fetchExplodeWatchInfoStatus !=
                 current.fetchExplodeWatchInfoStatus ||
-            previous.fetchSubtitlesStatus != current.fetchSubtitlesStatus;
+            previous.fetchSubtitlesStatus != current.fetchSubtitlesStatus ||
+            previous.explodeWatchResp != current.explodeWatchResp;
       }, builder: (context, state) {
         return BlocBuilder<SavedBloc, SavedState>(
+          buildWhen: (previous, current) =>
+              previous.videoInfo?.id != current.videoInfo?.id ||
+              previous.videoInfo?.isSaved != current.videoInfo?.isSaved ||
+              previous.videoInfo?.playbackPosition !=
+                  current.videoInfo?.playbackPosition,
           builder: (context, savedState) {
-            if ((state.oldId != widget.id || state.oldId == null) &&
-                !(state.fetchExplodeWatchInfoStatus == ApiStatus.error ||
-                    state.fetchExplodeWatchInfoStatus == ApiStatus.loading)) {
-              BlocProvider.of<WatchBloc>(context)
-                  .add(WatchEvent.getExplodeWatchInfo(id: widget.id));
-              BlocProvider.of<WatchBloc>(context)
-                  .add(WatchEvent.getExplodeMuxStreamInfo(id: widget.id));
-              BlocProvider.of<WatchBloc>(context)
-                  .add(WatchEvent.getExplodeRelatedVideoInfo(id: widget.id));
-              BlocProvider.of<WatchBloc>(context)
-                  .add(WatchEvent.getSubtitles(id: widget.id));
-            }
-
             bool isSaved = (savedState.videoInfo?.id == widget.id &&
                     savedState.videoInfo?.isSaved == true)
                 ? true

@@ -115,19 +115,36 @@ class _InvidiousVideoPlayerWidgetState
   }
 
   void _setupPlayer(int startPosition) {
-    if (selectedVideoTrack == null && !widget.isHlsPlayer) {
+    // Determine video URL with proper null safety
+    String? videoUrl;
+    BetterPlayerVideoFormat videoFormat = BetterPlayerVideoFormat.other;
+
+    if (widget.isHlsPlayer && widget.watchInfo.dashUrl != null) {
+      // Use DASH/HLS stream if enabled and available
+      videoUrl = widget.watchInfo.dashUrl;
+      videoFormat = BetterPlayerVideoFormat.hls;
+    } else if (selectedVideoTrack?.url != null) {
+      // Use direct stream if available
+      videoUrl = selectedVideoTrack!.url;
+      videoFormat = BetterPlayerVideoFormat.other;
+    } else if (widget.watchInfo.dashUrl != null) {
+      // Fallback to DASH if direct stream unavailable
+      videoUrl = widget.watchInfo.dashUrl;
+      videoFormat = BetterPlayerVideoFormat.hls;
+    }
+
+    // No playable stream found
+    if (videoUrl == null) {
       _showNoVideoAvailableToast();
       return;
     }
 
     betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      widget.isHlsPlayer ? widget.watchInfo.dashUrl! : selectedVideoTrack!.url!,
+      videoUrl,
       subtitles: _createSubtitles(),
       liveStream: widget.watchInfo.liveNow,
-      videoFormat: widget.isHlsPlayer
-          ? BetterPlayerVideoFormat.hls
-          : BetterPlayerVideoFormat.other,
+      videoFormat: videoFormat,
       // cacheConfiguration: const BetterPlayerCacheConfiguration(
       //   useCache: true,
       //   preCacheSize: 10 * 1024 * 1024, // 10 MB

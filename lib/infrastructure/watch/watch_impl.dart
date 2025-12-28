@@ -16,6 +16,30 @@ import '../../domain/core/api_end_points.dart';
 
 @LazySingleton(as: WatchService)
 class WatchImpl implements WatchService {
+  /// Maps DioException to specific MainFailure types for better error handling
+  MainFailure _mapDioExceptionToFailure(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return MainFailure.timeout(message: e.message);
+      case DioExceptionType.connectionError:
+        return MainFailure.networkError(message: e.message);
+      case DioExceptionType.badResponse:
+        final statusCode = e.response?.statusCode;
+        if (statusCode == 404) {
+          return const MainFailure.notFound();
+        } else if (statusCode == 429) {
+          return const MainFailure.rateLimited();
+        }
+        return MainFailure.serverError(statusCode: statusCode, message: e.message);
+      case DioExceptionType.cancel:
+        return MainFailure.unknown(message: 'Request cancelled');
+      default:
+        return MainFailure.unknown(message: e.message);
+    }
+  }
+
   //Piped
 
   ///[getVideoData] used to fetch video data from Piped.
@@ -37,13 +61,24 @@ class WatchImpl implements WatchService {
         final WatchResp result = WatchResp.fromJson(response.data);
 
         return Right(result);
+      } else if (response.statusCode == 404) {
+        log('Video not found: $id');
+        return Left(MainFailure.notFound(resource: 'video $id'));
+      } else if (response.statusCode == 429) {
+        log('Rate limited on getVideoData');
+        return const Left(MainFailure.rateLimited());
       } else {
         log('Err on getVideoData: ${response.statusCode}');
-        return const Left(MainFailure.serverFailure());
+        return Left(MainFailure.serverError(
+            statusCode: response.statusCode,
+            message: 'Failed to load video'));
       }
+    } on DioException catch (e) {
+      log('Err on getVideoData: $e');
+      return Left(_mapDioExceptionToFailure(e));
     } catch (e) {
       log('Err on getVideoData: $e');
-      return const Left(MainFailure.clientFailure());
+      return Left(MainFailure.unknown(message: e.toString()));
     } finally {
       dioClient.close();
     }
@@ -303,13 +338,24 @@ class WatchImpl implements WatchService {
             InvidiousWatchResp.fromJson(response.data);
 
         return Right(result);
+      } else if (response.statusCode == 404) {
+        log('Video not found: $id');
+        return Left(MainFailure.notFound(resource: 'video $id'));
+      } else if (response.statusCode == 429) {
+        log('Rate limited on getInvidiousVideoData');
+        return const Left(MainFailure.rateLimited());
       } else {
         log('Err on getInvidiousVideoData: ${response.statusCode}');
-        return const Left(MainFailure.serverFailure());
+        return Left(MainFailure.serverError(
+            statusCode: response.statusCode,
+            message: 'Failed to load video'));
       }
+    } on DioException catch (e) {
+      log('Err on getInvidiousVideoData: $e');
+      return Left(_mapDioExceptionToFailure(e));
     } catch (e) {
       log('Err on getInvidiousVideoData: $e');
-      return const Left(MainFailure.clientFailure());
+      return Left(MainFailure.unknown(message: e.toString()));
     } finally {
       dioClient.close();
     }

@@ -59,7 +59,7 @@ class _ExplodeVideoPlayerWidget extends State<ExplodeVideoPlayerWidget>
   @override
   void dispose() {
     _updateVideoHistory();
-    //_betterPlayerController?.dispose();
+    _betterPlayerController?.dispose();
     super.dispose();
   }
 
@@ -126,19 +126,32 @@ class _ExplodeVideoPlayerWidget extends State<ExplodeVideoPlayerWidget>
   }
 
   void _setupPlayer(int startPosition) {
-    if (selectedVideoTrack == null && !widget.watchInfo.isLive) {
+    // Determine video URL with proper null safety
+    String? videoUrl;
+    BetterPlayerVideoFormat videoFormat = BetterPlayerVideoFormat.other;
+
+    if (widget.watchInfo.isLive && widget.liveUrl != null) {
+      // Use live stream URL if available
+      videoUrl = widget.liveUrl;
+      videoFormat = BetterPlayerVideoFormat.hls;
+    } else if (selectedVideoTrack != null) {
+      // Use selected video track for non-live content
+      videoUrl = selectedVideoTrack!.url;
+      videoFormat = BetterPlayerVideoFormat.other;
+    }
+
+    // No playable stream found
+    if (videoUrl == null) {
       _showNoVideoAvailableToast();
       return;
     }
 
     betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      widget.watchInfo.isLive ? widget.liveUrl! : selectedVideoTrack!.url,
+      videoUrl,
       subtitles: _createSubtitles(),
       liveStream: widget.watchInfo.isLive,
-      videoFormat: widget.watchInfo.isLive
-          ? BetterPlayerVideoFormat.hls
-          : BetterPlayerVideoFormat.other,
+      videoFormat: videoFormat,
       // cacheConfiguration: const BetterPlayerCacheConfiguration(
       //   useCache: true,
       //   preCacheSize: 10 * 1024 * 1024, // 10 MB

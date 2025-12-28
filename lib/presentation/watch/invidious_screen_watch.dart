@@ -16,7 +16,7 @@ import 'widgets/invidious/related_video_section.dart';
 import 'widgets/invidious/subscribe_section.dart';
 import 'widgets/invidious/video_player_widget.dart';
 
-class InvidiousScreenWatch extends StatelessWidget {
+class InvidiousScreenWatch extends StatefulWidget {
   const InvidiousScreenWatch({
     super.key,
     required this.id,
@@ -27,17 +27,31 @@ class InvidiousScreenWatch extends StatelessWidget {
   final String channelId;
 
   @override
+  State<InvidiousScreenWatch> createState() => _InvidiousScreenWatchState();
+}
+
+class _InvidiousScreenWatchState extends State<InvidiousScreenWatch> {
+  @override
+  void initState() {
+    super.initState();
+    // Dispatch events once when screen initializes
+    final watchBloc = BlocProvider.of<WatchBloc>(context);
+    final savedBloc = BlocProvider.of<SavedBloc>(context);
+    final subscribeBloc = BlocProvider.of<SubscribeBloc>(context);
+
+    watchBloc.add(WatchEvent.togglePip(value: false));
+    watchBloc.add(WatchEvent.getInvidiousWatchInfo(id: widget.id));
+    watchBloc.add(WatchEvent.getSubtitles(id: widget.id));
+
+    savedBloc.add(const SavedEvent.getAllVideoInfoList());
+    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id));
+    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final locals = S.of(context);
-    final double _height = MediaQuery.of(context).size.height;
-
-    BlocProvider.of<WatchBloc>(context).add(WatchEvent.togglePip(value: false));
-
-    BlocProvider.of<SavedBloc>(context)
-        .add(const SavedEvent.getAllVideoInfoList());
-    BlocProvider.of<SavedBloc>(context).add(SavedEvent.checkVideoInfo(id: id));
-    BlocProvider.of<SubscribeBloc>(context)
-        .add(SubscribeEvent.checkSubscribeInfo(id: channelId));
+    final double height = MediaQuery.of(context).size.height;
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       buildWhen: (previous, current) =>
@@ -48,45 +62,36 @@ class InvidiousScreenWatch extends StatelessWidget {
       builder: (context, settingsState) {
         return BlocBuilder<WatchBloc, WatchState>(
           buildWhen: (previous, current) =>
-              previous.fetchInvidiousWatchInfoStatus != current.fetchInvidiousWatchInfoStatus ||
+              previous.fetchInvidiousWatchInfoStatus !=
+                  current.fetchInvidiousWatchInfoStatus ||
               previous.fetchSubtitlesStatus != current.fetchSubtitlesStatus ||
               previous.invidiousWatchResp != current.invidiousWatchResp ||
               previous.isDescriptionTapped != current.isDescriptionTapped ||
               previous.isTapComments != current.isTapComments ||
-              previous.subtitles != current.subtitles ||
-              previous.oldId != current.oldId ||
-              previous.selectedVideoBasicDetails != current.selectedVideoBasicDetails,
+              previous.subtitles != current.subtitles,
           builder: (context, state) {
             return BlocBuilder<SavedBloc, SavedState>(
               buildWhen: (previous, current) =>
                   previous.videoInfo?.id != current.videoInfo?.id ||
                   previous.videoInfo?.isSaved != current.videoInfo?.isSaved ||
-                  previous.videoInfo?.playbackPosition != current.videoInfo?.playbackPosition,
+                  previous.videoInfo?.playbackPosition !=
+                      current.videoInfo?.playbackPosition,
               builder: (context, savedState) {
-                if ((state.oldId != id || state.oldId == null) &&
-                    !(state.fetchInvidiousWatchInfoStatus ==
-                            ApiStatus.loading ||
-                        state.fetchInvidiousWatchInfoStatus ==
-                            ApiStatus.error)) {
-                  BlocProvider.of<WatchBloc>(context)
-                      .add(WatchEvent.getInvidiousWatchInfo(id: id));
-                  BlocProvider.of<WatchBloc>(context)
-                      .add(WatchEvent.getSubtitles(id: id));
-                }
-
                 final watchInfo = state.invidiousWatchResp;
 
-                bool isSaved = (savedState.videoInfo?.id == id &&
+                bool isSaved = (savedState.videoInfo?.id == widget.id &&
                         savedState.videoInfo?.isSaved == true)
                     ? true
                     : false;
 
                 if (state.fetchInvidiousWatchInfoStatus == ApiStatus.error ||
-                    (settingsState.isHlsPlayer && watchInfo.dashUrl == null)) {
+                    (state.fetchInvidiousWatchInfoStatus == ApiStatus.loaded &&
+                        settingsState.isHlsPlayer &&
+                        watchInfo.dashUrl == null)) {
                   return ErrorRetryWidget(
                     lottie: 'assets/cat-404.zip',
                     onTap: () => BlocProvider.of<WatchBloc>(context)
-                        .add(WatchEvent.getInvidiousWatchInfo(id: id)),
+                        .add(WatchEvent.getInvidiousWatchInfo(id: widget.id)),
                   );
                 } else {
                   return DismissiblePage(
@@ -99,7 +104,7 @@ class InvidiousScreenWatch extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     isFullScreen: true,
-                    key: ValueKey(id),
+                    key: ValueKey(widget.id),
                     child: PopScope(
                       canPop: true,
                       onPopInvokedWithResult: (didPop, _) {
@@ -128,7 +133,7 @@ class InvidiousScreenWatch extends StatelessWidget {
                                         ),
                                       )
                                     : InvidiousVideoPlayerWidget(
-                                        videoId: id,
+                                        videoId: widget.id,
                                         watchInfo: state.invidiousWatchResp,
                                         defaultQuality:
                                             settingsState.defaultQuality,
@@ -202,7 +207,7 @@ class InvidiousScreenWatch extends StatelessWidget {
                                                   ApiStatus.loading)
                                           ? const ShimmerLikeWidget()
                                           : InvidiousLikeSection(
-                                              id: id,
+                                              id: widget.id,
                                               state: state,
                                               watchInfo: watchInfo,
                                               pipClicked: () {
@@ -234,7 +239,7 @@ class InvidiousScreenWatch extends StatelessWidget {
                                       // * description
                                       state.isDescriptionTapped
                                           ? InvidiousDescriptionSection(
-                                              height: _height,
+                                              height: height,
                                               watchInfo: watchInfo,
                                               locals: locals)
                                           :
@@ -270,9 +275,9 @@ class InvidiousScreenWatch extends StatelessWidget {
                                                           watchInfo: watchInfo)
                                               //comments section
                                               : InvidiousCommentSection(
-                                                  videoId: id,
+                                                  videoId: widget.id,
                                                   state: state,
-                                                  height: _height,
+                                                  height: height,
                                                   locals: locals,
                                                 ),
                                     ],

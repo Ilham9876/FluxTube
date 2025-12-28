@@ -119,19 +119,36 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   void _setupPlayer(int startPosition) {
-    if (selectedVideoTrack == null && !widget.isHlsPlayer) {
+    // Determine video URL with proper null safety
+    String? videoUrl;
+    BetterPlayerVideoFormat videoFormat = BetterPlayerVideoFormat.other;
+
+    if (widget.isHlsPlayer && widget.watchInfo.hls != null) {
+      // Use HLS stream if enabled and available
+      videoUrl = widget.watchInfo.hls;
+      videoFormat = BetterPlayerVideoFormat.hls;
+    } else if (selectedVideoTrack?.url != null) {
+      // Use direct stream if available
+      videoUrl = selectedVideoTrack!.url;
+      videoFormat = BetterPlayerVideoFormat.other;
+    } else if (widget.watchInfo.hls != null) {
+      // Fallback to HLS if direct stream unavailable
+      videoUrl = widget.watchInfo.hls;
+      videoFormat = BetterPlayerVideoFormat.hls;
+    }
+
+    // No playable stream found
+    if (videoUrl == null) {
       _showNoVideoAvailableToast();
       return;
     }
 
     betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      widget.isHlsPlayer ? widget.watchInfo.hls! : selectedVideoTrack!.url!,
+      videoUrl,
       subtitles: _createSubtitles(),
       liveStream: widget.watchInfo.livestream,
-      videoFormat: widget.isHlsPlayer
-          ? BetterPlayerVideoFormat.hls
-          : BetterPlayerVideoFormat.other,
+      videoFormat: videoFormat,
       // cacheConfiguration: const BetterPlayerCacheConfiguration(
       //   useCache: true,
       //   preCacheSize: 10 * 1024 * 1024, // 10 MB

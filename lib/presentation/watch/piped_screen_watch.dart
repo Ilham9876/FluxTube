@@ -12,7 +12,7 @@ import 'package:fluxtube/widgets/widgets.dart';
 import 'widgets/sections/sections.dart';
 import 'widgets/widgets.dart';
 
-class PipedScreenWatch extends StatelessWidget {
+class PipedScreenWatch extends StatefulWidget {
   const PipedScreenWatch({
     super.key,
     required this.id,
@@ -23,17 +23,31 @@ class PipedScreenWatch extends StatelessWidget {
   final String channelId;
 
   @override
+  State<PipedScreenWatch> createState() => _PipedScreenWatchState();
+}
+
+class _PipedScreenWatchState extends State<PipedScreenWatch> {
+  @override
+  void initState() {
+    super.initState();
+    // Dispatch events once when screen initializes
+    final watchBloc = BlocProvider.of<WatchBloc>(context);
+    final savedBloc = BlocProvider.of<SavedBloc>(context);
+    final subscribeBloc = BlocProvider.of<SubscribeBloc>(context);
+
+    watchBloc.add(WatchEvent.togglePip(value: false));
+    watchBloc.add(WatchEvent.getWatchInfo(id: widget.id));
+    watchBloc.add(WatchEvent.getSubtitles(id: widget.id));
+
+    savedBloc.add(const SavedEvent.getAllVideoInfoList());
+    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id));
+    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final locals = S.of(context);
-    final double _height = MediaQuery.of(context).size.height;
-
-    BlocProvider.of<WatchBloc>(context).add(WatchEvent.togglePip(value: false));
-
-    BlocProvider.of<SavedBloc>(context)
-        .add(const SavedEvent.getAllVideoInfoList());
-    BlocProvider.of<SavedBloc>(context).add(SavedEvent.checkVideoInfo(id: id));
-    BlocProvider.of<SubscribeBloc>(context)
-        .add(SubscribeEvent.checkSubscribeInfo(id: channelId));
+    final double height = MediaQuery.of(context).size.height;
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       buildWhen: (previous, current) =>
@@ -49,38 +63,30 @@ class PipedScreenWatch extends StatelessWidget {
               previous.watchResp != current.watchResp ||
               previous.isDescriptionTapped != current.isDescriptionTapped ||
               previous.isTapComments != current.isTapComments ||
-              previous.subtitles != current.subtitles ||
-              previous.oldId != current.oldId ||
-              previous.selectedVideoBasicDetails != current.selectedVideoBasicDetails,
+              previous.subtitles != current.subtitles,
           builder: (context, state) {
             return BlocBuilder<SavedBloc, SavedState>(
               buildWhen: (previous, current) =>
                   previous.videoInfo?.id != current.videoInfo?.id ||
                   previous.videoInfo?.isSaved != current.videoInfo?.isSaved ||
-                  previous.videoInfo?.playbackPosition != current.videoInfo?.playbackPosition,
+                  previous.videoInfo?.playbackPosition !=
+                      current.videoInfo?.playbackPosition,
               builder: (context, savedState) {
-                if ((state.oldId != id || state.oldId == null) &&
-                    !(state.fetchWatchInfoStatus == ApiStatus.loading ||
-                        state.fetchWatchInfoStatus == ApiStatus.error)) {
-                  BlocProvider.of<WatchBloc>(context)
-                      .add(WatchEvent.getWatchInfo(id: id));
-                  BlocProvider.of<WatchBloc>(context)
-                      .add(WatchEvent.getSubtitles(id: id));
-                }
-
                 final watchInfo = state.watchResp;
 
-                bool isSaved = (savedState.videoInfo?.id == id &&
+                bool isSaved = (savedState.videoInfo?.id == widget.id &&
                         savedState.videoInfo?.isSaved == true)
                     ? true
                     : false;
 
                 if (state.fetchWatchInfoStatus == ApiStatus.error ||
-                    (settingsState.isHlsPlayer && watchInfo.hls == null)) {
+                    (state.fetchWatchInfoStatus == ApiStatus.loaded &&
+                        settingsState.isHlsPlayer &&
+                        watchInfo.hls == null)) {
                   return ErrorRetryWidget(
                     lottie: 'assets/cat-404.zip',
                     onTap: () => BlocProvider.of<WatchBloc>(context)
-                        .add(WatchEvent.getWatchInfo(id: id)),
+                        .add(WatchEvent.getWatchInfo(id: widget.id)),
                   );
                 } else {
                   return DismissiblePage(
@@ -93,7 +99,7 @@ class PipedScreenWatch extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     isFullScreen: true,
-                    key: ValueKey(id),
+                    key: ValueKey(widget.id),
                     child: PopScope(
                       canPop: true,
                       onPopInvokedWithResult: (didPop, _) {
@@ -122,7 +128,7 @@ class PipedScreenWatch extends StatelessWidget {
                                         ),
                                       )
                                     : VideoPlayerWidget(
-                                        videoId: id,
+                                        videoId: widget.id,
                                         watchInfo: state.watchResp,
                                         defaultQuality:
                                             settingsState.defaultQuality,
@@ -196,7 +202,7 @@ class PipedScreenWatch extends StatelessWidget {
                                                   ApiStatus.loading)
                                           ? const ShimmerLikeWidget()
                                           : LikeSection(
-                                              id: id,
+                                              id: widget.id,
                                               state: state,
                                               watchInfo: watchInfo,
                                               pipClicked: () {
@@ -228,7 +234,7 @@ class PipedScreenWatch extends StatelessWidget {
                                       // * description
                                       state.isDescriptionTapped
                                           ? DescriptionSection(
-                                              height: _height,
+                                              height: height,
                                               watchInfo: watchInfo,
                                               locals: locals)
                                           :
@@ -264,9 +270,9 @@ class PipedScreenWatch extends StatelessWidget {
                                                           watchInfo: watchInfo)
                                               //comments section
                                               : CommentSection(
-                                                  videoId: id,
+                                                  videoId: widget.id,
                                                   state: state,
-                                                  height: _height,
+                                                  height: height,
                                                   locals: locals,
                                                 ),
                                     ],
