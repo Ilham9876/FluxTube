@@ -95,14 +95,27 @@ class VideoSettingsSecction extends StatelessWidget {
                       .firstWhere((e) => e.name == state.ytService),
                   items: _services,
                   onChanged: (service) {
+                    if (service == null) return;
+                    final oldService = state.ytService;
                     BlocProvider.of<SettingsBloc>(context)
-                        .add(SettingsEvent.setYTService(service: service!));
-                    if (state.ytService != YouTubeServices.invidious.name) {
-                      BlocProvider.of<SettingsBloc>(context)
-                          .add(SettingsEvent.fetchPipedInstances());
-                    } else {
+                        .add(SettingsEvent.setYTService(service: service));
+
+                    if (service == YouTubeServices.invidious) {
                       BlocProvider.of<SettingsBloc>(context)
                           .add(SettingsEvent.fetchInvidiousInstances());
+                    } else {
+                      BlocProvider.of<SettingsBloc>(context)
+                          .add(SettingsEvent.fetchPipedInstances());
+                    }
+
+                    if (oldService != service.name) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Switched to ${service.name.toUpperCase()} service'),
+                          duration: const Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     }
                   }),
             ),

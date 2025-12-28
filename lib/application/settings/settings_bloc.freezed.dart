@@ -3273,7 +3273,10 @@ mixin _$SettingsState {
   bool get isPipDisabled =>
       throw _privateConstructorUsedError; // Connection status tracking for UI feedback
   String? get connectingToInstance => throw _privateConstructorUsedError;
-  bool get isTestingConnection => throw _privateConstructorUsedError;
+  bool get isTestingConnection =>
+      throw _privateConstructorUsedError; // Track if user's preferred instance failed (for showing snackbar)
+  bool get userInstanceFailed => throw _privateConstructorUsedError;
+  String? get failedInstanceName => throw _privateConstructorUsedError;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -3309,7 +3312,9 @@ abstract class $SettingsStateCopyWith<$Res> {
       ApiStatus settingsStatus,
       bool isPipDisabled,
       String? connectingToInstance,
-      bool isTestingConnection});
+      bool isTestingConnection,
+      bool userInstanceFailed,
+      String? failedInstanceName});
 }
 
 /// @nodoc
@@ -3348,6 +3353,8 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? isPipDisabled = null,
     Object? connectingToInstance = freezed,
     Object? isTestingConnection = null,
+    Object? userInstanceFailed = null,
+    Object? failedInstanceName = freezed,
   }) {
     return _then(_value.copyWith(
       defaultLanguage: null == defaultLanguage
@@ -3434,6 +3441,14 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.isTestingConnection
           : isTestingConnection // ignore: cast_nullable_to_non_nullable
               as bool,
+      userInstanceFailed: null == userInstanceFailed
+          ? _value.userInstanceFailed
+          : userInstanceFailed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      failedInstanceName: freezed == failedInstanceName
+          ? _value.failedInstanceName
+          : failedInstanceName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -3467,7 +3482,9 @@ abstract class _$$InitialImplCopyWith<$Res>
       ApiStatus settingsStatus,
       bool isPipDisabled,
       String? connectingToInstance,
-      bool isTestingConnection});
+      bool isTestingConnection,
+      bool userInstanceFailed,
+      String? failedInstanceName});
 }
 
 /// @nodoc
@@ -3504,6 +3521,8 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? isPipDisabled = null,
     Object? connectingToInstance = freezed,
     Object? isTestingConnection = null,
+    Object? userInstanceFailed = null,
+    Object? failedInstanceName = freezed,
   }) {
     return _then(_$InitialImpl(
       defaultLanguage: null == defaultLanguage
@@ -3590,6 +3609,14 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.isTestingConnection
           : isTestingConnection // ignore: cast_nullable_to_non_nullable
               as bool,
+      userInstanceFailed: null == userInstanceFailed
+          ? _value.userInstanceFailed
+          : userInstanceFailed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      failedInstanceName: freezed == failedInstanceName
+          ? _value.failedInstanceName
+          : failedInstanceName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -3618,7 +3645,9 @@ class _$InitialImpl implements _Initial {
       required this.settingsStatus,
       required this.isPipDisabled,
       required this.connectingToInstance,
-      required this.isTestingConnection})
+      required this.isTestingConnection,
+      required this.userInstanceFailed,
+      required this.failedInstanceName})
       : _pipedInstances = pipedInstances,
         _invidiousInstances = invidiousInstances;
 
@@ -3678,10 +3707,15 @@ class _$InitialImpl implements _Initial {
   final String? connectingToInstance;
   @override
   final bool isTestingConnection;
+// Track if user's preferred instance failed (for showing snackbar)
+  @override
+  final bool userInstanceFailed;
+  @override
+  final String? failedInstanceName;
 
   @override
   String toString() {
-    return 'SettingsState(defaultLanguage: $defaultLanguage, defaultQuality: $defaultQuality, defaultRegion: $defaultRegion, themeMode: $themeMode, version: $version, isHistoryVisible: $isHistoryVisible, isDislikeVisible: $isDislikeVisible, isHlsPlayer: $isHlsPlayer, isHideComments: $isHideComments, isHideRelated: $isHideRelated, pipedInstances: $pipedInstances, pipedInstanceStatus: $pipedInstanceStatus, instance: $instance, invidiousInstances: $invidiousInstances, invidiousInstanceStatus: $invidiousInstanceStatus, ytService: $ytService, initialized: $initialized, settingsStatus: $settingsStatus, isPipDisabled: $isPipDisabled, connectingToInstance: $connectingToInstance, isTestingConnection: $isTestingConnection)';
+    return 'SettingsState(defaultLanguage: $defaultLanguage, defaultQuality: $defaultQuality, defaultRegion: $defaultRegion, themeMode: $themeMode, version: $version, isHistoryVisible: $isHistoryVisible, isDislikeVisible: $isDislikeVisible, isHlsPlayer: $isHlsPlayer, isHideComments: $isHideComments, isHideRelated: $isHideRelated, pipedInstances: $pipedInstances, pipedInstanceStatus: $pipedInstanceStatus, instance: $instance, invidiousInstances: $invidiousInstances, invidiousInstanceStatus: $invidiousInstanceStatus, ytService: $ytService, initialized: $initialized, settingsStatus: $settingsStatus, isPipDisabled: $isPipDisabled, connectingToInstance: $connectingToInstance, isTestingConnection: $isTestingConnection, userInstanceFailed: $userInstanceFailed, failedInstanceName: $failedInstanceName)';
   }
 
   @override
@@ -3730,7 +3764,11 @@ class _$InitialImpl implements _Initial {
             (identical(other.connectingToInstance, connectingToInstance) ||
                 other.connectingToInstance == connectingToInstance) &&
             (identical(other.isTestingConnection, isTestingConnection) ||
-                other.isTestingConnection == isTestingConnection));
+                other.isTestingConnection == isTestingConnection) &&
+            (identical(other.userInstanceFailed, userInstanceFailed) ||
+                other.userInstanceFailed == userInstanceFailed) &&
+            (identical(other.failedInstanceName, failedInstanceName) ||
+                other.failedInstanceName == failedInstanceName));
   }
 
   @override
@@ -3756,7 +3794,9 @@ class _$InitialImpl implements _Initial {
         settingsStatus,
         isPipDisabled,
         connectingToInstance,
-        isTestingConnection
+        isTestingConnection,
+        userInstanceFailed,
+        failedInstanceName
       ]);
 
   /// Create a copy of SettingsState
@@ -3790,7 +3830,9 @@ abstract class _Initial implements SettingsState {
       required final ApiStatus settingsStatus,
       required final bool isPipDisabled,
       required final String? connectingToInstance,
-      required final bool isTestingConnection}) = _$InitialImpl;
+      required final bool isTestingConnection,
+      required final bool userInstanceFailed,
+      required final String? failedInstanceName}) = _$InitialImpl;
 
   @override
   String get defaultLanguage;
@@ -3833,7 +3875,12 @@ abstract class _Initial implements SettingsState {
   @override
   String? get connectingToInstance;
   @override
-  bool get isTestingConnection;
+  bool
+      get isTestingConnection; // Track if user's preferred instance failed (for showing snackbar)
+  @override
+  bool get userInstanceFailed;
+  @override
+  String? get failedInstanceName;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

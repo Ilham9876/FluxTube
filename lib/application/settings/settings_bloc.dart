@@ -214,11 +214,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (state.pipedInstances.isNotEmpty) {
         return emit(state);
       }
+
+      // Store user's preferred instance to check if it fails
+      final userPreferredInstance = state.instance;
+      String? userPreferredInstanceName;
+
       emit(state.copyWith(
         pipedInstanceStatus: ApiStatus.loading,
         isTestingConnection: true,
         connectingToInstance: 'Fetching instances...',
+        userInstanceFailed: false,
+        failedInstanceName: null,
       ));
+
       final _result = await settingsService.fetchInstances();
 
       if (_result.isLeft()) {
@@ -233,12 +241,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       final instances = _result.getOrElse(() => []);
 
+      // Find the name of user's preferred instance
+      final preferredInst = instances.where((i) => i.api == userPreferredInstance).firstOrNull;
+      userPreferredInstanceName = preferredInst?.name;
+
       if (state.ytService != YouTubeServices.invidious.name) {
-        // Try to find a working instance with status updates
+        // Try user's preferred instance first, then find other working instances
         final workingInstanceResult = await settingsService.findWorkingPipedInstance(
           instances: instances,
+          preferredInstanceApi: userPreferredInstance,
           onTestingInstance: (instanceName) {
-            // Emit state update for each instance being tested
             emit(state.copyWith(
               pipedInstanceStatus: ApiStatus.loading,
               pipedInstances: instances,
@@ -248,25 +260,34 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           },
         );
 
-        final String workingInstanceApi = workingInstanceResult.fold(
+        final workingResult = workingInstanceResult.fold(
           (failure) {
             log('No working piped instance found, using first available');
-            return instances.isNotEmpty ? instances.first.api : state.instance;
+            return (
+              api: instances.isNotEmpty ? instances.first.api : state.instance,
+              found: false,
+              userFailed: true,
+            );
           },
           (workingApi) {
             log('Found working piped instance: $workingApi');
-            return workingApi;
+            // Check if user's preferred instance failed (working instance is different)
+            final userFailed = userPreferredInstance.isNotEmpty &&
+                workingApi != userPreferredInstance;
+            return (api: workingApi, found: true, userFailed: userFailed);
           },
         );
 
-        BaseUrl.updateBaseUrl(workingInstanceApi);
+        BaseUrl.updateBaseUrl(workingResult.api);
 
         emit(state.copyWith(
-          pipedInstanceStatus: ApiStatus.loaded,
+          pipedInstanceStatus: workingResult.found ? ApiStatus.loaded : ApiStatus.error,
           pipedInstances: instances,
-          instance: workingInstanceApi,
+          instance: workingResult.api,
           isTestingConnection: false,
           connectingToInstance: null,
+          userInstanceFailed: workingResult.userFailed,
+          failedInstanceName: workingResult.userFailed ? userPreferredInstanceName : null,
         ));
       } else {
         emit(state.copyWith(
@@ -300,32 +321,90 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (state.invidiousInstances.isNotEmpty) {
         return emit(state);
       }
+
+      // Store user's preferred instance to check if it fails
+      final userPreferredInstance = state.instance;
+      String? userPreferredInstanceName;
+
       emit(state.copyWith(
         invidiousInstanceStatus: ApiStatus.loading,
+        isTestingConnection: true,
+        connectingToInstance: 'Fetching instances...',
+        userInstanceFailed: false,
+        failedInstanceName: null,
       ));
+
       final _result = await settingsService.fetchInvidiousInstances();
-      final _state = _result.fold(
-          (MainFailure f) => state.copyWith(
-              invidiousInstanceStatus: ApiStatus.error,
-              invidiousInstances: state.invidiousInstances),
-          (List<Instance> r) {
-        if (state.ytService == YouTubeServices.invidious.name) {
-          final instance = r.firstWhere(
-              (element) => element.api == state.instance,
-              orElse: () => r.first);
 
-          BaseUrl.updateInvidiousBaseUrl(instance.api);
+      if (_result.isLeft()) {
+        emit(state.copyWith(
+          invidiousInstanceStatus: ApiStatus.error,
+          invidiousInstances: state.invidiousInstances,
+          isTestingConnection: false,
+          connectingToInstance: null,
+        ));
+        return;
+      }
 
-          return state.copyWith(
-              invidiousInstanceStatus: ApiStatus.loaded,
-              invidiousInstances: r,
-              instance: instance.api);
-        } else {
-          return state.copyWith(
-              invidiousInstanceStatus: ApiStatus.loaded, invidiousInstances: r);
-        }
-      });
-      emit(_state);
+      final instances = _result.getOrElse(() => []);
+
+      // Find the name of user's preferred instance
+      final preferredInst = instances.where((i) => i.api == userPreferredInstance).firstOrNull;
+      userPreferredInstanceName = preferredInst?.name;
+
+      if (state.ytService == YouTubeServices.invidious.name) {
+        // Try user's preferred instance first, then find other working instances
+        final workingInstanceResult = await settingsService.findWorkingInvidiousInstance(
+          instances: instances,
+          preferredInstanceApi: userPreferredInstance,
+          onTestingInstance: (instanceName) {
+            emit(state.copyWith(
+              invidiousInstanceStatus: ApiStatus.loading,
+              invidiousInstances: instances,
+              isTestingConnection: true,
+              connectingToInstance: instanceName,
+            ));
+          },
+        );
+
+        final workingResult = workingInstanceResult.fold(
+          (failure) {
+            log('No working invidious instance found, using first available');
+            return (
+              api: instances.isNotEmpty ? instances.first.api : state.instance,
+              found: false,
+              userFailed: true,
+            );
+          },
+          (workingApi) {
+            log('Found working invidious instance: $workingApi');
+            // Check if user's preferred instance failed (working instance is different)
+            final userFailed = userPreferredInstance.isNotEmpty &&
+                workingApi != userPreferredInstance;
+            return (api: workingApi, found: true, userFailed: userFailed);
+          },
+        );
+
+        BaseUrl.updateInvidiousBaseUrl(workingResult.api);
+
+        emit(state.copyWith(
+          invidiousInstanceStatus: workingResult.found ? ApiStatus.loaded : ApiStatus.error,
+          invidiousInstances: instances,
+          instance: workingResult.api,
+          isTestingConnection: false,
+          connectingToInstance: null,
+          userInstanceFailed: workingResult.userFailed,
+          failedInstanceName: workingResult.userFailed ? userPreferredInstanceName : null,
+        ));
+      } else {
+        emit(state.copyWith(
+          invidiousInstanceStatus: ApiStatus.loaded,
+          invidiousInstances: instances,
+          isTestingConnection: false,
+          connectingToInstance: null,
+        ));
+      }
+
       add(SetInstance(instanceApi: state.instance));
     });
 
@@ -334,9 +413,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           await settingsService.setTYService(service: event.service);
       final _state = _result.fold(
           (MainFailure f) => state.copyWith(ytService: state.ytService),
-          (YouTubeServices r) => state.copyWith(
-                ytService: r.name,
-              ));
+          (YouTubeServices r) {
+        if (r == YouTubeServices.invidious) {
+          BaseUrl.updateInvidiousBaseUrl(state.instance);
+        } else {
+          BaseUrl.updateBaseUrl(state.instance);
+        }
+        return state.copyWith(ytService: r.name);
+      });
       emit(_state);
     });
 

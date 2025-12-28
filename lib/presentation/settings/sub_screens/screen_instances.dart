@@ -63,11 +63,26 @@ class PipedInstanceListView extends StatelessWidget {
         return ListView.separated(
           itemBuilder: (context, index) => ListTile(
             onTap: () async {
-              BlocProvider.of<SettingsBloc>(context).add(
-                SettingsEvent.setInstance(instanceApi: instances[index].api),
-              );
+              final selectedInstance = instances[index];
+              if (state.instance != selectedInstance.api) {
+                BlocProvider.of<SettingsBloc>(context).add(
+                  SettingsEvent.setInstance(instanceApi: selectedInstance.api),
+                );
 
-              // BaseUrl.kBaseUrl = instances[index].api;
+                if (state.ytService == YouTubeServices.invidious.name) {
+                  BlocProvider.of<SettingsBloc>(context).add(
+                    SettingsEvent.setYTService(service: YouTubeServices.piped),
+                  );
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Switched to ${selectedInstance.name}'),
+                    duration: const Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
             },
             leading: state.instance == instances[index].api
                 ? const Icon(CupertinoIcons.check_mark)
@@ -118,11 +133,26 @@ class InvidiousInstanceListView extends StatelessWidget {
         return ListView.separated(
           itemBuilder: (context, index) => ListTile(
             onTap: () async {
-              BlocProvider.of<SettingsBloc>(context).add(
-                SettingsEvent.setInstance(instanceApi: instances[index].api),
-              );
+              final selectedInstance = instances[index];
+              if (state.instance != selectedInstance.api) {
+                BlocProvider.of<SettingsBloc>(context).add(
+                  SettingsEvent.setInstance(instanceApi: selectedInstance.api),
+                );
 
-              // BaseUrl.kBaseUrl = instances[index].api;
+                if (state.ytService != YouTubeServices.invidious.name) {
+                  BlocProvider.of<SettingsBloc>(context).add(
+                    SettingsEvent.setYTService(service: YouTubeServices.invidious),
+                  );
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Switched to ${selectedInstance.name}'),
+                    duration: const Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
             },
             leading: state.instance == instances[index].api
                 ? const Icon(CupertinoIcons.check_mark)

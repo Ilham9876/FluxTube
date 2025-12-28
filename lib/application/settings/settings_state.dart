@@ -25,6 +25,9 @@ class SettingsState with _$SettingsState {
     // Connection status tracking for UI feedback
     required String? connectingToInstance,
     required bool isTestingConnection,
+    // Track if user's preferred instance failed (for showing snackbar)
+    required bool userInstanceFailed,
+    required String? failedInstanceName,
   }) = _Initial;
 
   factory SettingsState.initialize() => SettingsState(
@@ -50,5 +53,7 @@ class SettingsState with _$SettingsState {
         isPipDisabled: false,
         connectingToInstance: null,
         isTestingConnection: false,
+        userInstanceFailed: false,
+        failedInstanceName: null,
       );
 }

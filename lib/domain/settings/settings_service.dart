@@ -31,6 +31,14 @@ abstract class SettingsService {
       {required bool isPipDisabled});
   Future<Either<MainFailure, String>> findWorkingPipedInstance({
     required List<Instance> instances,
+    String? preferredInstanceApi,
     void Function(String instanceName)? onTestingInstance,
   });
+  Future<bool> testInstanceConnection(String apiUrl);
+  Future<Either<MainFailure, String>> findWorkingInvidiousInstance({
+    required List<Instance> instances,
+    String? preferredInstanceApi,
+    void Function(String instanceName)? onTestingInstance,
+  });
+  Future<bool> testInvidiousInstanceConnection(String apiUrl);
 }

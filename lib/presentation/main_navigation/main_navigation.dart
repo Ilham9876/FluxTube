@@ -33,6 +33,8 @@ class MainNavigationState extends State<MainNavigation> {
     const ScreenSettings()
   ];
 
+  bool _hasShownInstanceFailedSnackbar = false;
+
   @override
   Widget build(BuildContext context) {
     final locals = S.of(context);
@@ -53,7 +55,31 @@ class MainNavigationState extends State<MainNavigation> {
           key: "settings"),
     ];
 
-    return ValueListenableBuilder(
+    return BlocListener<SettingsBloc, SettingsState>(
+      listenWhen: (previous, current) =>
+          !previous.userInstanceFailed && current.userInstanceFailed,
+      listener: (context, state) {
+        if (state.userInstanceFailed && !_hasShownInstanceFailedSnackbar) {
+          _hasShownInstanceFailedSnackbar = true;
+          final failedName = state.failedInstanceName ?? 'Your preferred instance';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '$failedName is not responding. Switched to a working instance.',
+              ),
+              duration: const Duration(seconds: 4),
+              behavior: SnackBarBehavior.floating,
+              action: SnackBarAction(
+                label: 'OK',
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            ),
+          );
+        }
+      },
+      child: ValueListenableBuilder(
       valueListenable: indexChangeNotifier,
       builder: (BuildContext context, int index, Widget? _) {
         return Scaffold(
@@ -189,6 +215,7 @@ class MainNavigationState extends State<MainNavigation> {
           ),
         );
       },
+    ),
     );
   }
 }

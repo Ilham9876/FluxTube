@@ -516,33 +516,129 @@ class SettingImpliment implements SettingsService {
   @override
   Future<Either<MainFailure, String>> findWorkingPipedInstance({
     required List<Instance> instances,
+    String? preferredInstanceApi,
     void Function(String instanceName)? onTestingInstance,
   }) async {
-    final dio = Dio();
-    dio.options.connectTimeout = const Duration(seconds: 5);
-    dio.options.receiveTimeout = const Duration(seconds: 5);
+    // If user has a preferred instance, test it first
+    if (preferredInstanceApi != null && preferredInstanceApi.isNotEmpty) {
+      final preferredInstance = instances.firstWhere(
+        (i) => i.api == preferredInstanceApi,
+        orElse: () => Instance(name: 'Preferred', api: preferredInstanceApi, locations: ''),
+      );
 
+      onTestingInstance?.call(preferredInstance.name);
+      final isWorking = await testInstanceConnection(preferredInstanceApi);
+      if (isWorking) {
+        return Right(preferredInstanceApi);
+      }
+    }
+
+    // Test other instances
     for (final instance in instances) {
-      try {
-        // Notify caller which instance is being tested
-        onTestingInstance?.call(instance.name);
+      // Skip the preferred instance since we already tested it
+      if (instance.api == preferredInstanceApi) continue;
 
-        final testUrl = '${instance.api}trending?region=US';
-        final response = await dio.get(testUrl);
-        if (response.statusCode == 200 && response.data != null) {
-          // Verify response is valid JSON array (trending returns array of videos)
-          if (response.data is List && (response.data as List).isNotEmpty) {
-            dio.close();
-            return Right(instance.api);
-          }
+      try {
+        onTestingInstance?.call(instance.name);
+        final isWorking = await testInstanceConnection(instance.api);
+        if (isWorking) {
+          return Right(instance.api);
         }
       } catch (_) {
-        // Continue to next instance
         continue;
       }
     }
 
-    dio.close();
     return const Left(MainFailure.serverFailure());
+  }
+
+  @override
+  Future<bool> testInstanceConnection(String apiUrl) async {
+    final dio = Dio();
+    dio.options.connectTimeout = const Duration(seconds: 5);
+    dio.options.receiveTimeout = const Duration(seconds: 5);
+
+    try {
+      final testUrl = '${apiUrl}trending?region=US';
+      final response = await dio.get(testUrl);
+      dio.close();
+
+      if (response.statusCode == 200 && response.data != null) {
+        // Verify response is valid JSON array (trending returns array of videos)
+        if (response.data is List && (response.data as List).isNotEmpty) {
+          return true;
+        }
+      }
+      return false;
+    } catch (_) {
+      dio.close();
+      return false;
+    }
+  }
+
+  @override
+  Future<Either<MainFailure, String>> findWorkingInvidiousInstance({
+    required List<Instance> instances,
+    String? preferredInstanceApi,
+    void Function(String instanceName)? onTestingInstance,
+  }) async {
+    // If user has a preferred instance, test it first
+    if (preferredInstanceApi != null && preferredInstanceApi.isNotEmpty) {
+      final preferredInstance = instances.firstWhere(
+        (i) => i.api == preferredInstanceApi,
+        orElse: () => Instance(name: 'Preferred', api: preferredInstanceApi, locations: ''),
+      );
+
+      onTestingInstance?.call(preferredInstance.name);
+      final isWorking = await testInvidiousInstanceConnection(preferredInstanceApi);
+      if (isWorking) {
+        return Right(preferredInstanceApi);
+      }
+    }
+
+    // Filter to only test instances without "(API disabled)" in name
+    final apiEnabledInstances = instances.where(
+      (i) => !i.name.contains('(API disabled)') && i.api != preferredInstanceApi,
+    ).toList();
+
+    // Test API-enabled instances first
+    for (final instance in apiEnabledInstances) {
+      try {
+        onTestingInstance?.call(instance.name);
+        final isWorking = await testInvidiousInstanceConnection(instance.api);
+        if (isWorking) {
+          return Right(instance.api);
+        }
+      } catch (_) {
+        continue;
+      }
+    }
+
+    return const Left(MainFailure.serverFailure());
+  }
+
+  @override
+  Future<bool> testInvidiousInstanceConnection(String apiUrl) async {
+    final dio = Dio();
+    dio.options.connectTimeout = const Duration(seconds: 5);
+    dio.options.receiveTimeout = const Duration(seconds: 5);
+
+    try {
+      // Invidious API uses /api/v1/trending endpoint
+      final testUrl = '$apiUrl/api/v1/trending?region=US';
+      final response = await dio.get(testUrl);
+      dio.close();
+
+      if (response.statusCode == 200 && response.data != null) {
+        // Verify response is valid JSON array (trending returns array of videos)
+        if (response.data is List && (response.data as List).isNotEmpty) {
+          return true;
+        }
+      }
+      return false;
+    } catch (_) {
+      dio.close();
+      return false;
+    }
   }
 }

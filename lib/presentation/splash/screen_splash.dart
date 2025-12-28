@@ -91,49 +91,44 @@ class SplashScreenState extends State<SplashScreen> {
   void _handleState(SettingsState state, SubscribeState subscribeState) async {
     final settingsBloc = BlocProvider.of<SettingsBloc>(context);
 
-    // Fetch instances based on service type
-    // For invidious: fetch invidious instances
-    // For piped/iframe/explode: fetch piped instances (they all use piped API for feeds)
-    if (state.initialized) {
-      if (state.ytService == YouTubeServices.invidious.name) {
-        if (state.invidiousInstances.isEmpty &&
-            state.invidiousInstanceStatus != ApiStatus.loading) {
-          settingsBloc.add(SettingsEvent.fetchInvidiousInstances());
-        }
-      } else {
-        // piped, iframe, and explode all use piped API for trending/search/channels
-        if (state.pipedInstances.isEmpty &&
-            state.pipedInstanceStatus != ApiStatus.loading) {
-          settingsBloc.add(SettingsEvent.fetchPipedInstances());
-        }
+    if (!state.initialized) return;
+
+    final bool isInvidious = state.ytService == YouTubeServices.invidious.name;
+
+    if (isInvidious) {
+      if (state.invidiousInstances.isEmpty &&
+          state.invidiousInstanceStatus == ApiStatus.initial) {
+        settingsBloc.add(SettingsEvent.fetchInvidiousInstances());
+        return;
+      }
+    } else {
+      if (state.pipedInstances.isEmpty &&
+          state.pipedInstanceStatus == ApiStatus.initial) {
+        settingsBloc.add(SettingsEvent.fetchPipedInstances());
+        return;
       }
     }
 
-    // Check if instances are ready
     final bool instancesReady;
-    if (state.ytService == YouTubeServices.invidious.name) {
+    if (isInvidious) {
       instancesReady = state.invidiousInstanceStatus == ApiStatus.loaded ||
           state.invidiousInstanceStatus == ApiStatus.error;
     } else {
-      // piped, iframe, explode all need piped instances
       instancesReady = state.pipedInstanceStatus == ApiStatus.loaded ||
           state.pipedInstanceStatus == ApiStatus.error;
     }
 
-    // go to home screen
     if ((state.settingsStatus == ApiStatus.loaded ||
             state.settingsStatus == ApiStatus.error) &&
         instancesReady &&
+        !state.isTestingConnection &&
         (subscribeState.subscribeStatus == ApiStatus.loaded ||
             subscribeState.subscribeStatus == ApiStatus.error)) {
-      {
-        await Future.delayed(const Duration());
-        if (mounted) {
-          Router.neglect(context, () {
-            context
-                .goNamed('main');
-          });
-        }
+      await Future.delayed(const Duration());
+      if (mounted) {
+        Router.neglect(context, () {
+          context.goNamed('main');
+        });
       }
     }
   }

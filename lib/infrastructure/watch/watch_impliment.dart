@@ -219,7 +219,7 @@ class WatchImpliment implements WatchService {
     try {
       var video = await _youtubeExplode.videos.get(id);
       var relatedVideos = await _youtubeExplode.videos.getRelatedVideos(video);
-      List<MyRelatedVideo> relatedVideoList = relatedVideos!
+      List<MyRelatedVideo> relatedVideoList = (relatedVideos ?? [])
           .map((video) => MyRelatedVideo.fromYoutubeVideo(video))
           .toList();
 
