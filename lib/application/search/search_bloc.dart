@@ -193,12 +193,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           isMoreFetchCompleted: true,
         );
       } else if (state.result?.items != null) {
-        final moreSearch = state.result;
-
-        moreSearch!.items.addAll(resp.items);
-        moreSearch.nextpage = resp.nextpage;
+        final updatedResult = SearchResp(
+          items: [...state.result!.items, ...resp.items],
+          nextpage: resp.nextpage,
+          suggestion: state.result!.suggestion,
+          corrected: state.result!.corrected,
+        );
         return state.copyWith(
-            fetchMoreSearchResultStatus: ApiStatus.loaded, result: moreSearch);
+            fetchMoreSearchResultStatus: ApiStatus.loaded, result: updatedResult);
       } else {
         return state;
       }

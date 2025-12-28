@@ -49,5 +49,8 @@ android/app/key.jks
 # Analysis documentation (generated)
 /docs/
 
+# Fixed docs (generated during refactoring)
+/fixed-docs/
+
 # Claude flow files
 .claude-flow/

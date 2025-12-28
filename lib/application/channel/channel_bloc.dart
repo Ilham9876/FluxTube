@@ -92,12 +92,22 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
               moreChannelDetailsFetchStatus: ApiStatus.loaded,
               isMoreFetchCompleted: true);
         } else {
-          final moreSearch = state.pipedChannelResp;
-          moreSearch?.relatedStreams?.addAll(response.relatedStreams ?? []);
-          moreSearch?.nextpage = response.nextpage;
+          final currentResp = state.pipedChannelResp;
+          final updatedResp = ChannelResp(
+            id: currentResp?.id,
+            name: currentResp?.name,
+            avatarUrl: currentResp?.avatarUrl,
+            bannerUrl: currentResp?.bannerUrl,
+            description: currentResp?.description,
+            nextpage: response.nextpage,
+            subscriberCount: currentResp?.subscriberCount,
+            verified: currentResp?.verified,
+            relatedStreams: [...(currentResp?.relatedStreams ?? []), ...(response.relatedStreams ?? [])],
+            tabs: currentResp?.tabs,
+          );
           return state.copyWith(
               moreChannelDetailsFetchStatus: ApiStatus.loaded,
-              pipedChannelResp: moreSearch);
+              pipedChannelResp: updatedResp);
         }
       },
     );

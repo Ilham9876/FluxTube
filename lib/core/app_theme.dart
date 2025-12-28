@@ -31,7 +31,7 @@ abstract class AppTheme {
       useMaterial3: true,
       primaryColorLight: kWhiteColor,
       primaryColorDark: kBlackColor,
-      indicatorColor: kWhiteColor.withOpacity(0.5),
+      indicatorColor: kWhiteColor.withValues(alpha: 0.5),
       primaryIconTheme: const IconThemeData().copyWith(color: kWhiteColor),
       colorScheme: const ColorScheme.dark(),
       scaffoldBackgroundColor: kDarkColor,
@@ -55,7 +55,7 @@ abstract class AppTheme {
       ),
       fontFamily: 'Montserrat',
       iconTheme:
-          const IconThemeData().copyWith(color: kWhiteColor.withOpacity(0.7)),
+          const IconThemeData().copyWith(color: kWhiteColor.withValues(alpha: 0.7)),
       inputDecorationTheme: const InputDecorationTheme().copyWith(
         iconColor: kWhiteColor,
         prefixIconColor: kWhiteColor,

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -23,6 +25,8 @@ class TrendingBloc extends Bloc<TrendingEvent, TrendingState> {
   final TrendingService trendingService;
   final HomeServices homeServices;
   final SubscribeBloc subscribeBloc;
+  StreamSubscription<SettingsState>? _settingsSubscription;
+
   TrendingBloc(
     this.settingsBloc,
     this.trendingService,
@@ -30,11 +34,9 @@ class TrendingBloc extends Bloc<TrendingEvent, TrendingState> {
     this.subscribeBloc,
   ) : super(TrendingState.initialize()) {
 
-    settingsBloc.stream.listen((settingsState) {
+    _settingsSubscription = settingsBloc.stream.listen((settingsState) {
       if (settingsState.defaultRegion != state.lastUsedRegion) {
-        // Determine serviceType based on current logic or SettingsBloc's state
-        // Example: Assume serviceType is stored in SettingsBloc
-        final serviceType = settingsState.ytService; // Adjust based on your setup
+        final serviceType = settingsState.ytService;
         add(GetForcedTrendingData(serviceType: serviceType, region: settingsState.defaultRegion));
       }
     });
@@ -137,5 +139,11 @@ class TrendingBloc extends Bloc<TrendingEvent, TrendingState> {
             invidiousTrendingResult: resp,
             fetchInvidiousTrendingStatus: ApiStatus.loaded));
     emit(_state);
+  }
+
+  @override
+  Future<void> close() {
+    _settingsSubscription?.cancel();
+    return super.close();
   }
 }

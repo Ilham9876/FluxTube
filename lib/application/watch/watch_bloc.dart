@@ -123,12 +123,15 @@ class WatchBloc extends Bloc<WatchEvent, WatchState> {
             isMoreCommetsFetchCompleted: true,
           );
         } else {
-          final commentsModel = state.comments;
-          commentsModel.comments.addAll(resp.comments);
-          commentsModel.nextpage = resp.nextpage;
+          final updatedComments = CommentsResp(
+            comments: [...state.comments.comments, ...resp.comments],
+            nextpage: resp.nextpage,
+            disabled: state.comments.disabled,
+            commentCount: state.comments.commentCount,
+          );
           return state.copyWith(
             fetchMoreCommentsStatus: ApiStatus.loaded,
-            comments: commentsModel,
+            comments: updatedComments,
           );
         }
       });
@@ -160,12 +163,15 @@ class WatchBloc extends Bloc<WatchEvent, WatchState> {
             isMoreReplyCommetsFetchCompleted: true,
           );
         } else {
-          final replyCommentsModel = state.commentReplies;
-          replyCommentsModel.comments.addAll(resp.comments);
-          replyCommentsModel.nextpage = resp.nextpage;
+          final updatedReplies = CommentsResp(
+            comments: [...state.commentReplies.comments, ...resp.comments],
+            nextpage: resp.nextpage,
+            disabled: state.commentReplies.disabled,
+            commentCount: state.commentReplies.commentCount,
+          );
           return state.copyWith(
               fetchMoreCommentRepliesStatus: ApiStatus.loaded,
-              commentReplies: replyCommentsModel);
+              commentReplies: updatedReplies);
         }
       });
 
@@ -390,12 +396,15 @@ class WatchBloc extends Bloc<WatchEvent, WatchState> {
               isMoreInvidiousCommetsFetchCompleted: true,
             );
           } else {
-            final commentsModel = state.invidiousComments;
-            commentsModel.comments?.addAll(resp.comments ?? []);
-            commentsModel.continuation = resp.continuation;
+            final updatedComments = InvidiousCommentsResp(
+              commentCount: state.invidiousComments.commentCount,
+              videoId: state.invidiousComments.videoId,
+              comments: [...(state.invidiousComments.comments ?? []), ...(resp.comments ?? [])],
+              continuation: resp.continuation,
+            );
             return state.copyWith(
               fetchMoreInvidiousCommentsStatus: ApiStatus.loaded,
-              invidiousComments: commentsModel,
+              invidiousComments: updatedComments,
             );
           }
         },
@@ -426,12 +435,15 @@ class WatchBloc extends Bloc<WatchEvent, WatchState> {
               isMoreInvidiousReplyCommetsFetchCompleted: true,
             );
           } else {
-            final replyCommentsModel = state.invidiousCommentReplies;
-            replyCommentsModel.comments?.addAll(resp.comments ?? []);
-            replyCommentsModel.continuation = resp.continuation;
+            final updatedReplies = InvidiousCommentsResp(
+              commentCount: state.invidiousCommentReplies.commentCount,
+              videoId: state.invidiousCommentReplies.videoId,
+              comments: [...(state.invidiousCommentReplies.comments ?? []), ...(resp.comments ?? [])],
+              continuation: resp.continuation,
+            );
             return state.copyWith(
               fetchMoreInvidiousCommentRepliesStatus: ApiStatus.loaded,
-              invidiousCommentReplies: replyCommentsModel,
+              invidiousCommentReplies: updatedReplies,
             );
           }
         },

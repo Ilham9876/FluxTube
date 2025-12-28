@@ -236,7 +236,7 @@ class ChannelBannerWidget extends StatelessWidget {
                   : DecorationImage(
                       image: CachedNetworkImageProvider(bannerUrl!),
                       fit: BoxFit.cover),
-              color: kBlackColor.withOpacity(0.9),
+              color: kBlackColor.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(10)),
           child: bannerUrl == null
               ? Center(
