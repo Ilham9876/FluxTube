@@ -9,6 +9,7 @@ part 'settings_db.g.dart';
 class SettingsDBValue {
   Id id = Isar.autoIncrement;
 
+  @Index(unique: true, replace: true)
   late String name;
 
   String? value;
