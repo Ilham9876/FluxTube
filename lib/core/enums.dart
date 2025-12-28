@@ -3,6 +3,7 @@ enum YouTubeServices {
   explode,
   iframe,
   invidious,
+  omniPlayer,
 }
 
 enum ApiStatus {

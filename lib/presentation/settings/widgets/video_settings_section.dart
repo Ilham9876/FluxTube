@@ -51,6 +51,10 @@ final _services = [
     child: Text("IFrame"),
   ),
   const DropdownMenuItem(
+    value: YouTubeServices.omniPlayer,
+    child: Text("Omni Player"),
+  ),
+  const DropdownMenuItem(
     value: YouTubeServices.invidious,
     child: Text("Invidious"),
   ),

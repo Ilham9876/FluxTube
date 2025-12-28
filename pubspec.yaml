@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.3.0
   youtube_explode_dart: ^3.0.5
   youtube_player_iframe: ^5.2.0
+  omni_video_player: ^3.5.3
 
 dev_dependencies:
   build_runner: ^2.4.13

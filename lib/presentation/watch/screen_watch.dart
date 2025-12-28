@@ -6,6 +6,7 @@ import 'package:fluxtube/core/enums.dart';
 import 'package:fluxtube/presentation/watch/explode_screen_watch.dart';
 import 'package:fluxtube/presentation/watch/iframe_screen_watch.dart';
 import 'package:fluxtube/presentation/watch/invidious_screen_watch.dart';
+import 'package:fluxtube/presentation/watch/omni_screen_watch.dart';
 import 'package:fluxtube/presentation/watch/piped_screen_watch.dart';
 
 class ScreenWatch extends StatelessWidget {
@@ -28,6 +29,8 @@ class ScreenWatch extends StatelessWidget {
         return ExplodeScreenWatch(id: id, channelId: channelId);
       } else if (settingsState.ytService == YouTubeServices.iframe.name) {
         return IFramScreenWatch(id: id, channelId: channelId);
+      } else if (settingsState.ytService == YouTubeServices.omniPlayer.name) {
+        return OmniScreenWatch(id: id, channelId: channelId);
       } else {
         return InvidiousScreenWatch(id: id, channelId: channelId);
       }
