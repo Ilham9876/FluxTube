@@ -321,11 +321,16 @@ class _InvidiousScreenWatchState extends State<InvidiousScreenWatch> {
   }
 
   Widget _buildOmniPlayer(InvidiousWatchResp watchInfo, bool isHlsPlayer, int startPosition) {
-    // Try to get stream URL: prefer DASH if enabled, otherwise use first available format stream
+    // Try to get stream URL: prefer DASH if enabled or if live, otherwise use first available format stream
     String? streamUrl;
     bool isHls = false;
+    final bool isLive = watchInfo.liveNow == true;
 
-    if (isHlsPlayer && watchInfo.dashUrl != null) {
+    // For live streams, always use DASH/HLS
+    if (isLive && watchInfo.dashUrl != null) {
+      streamUrl = watchInfo.dashUrl;
+      isHls = true;
+    } else if (isHlsPlayer && watchInfo.dashUrl != null) {
       streamUrl = watchInfo.dashUrl;
       // DASH is similar to HLS for adaptive streaming
       isHls = true;
@@ -346,7 +351,8 @@ class _InvidiousScreenWatchState extends State<InvidiousScreenWatch> {
 
     return OmniVideoPlayerWidget.network(
       url: streamUrl,
-      startPosition: startPosition,
+      // Don't set start position for live streams
+      startPosition: isLive ? 0 : startPosition,
       isHls: isHls,
       onControllerCreated: (controller) {
         // Controller can be used for playback position tracking if needed

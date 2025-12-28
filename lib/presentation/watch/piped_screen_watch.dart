@@ -318,11 +318,16 @@ class _PipedScreenWatchState extends State<PipedScreenWatch> {
   }
 
   Widget _buildOmniPlayer(WatchResp watchInfo, bool isHlsPlayer, int startPosition) {
-    // Try to get stream URL: prefer HLS if enabled, otherwise use first available video stream
+    // Try to get stream URL: prefer HLS if enabled or if live, otherwise use first available video stream
     String? streamUrl;
     bool isHls = false;
+    final bool isLive = watchInfo.livestream == true;
 
-    if (isHlsPlayer && watchInfo.hls != null) {
+    // For live streams, always use HLS
+    if (isLive && watchInfo.hls != null) {
+      streamUrl = watchInfo.hls;
+      isHls = true;
+    } else if (isHlsPlayer && watchInfo.hls != null) {
       streamUrl = watchInfo.hls;
       isHls = true;
     } else if (watchInfo.videoStreams.isNotEmpty) {
@@ -345,7 +350,8 @@ class _PipedScreenWatchState extends State<PipedScreenWatch> {
 
     return OmniVideoPlayerWidget.network(
       url: streamUrl,
-      startPosition: startPosition,
+      // Don't set start position for live streams
+      startPosition: isLive ? 0 : startPosition,
       isHls: isHls,
       onControllerCreated: (controller) {
         // Controller can be used for playback position tracking if needed

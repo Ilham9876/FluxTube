@@ -335,15 +335,16 @@ class _ExplodeScreenWatchState extends State<ExplodeScreenWatch> {
   }
 
   Widget _buildOmniPlayer(List<MyMuxedStreamInfo> muxedStreams, String? liveUrl, int startPosition) {
-    // Try to get stream URL: prefer muxed streams, fallback to live URL
+    // Try to get stream URL: for live streams use liveUrl (HLS), otherwise use muxed streams
     String? streamUrl;
+    final bool isLive = liveUrl != null;
 
-    if (muxedStreams.isNotEmpty) {
-      // Get first muxed stream URL
-      streamUrl = muxedStreams.first.url;
-    } else if (liveUrl != null) {
-      // Fallback to live stream URL
+    // For live streams, always use the live URL (HLS)
+    if (isLive) {
       streamUrl = liveUrl;
+    } else if (muxedStreams.isNotEmpty) {
+      // Get first muxed stream URL for regular videos
+      streamUrl = muxedStreams.first.url;
     }
 
     if (streamUrl == null) {
@@ -354,8 +355,9 @@ class _ExplodeScreenWatchState extends State<ExplodeScreenWatch> {
 
     return OmniVideoPlayerWidget.network(
       url: streamUrl,
-      startPosition: startPosition,
-      isHls: liveUrl != null && muxedStreams.isEmpty,
+      // Don't set start position for live streams
+      startPosition: isLive ? 0 : startPosition,
+      isHls: isLive,
       onControllerCreated: (controller) {
         // Controller can be used for playback position tracking if needed
       },
