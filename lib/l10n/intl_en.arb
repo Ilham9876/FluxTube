@@ -277,5 +277,10 @@
   "swipeDownToDismissDisabled": "'Swipe down to dismiss' disabled",
   "swipeUpToDismissEnabled": "'Swipe up to dismiss' enabled",
   "noCommentsFound": "No Comments Found",
-  "disablePipPlayer": "Disable PIP player"
+  "disablePipPlayer": "Disable PIP player",
+  "videos": "Videos",
+  "shorts": "Shorts",
+  "playlists": "Playlists",
+  "noShorts": "No shorts available",
+  "noPlaylists": "No playlists available"
 }

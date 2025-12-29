@@ -12,15 +12,39 @@ import 'package:fluxtube/domain/channel/models/piped/channel_resp.dart';
 import 'package:fluxtube/generated/l10n.dart';
 import 'package:fluxtube/presentation/channel/widgets/invidious/related_videos.dart';
 import 'package:fluxtube/presentation/channel/widgets/piped/related_videos.dart';
+import 'package:fluxtube/presentation/channel/widgets/piped/channel_tab_content.dart';
 import 'package:fluxtube/presentation/settings/utils/launch_url.dart';
 import 'package:fluxtube/widgets/widgets.dart';
 
-class ScreenChannel extends StatelessWidget {
+class ScreenChannel extends StatefulWidget {
   const ScreenChannel({super.key, required String? channelId, avatarUrl})
       : _channelId = channelId,
         _avatarUrl = avatarUrl;
   final String? _channelId;
   final String? _avatarUrl;
+
+  @override
+  State<ScreenChannel> createState() => _ScreenChannelState();
+}
+
+class _ScreenChannelState extends State<ScreenChannel>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  String? get _channelId => widget._channelId;
+  String? get _avatarUrl => widget._avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +53,7 @@ class ScreenChannel extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_channelId != null) {
         BlocProvider.of<ChannelBloc>(context).add(ChannelEvent.getChannelData(
-            channelId: _channelId, serviceType: settingsBloc.state.ytService));
+            channelId: _channelId!, serviceType: settingsBloc.state.ytService));
       }
     });
     final double _width = MediaQuery.of(context).size.width;
@@ -94,33 +118,70 @@ class ScreenChannel extends StatelessWidget {
                           )),
                     ]),
                 body: SafeArea(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ChannelBannerWidget(
-                        width: _width,
-                        name: state.invidiousChannelResp!.author,
-                        bannerUrl: state
-                            .invidiousChannelResp?.authorBanners?.last.url),
-                    ChannelWidget(
-                      channelName: state.invidiousChannelResp!.author,
-                      isVerified: state.invidiousChannelResp!.authorVerified,
-                      subscriberCount: state.invidiousChannelResp!.subCount,
-                      thumbnail: state.invidiousChannelResp?.authorThumbnails
-                              ?.last.url ??
-                          _avatarUrl,
-                      isSubscribed: _isSubscribed,
-                      channelId: _channelId ?? '',
-                      locals: locals,
-                      isTapEnabled: false,
-                    ),
-                    Expanded(
-                        child: InvidiousChannelRelatedVideoSection(
+                    child: NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          ChannelBannerWidget(
+                              width: _width,
+                              name: state.invidiousChannelResp!.author,
+                              bannerUrl: state
+                                  .invidiousChannelResp?.authorBanners?.last.url),
+                          const SizedBox(height: 10),
+                          ChannelWidget(
+                            channelName: state.invidiousChannelResp!.author,
+                            isVerified: state.invidiousChannelResp!.authorVerified,
+                            subscriberCount: state.invidiousChannelResp!.subCount,
+                            thumbnail: state.invidiousChannelResp?.authorThumbnails
+                                    ?.last.url ??
+                                _avatarUrl,
+                            isSubscribed: _isSubscribed,
                             channelId: _channelId ?? '',
                             locals: locals,
-                            state: state,
-                            channelInfo: state.invidiousChannelResp!)),
+                            isTapEnabled: false,
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _SliverTabBarDelegate(
+                        TabBar(
+                          controller: _tabController,
+                          dividerColor: Colors.transparent,
+                          tabs: [
+                            Tab(text: locals.videos),
+                            Tab(text: locals.shorts),
+                            Tab(text: locals.playlists),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
+                  body: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      InvidiousChannelRelatedVideoSection(
+                          channelId: _channelId ?? '',
+                          locals: locals,
+                          state: state,
+                          channelInfo: state.invidiousChannelResp!),
+                      Center(
+                        child: Text(
+                          locals.noShorts,
+                          style: TextStyle(color: kGreyColor),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          locals.noPlaylists,
+                          style: TextStyle(color: kGreyColor),
+                        ),
+                      ),
+                    ],
+                  ),
                 )),
               );
             }
@@ -141,9 +202,6 @@ class ScreenChannel extends StatelessWidget {
                   actions: [
                     IconButton(
                         color: kGreyColor,
-                        // style: ButtonStyle(
-                        //     backgroundColor:
-                        //         WidgetStatePropertyAll(kGreyOpacityColor)),
                         onPressed: () async => await urlLaunchWithSettings(
                             context, '$kYTChannelUrl${channelInfo.id}'),
                         icon: SvgPicture.asset(
@@ -154,38 +212,93 @@ class ScreenChannel extends StatelessWidget {
                         )),
                   ]),
               body: SafeArea(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ChannelBannerWidget(
-                      width: _width,
-                      name: channelInfo.name,
-                      bannerUrl: channelInfo.bannerUrl),
-                  SizedBox(height: 10),
-                  ChannelWidget(
-                    channelName: channelInfo.name,
-                    isVerified: channelInfo.verified,
-                    subscriberCount: channelInfo.subscriberCount,
-                    thumbnail: channelInfo.avatarUrl ?? _avatarUrl,
-                    isSubscribed: _isSubscribed,
-                    channelId: _channelId ?? '',
-                    locals: locals,
-                    isTapEnabled: false,
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                      child: ChannelRelatedVideoSection(
+                  child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        ChannelBannerWidget(
+                            width: _width,
+                            name: channelInfo.name,
+                            bannerUrl: channelInfo.bannerUrl),
+                        const SizedBox(height: 10),
+                        ChannelWidget(
+                          channelName: channelInfo.name,
+                          isVerified: channelInfo.verified,
+                          subscriberCount: channelInfo.subscriberCount,
+                          thumbnail: channelInfo.avatarUrl ?? _avatarUrl,
+                          isSubscribed: _isSubscribed,
                           channelId: _channelId ?? '',
                           locals: locals,
-                          state: state,
-                          channelInfo: channelInfo)),
+                          isTapEnabled: false,
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: _SliverTabBarDelegate(
+                      TabBar(
+                        controller: _tabController,
+                        dividerColor: Colors.transparent,
+                        tabs: [
+                          Tab(text: locals.videos),
+                          Tab(text: locals.shorts),
+                          Tab(text: locals.playlists),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    ChannelRelatedVideoSection(
+                        channelId: _channelId ?? '',
+                        locals: locals,
+                        state: state,
+                        channelInfo: channelInfo),
+                    ChannelTabContent(
+                        tabs: channelInfo.tabs, tabName: 'shorts', locals: locals),
+                    ChannelTabContent(
+                        tabs: channelInfo.tabs, tabName: 'playlists', locals: locals),
+                  ],
+                ),
               )),
             );
           },
         );
       },
     );
+  }
+
+}
+
+class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  _SliverTabBarDelegate(this.tabBar);
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      color: isDark ? Colors.black : Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {
+    return false;
   }
 }
 

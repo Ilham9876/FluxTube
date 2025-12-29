@@ -7,6 +7,7 @@ class RelatedStream {
   String? url;
   String? type;
   String? title;
+  String? name;
   String? thumbnail;
   String? uploaderName;
   String? uploaderUrl;
@@ -15,6 +16,7 @@ class RelatedStream {
   String? shortDescription;
   int? duration;
   int? views;
+  int? videos;
   int? uploaded;
   bool? uploaderVerified;
   bool? isShort;
@@ -23,6 +25,7 @@ class RelatedStream {
     this.url,
     this.type,
     this.title,
+    this.name,
     this.thumbnail,
     this.uploaderName,
     this.uploaderUrl,
@@ -31,6 +34,7 @@ class RelatedStream {
     this.shortDescription,
     this.duration,
     this.views,
+    this.videos,
     this.uploaded,
     this.uploaderVerified,
     this.isShort,

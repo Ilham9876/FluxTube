@@ -122,6 +122,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "noCommentsFound": MessageLookupByLibrary.simpleMessage(
       "No Comments Found",
     ),
+    "noPlaylists": MessageLookupByLibrary.simpleMessage(
+      "No playlists available",
+    ),
+    "noShorts": MessageLookupByLibrary.simpleMessage("No shorts available"),
     "noSubscriptions": MessageLookupByLibrary.simpleMessage("No Subscriptions"),
     "noSubscriptionsHint": MessageLookupByLibrary.simpleMessage(
       "Subscribe to channels to see their videos here",
@@ -151,6 +155,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Video player engine",
     ),
     "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
+    "playlists": MessageLookupByLibrary.simpleMessage("Playlists"),
     "profileInUse": MessageLookupByLibrary.simpleMessage("Active"),
     "profileName": MessageLookupByLibrary.simpleMessage("Profile Name"),
     "profiles": MessageLookupByLibrary.simpleMessage("Profiles"),
@@ -190,6 +195,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "servicePiped": MessageLookupByLibrary.simpleMessage("Piped"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "share": MessageLookupByLibrary.simpleMessage("Share"),
+    "shorts": MessageLookupByLibrary.simpleMessage("Shorts"),
     "showLessText": MessageLookupByLibrary.simpleMessage("Show less"),
     "skipInterval": MessageLookupByLibrary.simpleMessage("Skip Interval"),
     "skipIntervalDescription": MessageLookupByLibrary.simpleMessage(
@@ -239,6 +245,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "videoFitFitHeight": MessageLookupByLibrary.simpleMessage("Fit Height"),
     "videoFitFitWidth": MessageLookupByLibrary.simpleMessage("Fit Width"),
     "videoViews": m2,
+    "videos": MessageLookupByLibrary.simpleMessage("Videos"),
     "youtubeService": MessageLookupByLibrary.simpleMessage("YouTube Service"),
   };
 }

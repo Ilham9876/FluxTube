@@ -181,15 +181,42 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
 
   Future<void> _fetchChannelTabContent(
       GetChannelTabContent event, Emitter<ChannelState> emit) async {
+    // Set loading state based on tab name
+    if (event.tabName == 'shorts') {
+      emit(state.copyWith(shortsTabFetchStatus: ApiStatus.loading));
+    } else if (event.tabName == 'playlists') {
+      emit(state.copyWith(playlistsTabFetchStatus: ApiStatus.loading));
+    } else {
+      emit(state.copyWith(tabContentFetchStatus: ApiStatus.loading));
+    }
+
     final result = await channelServices.getChannelTabContent(data: event.tabData);
 
     final _state = result.fold(
-      (failure) => state.copyWith(
-          tabContentFetchStatus: ApiStatus.error,
-          selectedTabContent: null),
-      (response) => state.copyWith(
-          tabContentFetchStatus: ApiStatus.loaded,
-          selectedTabContent: response),
+      (failure) {
+        if (event.tabName == 'shorts') {
+          return state.copyWith(
+              shortsTabFetchStatus: ApiStatus.error, shortsTabContent: null);
+        } else if (event.tabName == 'playlists') {
+          return state.copyWith(
+              playlistsTabFetchStatus: ApiStatus.error,
+              playlistsTabContent: null);
+        }
+        return state.copyWith(
+            tabContentFetchStatus: ApiStatus.error, selectedTabContent: null);
+      },
+      (response) {
+        if (event.tabName == 'shorts') {
+          return state.copyWith(
+              shortsTabFetchStatus: ApiStatus.loaded, shortsTabContent: response);
+        } else if (event.tabName == 'playlists') {
+          return state.copyWith(
+              playlistsTabFetchStatus: ApiStatus.loaded,
+              playlistsTabContent: response);
+        }
+        return state.copyWith(
+            tabContentFetchStatus: ApiStatus.loaded, selectedTabContent: response);
+      },
     );
     emit(_state);
   }

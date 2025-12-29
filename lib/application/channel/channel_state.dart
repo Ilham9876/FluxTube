@@ -17,6 +17,12 @@ class ChannelState with _$ChannelState {
     required ApiStatus tabContentFetchStatus,
     required TabContent? selectedTabContent,
 
+    // Separate tab content for shorts and playlists
+    required ApiStatus shortsTabFetchStatus,
+    required TabContent? shortsTabContent,
+    required ApiStatus playlistsTabFetchStatus,
+    required TabContent? playlistsTabContent,
+
     // INVIDIOUS
 
     required InvidiousChannelResp? invidiousChannelResp,
@@ -36,6 +42,10 @@ class ChannelState with _$ChannelState {
         selectedTabIndex: 0,
         tabContentFetchStatus: ApiStatus.initial,
         selectedTabContent: null,
+        shortsTabFetchStatus: ApiStatus.initial,
+        shortsTabContent: null,
+        playlistsTabFetchStatus: ApiStatus.initial,
+        playlistsTabContent: null,
 
         // INVIDIOUS
 

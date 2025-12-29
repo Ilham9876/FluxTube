@@ -797,6 +797,11 @@ mixin _$ChannelState {
   int get selectedTabIndex => throw _privateConstructorUsedError;
   ApiStatus get tabContentFetchStatus => throw _privateConstructorUsedError;
   TabContent? get selectedTabContent =>
+      throw _privateConstructorUsedError; // Separate tab content for shorts and playlists
+  ApiStatus get shortsTabFetchStatus => throw _privateConstructorUsedError;
+  TabContent? get shortsTabContent => throw _privateConstructorUsedError;
+  ApiStatus get playlistsTabFetchStatus => throw _privateConstructorUsedError;
+  TabContent? get playlistsTabContent =>
       throw _privateConstructorUsedError; // INVIDIOUS
   InvidiousChannelResp? get invidiousChannelResp =>
       throw _privateConstructorUsedError;
@@ -823,6 +828,10 @@ abstract class $ChannelStateCopyWith<$Res> {
       int selectedTabIndex,
       ApiStatus tabContentFetchStatus,
       TabContent? selectedTabContent,
+      ApiStatus shortsTabFetchStatus,
+      TabContent? shortsTabContent,
+      ApiStatus playlistsTabFetchStatus,
+      TabContent? playlistsTabContent,
       InvidiousChannelResp? invidiousChannelResp,
       int invidiousPage});
 }
@@ -849,6 +858,10 @@ class _$ChannelStateCopyWithImpl<$Res, $Val extends ChannelState>
     Object? selectedTabIndex = null,
     Object? tabContentFetchStatus = null,
     Object? selectedTabContent = freezed,
+    Object? shortsTabFetchStatus = null,
+    Object? shortsTabContent = freezed,
+    Object? playlistsTabFetchStatus = null,
+    Object? playlistsTabContent = freezed,
     Object? invidiousChannelResp = freezed,
     Object? invidiousPage = null,
   }) {
@@ -881,6 +894,22 @@ class _$ChannelStateCopyWithImpl<$Res, $Val extends ChannelState>
           ? _value.selectedTabContent
           : selectedTabContent // ignore: cast_nullable_to_non_nullable
               as TabContent?,
+      shortsTabFetchStatus: null == shortsTabFetchStatus
+          ? _value.shortsTabFetchStatus
+          : shortsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      shortsTabContent: freezed == shortsTabContent
+          ? _value.shortsTabContent
+          : shortsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
+      playlistsTabFetchStatus: null == playlistsTabFetchStatus
+          ? _value.playlistsTabFetchStatus
+          : playlistsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      playlistsTabContent: freezed == playlistsTabContent
+          ? _value.playlistsTabContent
+          : playlistsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
       invidiousChannelResp: freezed == invidiousChannelResp
           ? _value.invidiousChannelResp
           : invidiousChannelResp // ignore: cast_nullable_to_non_nullable
@@ -909,6 +938,10 @@ abstract class _$$ChannelStateImplCopyWith<$Res>
       int selectedTabIndex,
       ApiStatus tabContentFetchStatus,
       TabContent? selectedTabContent,
+      ApiStatus shortsTabFetchStatus,
+      TabContent? shortsTabContent,
+      ApiStatus playlistsTabFetchStatus,
+      TabContent? playlistsTabContent,
       InvidiousChannelResp? invidiousChannelResp,
       int invidiousPage});
 }
@@ -933,6 +966,10 @@ class __$$ChannelStateImplCopyWithImpl<$Res>
     Object? selectedTabIndex = null,
     Object? tabContentFetchStatus = null,
     Object? selectedTabContent = freezed,
+    Object? shortsTabFetchStatus = null,
+    Object? shortsTabContent = freezed,
+    Object? playlistsTabFetchStatus = null,
+    Object? playlistsTabContent = freezed,
     Object? invidiousChannelResp = freezed,
     Object? invidiousPage = null,
   }) {
@@ -965,6 +1002,22 @@ class __$$ChannelStateImplCopyWithImpl<$Res>
           ? _value.selectedTabContent
           : selectedTabContent // ignore: cast_nullable_to_non_nullable
               as TabContent?,
+      shortsTabFetchStatus: null == shortsTabFetchStatus
+          ? _value.shortsTabFetchStatus
+          : shortsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      shortsTabContent: freezed == shortsTabContent
+          ? _value.shortsTabContent
+          : shortsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
+      playlistsTabFetchStatus: null == playlistsTabFetchStatus
+          ? _value.playlistsTabFetchStatus
+          : playlistsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      playlistsTabContent: freezed == playlistsTabContent
+          ? _value.playlistsTabContent
+          : playlistsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
       invidiousChannelResp: freezed == invidiousChannelResp
           ? _value.invidiousChannelResp
           : invidiousChannelResp // ignore: cast_nullable_to_non_nullable
@@ -988,6 +1041,10 @@ class _$ChannelStateImpl implements _ChannelState {
       required this.selectedTabIndex,
       required this.tabContentFetchStatus,
       required this.selectedTabContent,
+      required this.shortsTabFetchStatus,
+      required this.shortsTabContent,
+      required this.playlistsTabFetchStatus,
+      required this.playlistsTabContent,
       required this.invidiousChannelResp,
       required this.invidiousPage});
 
@@ -1008,6 +1065,15 @@ class _$ChannelStateImpl implements _ChannelState {
   final ApiStatus tabContentFetchStatus;
   @override
   final TabContent? selectedTabContent;
+// Separate tab content for shorts and playlists
+  @override
+  final ApiStatus shortsTabFetchStatus;
+  @override
+  final TabContent? shortsTabContent;
+  @override
+  final ApiStatus playlistsTabFetchStatus;
+  @override
+  final TabContent? playlistsTabContent;
 // INVIDIOUS
   @override
   final InvidiousChannelResp? invidiousChannelResp;
@@ -1016,7 +1082,7 @@ class _$ChannelStateImpl implements _ChannelState {
 
   @override
   String toString() {
-    return 'ChannelState(isMoreFetchCompleted: $isMoreFetchCompleted, channelDetailsFetchStatus: $channelDetailsFetchStatus, pipedChannelResp: $pipedChannelResp, moreChannelDetailsFetchStatus: $moreChannelDetailsFetchStatus, selectedTabIndex: $selectedTabIndex, tabContentFetchStatus: $tabContentFetchStatus, selectedTabContent: $selectedTabContent, invidiousChannelResp: $invidiousChannelResp, invidiousPage: $invidiousPage)';
+    return 'ChannelState(isMoreFetchCompleted: $isMoreFetchCompleted, channelDetailsFetchStatus: $channelDetailsFetchStatus, pipedChannelResp: $pipedChannelResp, moreChannelDetailsFetchStatus: $moreChannelDetailsFetchStatus, selectedTabIndex: $selectedTabIndex, tabContentFetchStatus: $tabContentFetchStatus, selectedTabContent: $selectedTabContent, shortsTabFetchStatus: $shortsTabFetchStatus, shortsTabContent: $shortsTabContent, playlistsTabFetchStatus: $playlistsTabFetchStatus, playlistsTabContent: $playlistsTabContent, invidiousChannelResp: $invidiousChannelResp, invidiousPage: $invidiousPage)';
   }
 
   @override
@@ -1041,6 +1107,15 @@ class _$ChannelStateImpl implements _ChannelState {
                 other.tabContentFetchStatus == tabContentFetchStatus) &&
             (identical(other.selectedTabContent, selectedTabContent) ||
                 other.selectedTabContent == selectedTabContent) &&
+            (identical(other.shortsTabFetchStatus, shortsTabFetchStatus) ||
+                other.shortsTabFetchStatus == shortsTabFetchStatus) &&
+            (identical(other.shortsTabContent, shortsTabContent) ||
+                other.shortsTabContent == shortsTabContent) &&
+            (identical(
+                    other.playlistsTabFetchStatus, playlistsTabFetchStatus) ||
+                other.playlistsTabFetchStatus == playlistsTabFetchStatus) &&
+            (identical(other.playlistsTabContent, playlistsTabContent) ||
+                other.playlistsTabContent == playlistsTabContent) &&
             (identical(other.invidiousChannelResp, invidiousChannelResp) ||
                 other.invidiousChannelResp == invidiousChannelResp) &&
             (identical(other.invidiousPage, invidiousPage) ||
@@ -1057,6 +1132,10 @@ class _$ChannelStateImpl implements _ChannelState {
       selectedTabIndex,
       tabContentFetchStatus,
       selectedTabContent,
+      shortsTabFetchStatus,
+      shortsTabContent,
+      playlistsTabFetchStatus,
+      playlistsTabContent,
       invidiousChannelResp,
       invidiousPage);
 
@@ -1078,6 +1157,10 @@ abstract class _ChannelState implements ChannelState {
       required final int selectedTabIndex,
       required final ApiStatus tabContentFetchStatus,
       required final TabContent? selectedTabContent,
+      required final ApiStatus shortsTabFetchStatus,
+      required final TabContent? shortsTabContent,
+      required final ApiStatus playlistsTabFetchStatus,
+      required final TabContent? playlistsTabContent,
       required final InvidiousChannelResp? invidiousChannelResp,
       required final int invidiousPage}) = _$ChannelStateImpl;
 
@@ -1095,7 +1178,16 @@ abstract class _ChannelState implements ChannelState {
   @override
   ApiStatus get tabContentFetchStatus;
   @override
-  TabContent? get selectedTabContent; // INVIDIOUS
+  TabContent?
+      get selectedTabContent; // Separate tab content for shorts and playlists
+  @override
+  ApiStatus get shortsTabFetchStatus;
+  @override
+  TabContent? get shortsTabContent;
+  @override
+  ApiStatus get playlistsTabFetchStatus;
+  @override
+  TabContent? get playlistsTabContent; // INVIDIOUS
   @override
   InvidiousChannelResp? get invidiousChannelResp;
   @override

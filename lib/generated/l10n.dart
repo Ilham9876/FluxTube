@@ -1213,6 +1213,41 @@ class S {
       args: [],
     );
   }
+
+  /// `Videos`
+  String get videos {
+    return Intl.message('Videos', name: 'videos', desc: '', args: []);
+  }
+
+  /// `Shorts`
+  String get shorts {
+    return Intl.message('Shorts', name: 'shorts', desc: '', args: []);
+  }
+
+  /// `Playlists`
+  String get playlists {
+    return Intl.message('Playlists', name: 'playlists', desc: '', args: []);
+  }
+
+  /// `No shorts available`
+  String get noShorts {
+    return Intl.message(
+      'No shorts available',
+      name: 'noShorts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No playlists available`
+  String get noPlaylists {
+    return Intl.message(
+      'No playlists available',
+      name: 'noPlaylists',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
