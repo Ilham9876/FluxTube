@@ -61,7 +61,7 @@ class ChannelRelatedVideoSection extends StatelessWidget {
                             channelThumbnailUrl: videoInfo.uploaderAvatar,
                             channelId: channelId,
                             uploaderVerified: videoInfo.uploaderVerified)));
-                context.goNamed('watch', pathParameters: {
+                context.pushNamed('watch', pathParameters: {
                   'videoId': videoId,
                   'channelId': channelId,
                 });

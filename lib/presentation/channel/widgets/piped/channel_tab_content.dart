@@ -217,7 +217,7 @@ class _ChannelTabContentState extends State<ChannelTabContent>
         ),
       );
 
-      context.goNamed('watch', pathParameters: {
+      context.pushNamed('watch', pathParameters: {
         'videoId': videoId,
         'channelId': channelId,
       });

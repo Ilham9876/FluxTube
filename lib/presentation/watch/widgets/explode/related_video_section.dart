@@ -54,11 +54,7 @@ class ExplodeRelatedVideoSection extends StatelessWidget {
                                   channelThumbnailUrl: null,
                                   channelId: channelId,
                                   uploaderVerified: null)));
-                      if (context.canPop()) {
-                        Navigator.of(context).pop();
-                      }
-
-                      context.goNamed('watch', pathParameters: {
+                      context.pushNamed('watch', pathParameters: {
                         'videoId': videoId,
                         'channelId': channelId,
                       });

@@ -57,7 +57,7 @@ class RelatedVideoSection extends StatelessWidget {
                                   uploaderVerified: watchInfo
                                       .relatedStreams![index]
                                       .uploaderVerified)));
-                      context.goNamed('watch', pathParameters: {
+                      context.pushNamed('watch', pathParameters: {
                         'videoId': videoId,
                         'channelId': channelId,
                       });

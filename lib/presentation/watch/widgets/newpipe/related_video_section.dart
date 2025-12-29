@@ -61,7 +61,7 @@ class NewPipeRelatedVideoSection extends StatelessWidget {
                                   channelThumbnailUrl: related.uploaderAvatarUrl,
                                   channelId: channelId,
                                   uploaderVerified: related.uploaderVerified)));
-                      context.goNamed('watch', pathParameters: {
+                      context.pushNamed('watch', pathParameters: {
                         'videoId': videoId,
                         'channelId': channelId ?? '',
                       });

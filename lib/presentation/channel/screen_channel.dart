@@ -30,11 +30,25 @@ class ScreenChannel extends StatefulWidget {
 class _ScreenChannelState extends State<ScreenChannel>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  bool _hasLoadedChannel = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadChannelData();
+    });
+  }
+
+  void _loadChannelData() {
+    if (_hasLoadedChannel) return;
+    if (_channelId != null) {
+      final settingsBloc = BlocProvider.of<SettingsBloc>(context);
+      BlocProvider.of<ChannelBloc>(context).add(ChannelEvent.getChannelData(
+          channelId: _channelId!, serviceType: settingsBloc.state.ytService));
+      _hasLoadedChannel = true;
+    }
   }
 
   @override
@@ -48,14 +62,6 @@ class _ScreenChannelState extends State<ScreenChannel>
 
   @override
   Widget build(BuildContext context) {
-    final settingsBloc = BlocProvider.of<SettingsBloc>(context);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_channelId != null) {
-        BlocProvider.of<ChannelBloc>(context).add(ChannelEvent.getChannelData(
-            channelId: _channelId!, serviceType: settingsBloc.state.ytService));
-      }
-    });
     final double _width = MediaQuery.of(context).size.width;
     final S locals = S.of(context);
     return BlocBuilder<SubscribeBloc, SubscribeState>(
@@ -78,10 +84,10 @@ class _ScreenChannelState extends State<ScreenChannel>
               return Center(
                   child: ErrorRetryWidget(
                 lottie: 'assets/black-cat.zip',
-                onTap: () => BlocProvider.of<ChannelBloc>(context).add(
-                    ChannelEvent.getChannelData(
-                        channelId: _channelId ?? '',
-                        serviceType: settingsBloc.state.ytService)),
+                onTap: () {
+                  _hasLoadedChannel = false;
+                  _loadChannelData();
+                },
               ));
             }
 
