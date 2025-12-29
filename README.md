@@ -37,16 +37,30 @@ A powerful and ad-free YouTube client built using Flutter. Watch YouTube videos 
 ## Download
 
 <a href='https://github.com/mu-fazil-vk/FluxTube/releases'><img alt='Get it on GitHub' src='doc/get-it-on-gb.png' width="200"/></a><br>
+
 <a href='https://apt.izzysoft.de/packages/com.fazilvk.fluxtube'><img alt='Get it on GitHub' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png' width="200"/></a><br>
+
 You can download the latest version of the app from the [releases page](https://github.com/mu-fazil-vk/FluxTube/releases).
+
+## Recommended Settings
+
+For the best experience, we recommend the following configurations:
+
+| Use Case | YouTube Service | Player Type |
+|----------|----------------|-------------|
+| **Best Compatibility** | Piped | Better Player |
+| **Best Compatibility with UI** | Piped | OmniPlayer |
+
+> **Note:** OmniPlayer is experimental and provides better UI support, while Better Player offers more mature playback features on mobile.
 
 ## Todo
 
-- [ ] Playlist Support
+- [x] Playlist Support
 - [x] Picture in Picture Mode
 - [x] Channel Profile Support
 - [x] Subtitle Support
 - [x] Unlimited Scroll Support
+- [x] User Profiles
 
 ## Translations
 - Go to [Crowdin](https://crowdin.com/project/fluxtube/invite?h=4d7d9f6ba7c350dc176d6f75a5f569362170999) and help with the translations.

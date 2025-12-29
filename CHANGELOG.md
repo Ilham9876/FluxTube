@@ -1,5 +1,17 @@
 ## Changelog
 
+### v0.9.0
+
+- Added OmniPlayer (experimental cross-platform video player).
+- Added user profiles with separate subscriptions and history per profile.
+- Added auto-check instances feature for automatic failover.
+- Added playlist support.
+- Added home feed mode options (Auto/Subscriptions Only/Trending Only).
+- Added video fit mode, skip interval, and audio focus settings.
+- Added open links in external browser option.
+- Improved error handling with inline player error widgets.
+- Performance and stability improvements.
+
 ### v0.8.3
 
 - The signing key was changed to the previous one.
