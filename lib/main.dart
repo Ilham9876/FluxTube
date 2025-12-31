@@ -16,6 +16,7 @@ import 'package:fluxtube/core/locals.dart';
 import 'package:fluxtube/infrastructure/settings/setting_impl.dart';
 import 'package:fluxtube/presentation/routes/app_routes.dart';
 import 'package:fluxtube/presentation/routes/bloc_observer.dart';
+import 'package:fluxtube/presentation/watch/widgets/global_pip_overlay.dart';
 
 import 'core/di/injectable.dart';
 
@@ -64,6 +65,11 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: supportedLocales,
             locale: Locale(state.defaultLanguage),
+            builder: (context, child) {
+              return GlobalPipOverlay(
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
           );
         },
       ),

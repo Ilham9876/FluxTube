@@ -40,11 +40,13 @@ class NewPipeVideoPlayerWidget extends StatefulWidget {
 class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
   BetterPlayerController? _betterPlayerController;
   NewPipeVideoStream? selectedVideoTrack;
+  NewPipeAudioStream? selectedAudioTrack;
   late final List<NewPipeVideoStream> availableVideoTracks;
   late final double aspectRatio;
   late final SavedBloc _savedBloc;
   late final WatchBloc _watchBloc;
   BetterPlayerDataSource? betterPlayerDataSource;
+  Map<String, String>? resolutions;
 
   @override
   void initState() {
@@ -52,13 +54,108 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
 
     _savedBloc = BlocProvider.of<SavedBloc>(context);
     _watchBloc = BlocProvider.of<WatchBloc>(context);
-    // Combine video streams and video-only streams for selection
+
+    // Debug: Log available streams
+    _logAvailableStreams();
+
+    // Combine all video streams (muxed + video-only) for quality options
     availableVideoTracks = [
       ...(widget.watchInfo.videoStreams ?? []),
+      ...(widget.watchInfo.videoOnlyStreams ?? []),
     ];
+
+    // Select best audio stream for video-only playback
+    selectedAudioTrack = _selectBestAudioTrack();
+
+    // Build resolutions map including both muxed and video-only streams
+    _buildResolutionsMap();
+
     aspectRatio = _selectAspectRatio();
     selectedVideoTrack = _selectVideoTrack();
+
+    debugPrint('Selected video track: ${selectedVideoTrack?.resolution} | URL valid: ${_isValidUrl(selectedVideoTrack?.url)}');
+    debugPrint('Selected audio track: ${selectedAudioTrack?.quality} | URL valid: ${_isValidUrl(selectedAudioTrack?.url)}');
+    debugPrint('Resolutions map has ${resolutions?.length ?? 0} entries: ${resolutions?.keys.toList()}');
+
     _setupPlayer(widget.playbackPosition);
+  }
+
+  void _logAvailableStreams() {
+    debugPrint('=== NewPipe Stream Debug ===');
+    debugPrint('Muxed streams (videoStreams): ${widget.watchInfo.videoStreams?.length ?? 0}');
+    for (var stream in widget.watchInfo.videoStreams ?? []) {
+      debugPrint('  - ${stream.resolution} | ${stream.format} | URL valid: ${_isValidUrl(stream.url)}');
+    }
+    debugPrint('Video-only streams: ${widget.watchInfo.videoOnlyStreams?.length ?? 0}');
+    for (var stream in widget.watchInfo.videoOnlyStreams ?? []) {
+      debugPrint('  - ${stream.resolution} | ${stream.format} | URL valid: ${_isValidUrl(stream.url)}');
+    }
+    debugPrint('Audio streams: ${widget.watchInfo.audioStreams?.length ?? 0}');
+    for (var stream in widget.watchInfo.audioStreams ?? []) {
+      debugPrint('  - ${stream.quality} | ${stream.format} | ${stream.averageBitrate}kbps | URL valid: ${_isValidUrl(stream.url)}');
+    }
+    debugPrint('HLS URL valid: ${_isValidUrl(widget.watchInfo.hlsUrl)}');
+    debugPrint('DASH MPD URL valid: ${_isValidUrl(widget.watchInfo.dashMpdUrl)}');
+    debugPrint('=== End Stream Debug ===');
+  }
+
+  /// Select the best audio stream based on format compatibility and bitrate
+  NewPipeAudioStream? _selectBestAudioTrack() {
+    final audioStreams = widget.watchInfo.audioStreams;
+    if (audioStreams == null || audioStreams.isEmpty) return null;
+
+    // Sort by bitrate (higher is better)
+    final sortedStreams = List<NewPipeAudioStream>.from(audioStreams)
+      ..sort((a, b) => (b.averageBitrate ?? 0).compareTo(a.averageBitrate ?? 0));
+
+    // Prefer M4A/AAC for better compatibility, then OPUS/WEBM
+    final m4aStreams = sortedStreams.where((s) =>
+      s.mimeType?.contains('mp4') == true ||
+      s.format?.toLowerCase() == 'm4a').toList();
+
+    if (m4aStreams.isNotEmpty) return m4aStreams.first;
+
+    // Fallback to highest bitrate stream
+    return sortedStreams.first;
+  }
+
+  /// Build resolutions map from all available streams
+  void _buildResolutionsMap() {
+    resolutions = {};
+
+    // Get all valid tracks
+    final allTracks = availableVideoTracks
+        .where((v) => v.url != null)
+        .toList();
+
+    // Sort all tracks by resolution (highest first), then by fps
+    allTracks.sort((a, b) {
+      final aRes = int.tryParse(a.resolution?.replaceAll('p', '') ?? '0') ?? 0;
+      final bRes = int.tryParse(b.resolution?.replaceAll('p', '') ?? '0') ?? 0;
+      if (aRes != bRes) {
+        return bRes.compareTo(aRes); // Higher resolution first
+      }
+      // Same resolution: higher fps first
+      return (b.fps ?? 0).compareTo(a.fps ?? 0);
+    });
+
+    // Add to map (preserves insertion order)
+    for (var stream in allTracks) {
+      final label = _getQualityLabel(stream);
+      // Only add if we don't already have this quality label
+      if (!resolutions!.containsKey(label)) {
+        resolutions![label] = stream.url!;
+      }
+    }
+  }
+
+  /// Get a display label for the quality (e.g., "1080p 60fps")
+  String _getQualityLabel(NewPipeVideoStream stream) {
+    String label = stream.resolution ?? 'Unknown';
+    if (stream.fps != null && stream.fps! > 30) {
+      label += ' ${stream.fps}fps';
+    }
+    return label;
   }
 
   @override
@@ -91,36 +188,39 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
       return null;
     }
 
-    // Filter to get only muxed streams (non video-only)
-    final muxedTracks = availableVideoTracks.where((v) => v.isVideoOnly != true).toList();
-    if (muxedTracks.isEmpty) return null;
+    final defaultQualityValue =
+        int.tryParse(widget.defaultQuality.replaceAll('p', '')) ?? 720;
 
-    NewPipeVideoStream? defaultTrack;
-    for (var video in muxedTracks) {
+    // Get all streams with valid URLs
+    final allValidStreams = availableVideoTracks
+        .where((v) => v.url != null && v.url!.isNotEmpty)
+        .toList();
+
+    if (allValidStreams.isEmpty) return null;
+
+    // First, try to find exact match
+    for (var video in allValidStreams) {
       if (video.resolution == widget.defaultQuality) {
-        defaultTrack = video;
-        break;
+        return video;
       }
     }
 
-    if (defaultTrack == null) {
-      final defaultQualityValue =
-          int.tryParse(widget.defaultQuality.replaceAll('p', '')) ?? 0;
+    // Find closest quality
+    NewPipeVideoStream? defaultTrack;
+    int smallestDifference = double.maxFinite.toInt();
 
-      int smallestDifference = double.maxFinite.toInt();
-      for (var track in muxedTracks) {
-        int trackQualityValue =
-            int.tryParse(track.resolution?.replaceAll('p', '') ?? '0') ?? 0;
-        int difference = (trackQualityValue - defaultQualityValue).abs();
+    for (var track in allValidStreams) {
+      int trackQualityValue =
+          int.tryParse(track.resolution?.replaceAll('p', '') ?? '0') ?? 0;
+      int difference = (trackQualityValue - defaultQualityValue).abs();
 
-        if (difference < smallestDifference) {
-          smallestDifference = difference;
-          defaultTrack = track;
-        }
+      if (difference < smallestDifference) {
+        smallestDifference = difference;
+        defaultTrack = track;
       }
     }
 
-    return defaultTrack ?? muxedTracks.firstOrNull;
+    return defaultTrack ?? allValidStreams.first;
   }
 
   void _setupPlayer(int startPosition) {
@@ -130,21 +230,21 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
     final bool isLive = widget.watchInfo.isLive == true;
 
     // For live streams, prefer HLS
-    if (isLive && widget.watchInfo.hlsUrl != null) {
+    if (isLive && _isValidUrl(widget.watchInfo.hlsUrl)) {
       videoUrl = widget.watchInfo.hlsUrl;
       videoFormat = BetterPlayerVideoFormat.hls;
-    } else if (widget.isHlsPlayer && widget.watchInfo.dashMpdUrl != null) {
-      videoUrl = widget.watchInfo.dashMpdUrl;
-      videoFormat = BetterPlayerVideoFormat.dash;
-    } else if (selectedVideoTrack?.url != null) {
+    } else if (widget.isHlsPlayer && _isValidUrl(widget.watchInfo.hlsUrl)) {
+      // User explicitly requested HLS player
+      videoUrl = widget.watchInfo.hlsUrl;
+      videoFormat = BetterPlayerVideoFormat.hls;
+    } else if (selectedVideoTrack?.url != null && _isValidUrl(selectedVideoTrack!.url)) {
+      // Use direct stream with resolutions map for quality switching
       videoUrl = selectedVideoTrack!.url;
       videoFormat = BetterPlayerVideoFormat.other;
-    } else if (widget.watchInfo.hlsUrl != null) {
+    } else if (_isValidUrl(widget.watchInfo.hlsUrl)) {
+      // Fallback to HLS
       videoUrl = widget.watchInfo.hlsUrl;
       videoFormat = BetterPlayerVideoFormat.hls;
-    } else if (widget.watchInfo.dashMpdUrl != null) {
-      videoUrl = widget.watchInfo.dashMpdUrl;
-      videoFormat = BetterPlayerVideoFormat.dash;
     }
 
     if (videoUrl == null) {
@@ -152,12 +252,18 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
       return;
     }
 
+    // Only include resolutions for direct streams (non-HLS)
+    final shouldIncludeResolutions = videoFormat == BetterPlayerVideoFormat.other &&
+        resolutions != null &&
+        resolutions!.isNotEmpty;
+
     betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       videoUrl,
       subtitles: _createSubtitles(),
       liveStream: isLive,
       videoFormat: videoFormat,
+      resolutions: shouldIncludeResolutions ? resolutions : null,
     );
 
     _betterPlayerController = BetterPlayerController(
@@ -193,6 +299,13 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  /// Check if URL is valid and has a proper host
+  bool _isValidUrl(String? url) {
+    if (url == null || url.isEmpty) return false;
+    final uri = Uri.tryParse(url);
+    return uri != null && uri.hasScheme && uri.host.isNotEmpty;
   }
 
   void _showNoVideoAvailableToast() {

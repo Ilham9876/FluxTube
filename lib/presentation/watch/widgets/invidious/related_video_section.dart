@@ -61,7 +61,7 @@ class InvidiousRelatedVideoSection extends StatelessWidget {
                                   uploaderVerified: watchInfo
                                       .recommendedVideos![index]
                                       .authorVerified)));
-                      context.pushNamed('watch', pathParameters: {
+                      context.pushReplacementNamed('watch', pathParameters: {
                         'videoId': videoId,
                         'channelId': channelId,
                       });

@@ -5,12 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/colors.dart';
 import 'package:fluxtube/core/deep_link_handler.dart';
-import 'package:fluxtube/core/enums.dart';
 import 'package:fluxtube/generated/l10n.dart';
-import 'package:fluxtube/presentation/watch/widgets/explode/pip_video_player.dart';
-import 'package:fluxtube/presentation/watch/widgets/iFrame/pip_video_player.dart';
-import 'package:fluxtube/presentation/watch/widgets/invidious/pip_video_player.dart';
-import 'package:fluxtube/presentation/watch/widgets/pip_video_player.dart';
 
 import '../home/screen_home.dart';
 import '../saved/screen_saved.dart';
@@ -100,108 +95,7 @@ class MainNavigationState extends State<MainNavigation> {
       builder: (BuildContext context, int index, Widget? _) {
         return Scaffold(
           body: SafeArea(
-            child: BlocBuilder<SavedBloc, SavedState>(
-              builder: (context, savedState) {
-                return BlocBuilder<SettingsBloc, SettingsState>(
-                  builder: (context, settingsState) {
-                    return BlocBuilder<WatchBloc, WatchState>(
-                      builder: (context, state) {
-                        return Stack(
-                          children: [
-                            _pages[index],
-
-                            // Invidious pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.invidious.name &&
-                                !settingsState.isPipDisabled)
-                              Positioned(
-                                child: InvidiousPipVideoPlayerWidget(
-                                  watchInfo: state.invidiousWatchResp,
-                                  videoId: state.selectedVideoBasicDetails!.id,
-                                  playbackPosition: state.playBack,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  isHlsPlayer: settingsState.isHlsPlayer,
-                                  subtitles: state.subtitles,
-                                  watchState: state,
-                                ),
-                              ),
-
-                            // Piped pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.piped.name &&
-                                !settingsState.isPipDisabled)
-                              Positioned(
-                                child: PipVideoPlayerWidget(
-                                  watchInfo: state.watchResp,
-                                  videoId: state.selectedVideoBasicDetails!.id,
-                                  playbackPosition: state.playBack,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  isHlsPlayer: settingsState.isHlsPlayer,
-                                  subtitles: state.subtitles,
-                                  watchState: state,
-                                ),
-                              ),
-
-                            // IFrame pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.iframe.name &&
-                                !settingsState.isPipDisabled)
-                              Align(
-                                child: IFramePipVideoPlayer(
-                                  id: state.selectedVideoBasicDetails!.id,
-                                  isLive: state.explodeWatchResp.isLive,
-                                  channelId: state
-                                      .selectedVideoBasicDetails!.channelId!,
-                                  settingsState: settingsState,
-                                  watchState: state,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  savedState: savedState,
-                                  watchInfo: state.explodeWatchResp,
-                                  playBack: state.playBack,
-                                ),
-                              ),
-
-                            // Explode pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.explode.name &&
-                                !settingsState.isPipDisabled)
-                              Positioned(
-                                child: ExplodePipVideoPlayerWidget(
-                                  watchInfo: state.explodeWatchResp,
-                                  videoId: state.selectedVideoBasicDetails!.id,
-                                  playbackPosition: state.playBack,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  liveUrl: state.liveStreamUrl,
-                                  availableVideoTracks:
-                                      state.muxedStreams ?? [],
-                                  subtitles: state.subtitles,
-                                  watchState: state,
-                                ),
-                              ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
+            child: _pages[index],
           ),
           bottomNavigationBar: BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, state) {

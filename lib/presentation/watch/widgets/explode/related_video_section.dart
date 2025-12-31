@@ -54,7 +54,7 @@ class ExplodeRelatedVideoSection extends StatelessWidget {
                                   channelThumbnailUrl: null,
                                   channelId: channelId,
                                   uploaderVerified: null)));
-                      context.pushNamed('watch', pathParameters: {
+                      context.pushReplacementNamed('watch', pathParameters: {
                         'videoId': videoId,
                         'channelId': channelId,
                       });

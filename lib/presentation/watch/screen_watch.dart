@@ -36,10 +36,10 @@ class ScreenWatch extends StatelessWidget {
       // For other services, use service-specific screens
       // They will use either BetterPlayer or OmniPlayer based on playerType
       if (ytService == YouTubeServices.newpipe.name) {
+        // NewPipe now uses media_kit player exclusively
         return NewPipeScreenWatch(
           id: id,
           channelId: channelId,
-          useOmniPlayer: useOmniPlayer,
         );
       } else if (ytService == YouTubeServices.piped.name) {
         return PipedScreenWatch(

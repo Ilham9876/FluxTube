@@ -6,7 +6,6 @@ import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/colors.dart';
 import 'package:fluxtube/core/constants.dart';
 import 'package:fluxtube/core/enums.dart';
-import 'package:fluxtube/domain/watch/models/newpipe/newpipe_watch_resp.dart';
 import 'package:fluxtube/generated/l10n.dart';
 import 'package:fluxtube/widgets/widgets.dart';
 
@@ -16,20 +15,16 @@ import 'widgets/newpipe/like_section.dart';
 import 'widgets/newpipe/related_video_section.dart';
 import 'widgets/newpipe/subscribe_section.dart';
 import 'widgets/newpipe/video_player_widget.dart';
-import 'widgets/omni_video_player_widget.dart';
-import 'widgets/player_error_widget.dart';
 
 class NewPipeScreenWatch extends StatefulWidget {
   const NewPipeScreenWatch({
     super.key,
     required this.id,
     required this.channelId,
-    this.useOmniPlayer = false,
   });
 
   final String id;
   final String channelId;
-  final bool useOmniPlayer;
 
   @override
   State<NewPipeScreenWatch> createState() => _NewPipeScreenWatchState();
@@ -147,26 +142,20 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch> {
                                           child: cIndicator(context),
                                         ),
                                       )
-                                    : widget.useOmniPlayer
-                                        ? _buildOmniPlayer(
-                                            state.newPipeWatchResp,
-                                            settingsState.isHlsPlayer,
-                                            savedState.videoInfo?.playbackPosition ?? 0,
-                                          )
-                                        : NewPipeVideoPlayerWidget(
-                                            videoId: widget.id,
-                                            watchInfo: state.newPipeWatchResp,
-                                            defaultQuality:
-                                                settingsState.defaultQuality,
-                                            playbackPosition: savedState
-                                                    .videoInfo?.playbackPosition ??
-                                                0,
-                                            isSaved: isSaved,
-                                            isHlsPlayer: settingsState.isHlsPlayer,
-                                            videoFitMode: settingsState.videoFitMode,
-                                            skipInterval: settingsState.skipInterval,
-                                            isAudioFocusEnabled: settingsState.isAudioFocusEnabled,
-                                          ),
+                                    : NewPipeVideoPlayerWidget(
+                                        videoId: widget.id,
+                                        watchInfo: state.newPipeWatchResp,
+                                        defaultQuality:
+                                            settingsState.defaultQuality,
+                                        playbackPosition: savedState
+                                                .videoInfo?.playbackPosition ??
+                                            0,
+                                        isSaved: isSaved,
+                                        isHlsPlayer: settingsState.isHlsPlayer,
+                                        videoFitMode: settingsState.videoFitMode,
+                                        skipInterval: settingsState.skipInterval,
+                                        isAudioFocusEnabled: settingsState.isAudioFocusEnabled,
+                                      ),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       top: 12, left: 20, right: 20),
@@ -307,49 +296,6 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch> {
           },
         );
       },
-    );
-  }
-
-  Widget _buildOmniPlayer(NewPipeWatchResp watchInfo, bool isHlsPlayer, int startPosition) {
-    String? streamUrl;
-    bool isHls = false;
-    final bool isLive = watchInfo.isLive == true;
-
-    // For live streams, use HLS URL
-    if (isLive && watchInfo.hlsUrl != null) {
-      streamUrl = watchInfo.hlsUrl;
-      isHls = true;
-    } else if (isHlsPlayer && watchInfo.dashMpdUrl != null) {
-      streamUrl = watchInfo.dashMpdUrl;
-      isHls = true;
-    } else if (watchInfo.videoStreams != null && watchInfo.videoStreams!.isNotEmpty) {
-      // Get first video stream with audio (non video-only)
-      final muxedStreams = watchInfo.videoStreams!.where((s) => s.isVideoOnly != true).toList();
-      if (muxedStreams.isNotEmpty) {
-        streamUrl = muxedStreams.first.url;
-      } else if (watchInfo.videoStreams!.isNotEmpty) {
-        streamUrl = watchInfo.videoStreams!.first.url;
-      }
-    } else if (watchInfo.dashMpdUrl != null) {
-      streamUrl = watchInfo.dashMpdUrl;
-      isHls = true;
-    } else if (watchInfo.hlsUrl != null) {
-      streamUrl = watchInfo.hlsUrl;
-      isHls = true;
-    }
-
-    if (streamUrl == null) {
-      return const PlayerErrorWidget(
-        message: 'No stream URL available',
-      );
-    }
-
-    return OmniVideoPlayerWidget.network(
-      url: streamUrl,
-      startPosition: isLive ? 0 : startPosition,
-      isHls: isHls,
-      isLive: isLive,
-      onControllerCreated: (controller) {},
     );
   }
 }
