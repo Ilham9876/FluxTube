@@ -47,7 +47,9 @@ class SettingsEvent with _$SettingsEvent {
   factory SettingsEvent.renameProfile({required String oldName, required String newName}) =
       RenameProfile;
   // Import/Export events
-  factory SettingsEvent.exportSubscriptions() = ExportSubscriptions;
-  factory SettingsEvent.importSubscriptions({required String filePath}) =
+  factory SettingsEvent.exportSubscriptions({@Default('default') String profileName}) = ExportSubscriptions;
+  factory SettingsEvent.importSubscriptions({required String filePath, @Default('default') String profileName}) =
       ImportSubscriptions;
+  // Subtitle size
+  factory SettingsEvent.setSubtitleSize({required double size}) = SetSubtitleSize;
 }

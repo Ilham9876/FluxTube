@@ -306,7 +306,11 @@ class WatchBloc extends Bloc<WatchEvent, WatchState> {
     });
 
     on<SetSelectedVideoBasicDetails>((event, emit) async {
-      final newState = state.copyWith(selectedVideoBasicDetails: event.details);
+      // Disable PiP when navigating to a new video to stop any currently playing PiP
+      final newState = state.copyWith(
+        selectedVideoBasicDetails: event.details,
+        isPipEnabled: false,
+      );
       emit(newState);
     });
 

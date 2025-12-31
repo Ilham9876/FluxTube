@@ -37,13 +37,14 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch> {
     final watchBloc = BlocProvider.of<WatchBloc>(context);
     final savedBloc = BlocProvider.of<SavedBloc>(context);
     final subscribeBloc = BlocProvider.of<SubscribeBloc>(context);
+    final currentProfile = BlocProvider.of<SettingsBloc>(context).state.currentProfile;
 
     watchBloc.add(WatchEvent.togglePip(value: false));
     watchBloc.add(WatchEvent.getNewPipeWatchInfo(id: widget.id));
 
-    savedBloc.add(const SavedEvent.getAllVideoInfoList());
-    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id));
-    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId));
+    savedBloc.add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
+    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id, profileName: currentProfile));
+    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId, profileName: currentProfile));
   }
 
   @override
@@ -58,7 +59,8 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch> {
           previous.isPipDisabled != current.isPipDisabled ||
           previous.isHideRelated != current.isHideRelated ||
           previous.videoFitMode != current.videoFitMode ||
-          previous.skipInterval != current.skipInterval,
+          previous.skipInterval != current.skipInterval ||
+          previous.subtitleSize != current.subtitleSize,
       builder: (context, settingsState) {
         return BlocBuilder<WatchBloc, WatchState>(
           buildWhen: (previous, current) =>
@@ -144,6 +146,10 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch> {
                                         playbackPosition: savedState
                                                 .videoInfo?.playbackPosition ??
                                             0,
+                                        defaultQuality: settingsState.defaultQuality,
+                                        videoFitMode: settingsState.videoFitMode,
+                                        skipInterval: settingsState.skipInterval,
+                                        subtitleSize: settingsState.subtitleSize,
                                       ),
                                 Padding(
                                   padding: const EdgeInsets.only(

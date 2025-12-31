@@ -47,6 +47,8 @@ class SettingsState with _$SettingsState {
     // Profiles
     required String currentProfile,
     required List<String> profiles,
+    // Subtitle size (font size in pixels)
+    required double subtitleSize,
   }) = _Initial;
 
   factory SettingsState.initialize() => SettingsState(
@@ -86,5 +88,6 @@ class SettingsState with _$SettingsState {
         isAudioFocusEnabled: true,
         currentProfile: 'default',
         profiles: ['default'],
+        subtitleSize: 18.0,
       );
 }

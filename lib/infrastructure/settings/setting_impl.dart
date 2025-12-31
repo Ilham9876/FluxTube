@@ -108,6 +108,7 @@ class SettingImpl implements SettingsService {
       {"name": openLinksInBrowserKey, "default": "false"},
       {"name": audioFocusEnabledKey, "default": "true"},
       {"name": sponsorBlockEnabledKey, "default": "false"},
+      {"name": subtitleSizeKey, "default": "18.0"},
     ];
 
     // Initialize settings list
@@ -634,9 +635,13 @@ class SettingImpl implements SettingsService {
 
   // Import/Export methods
   @override
-  Future<Either<MainFailure, String>> exportSubscriptions() async {
+  Future<Either<MainFailure, String>> exportSubscriptions({String profileName = 'default'}) async {
     try {
-      final subscriptions = await isar.subscribes.where().findAll();
+      // Get subscriptions only for the specified profile
+      final subscriptions = await isar.subscribes
+          .filter()
+          .profileNameEqualTo(profileName)
+          .findAll();
 
       // Create NewPipe compatible format
       final subscriptionsList = subscriptions.map((sub) {
@@ -651,11 +656,13 @@ class SettingImpl implements SettingsService {
         'app_version': '0.9.0',
         'app_version_int': 11,
         'subscriptions': subscriptionsList,
+        'profile': profileName,
       };
 
       final dir = await getApplicationDocumentsDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final file = File('${dir.path}/fluxtube_subscriptions_$timestamp.json');
+      final profileSuffix = profileName == 'default' ? '' : '_$profileName';
+      final file = File('${dir.path}/fluxtube_subscriptions${profileSuffix}_$timestamp.json');
       await file.writeAsString(jsonEncode(exportData));
 
       return Right(file.path);
@@ -665,7 +672,7 @@ class SettingImpl implements SettingsService {
   }
 
   @override
-  Future<Either<MainFailure, int>> importSubscriptions({required String filePath}) async {
+  Future<Either<MainFailure, int>> importSubscriptions({required String filePath, String profileName = 'default'}) async {
     try {
       final file = File(filePath);
       if (!await file.exists()) {
@@ -697,16 +704,18 @@ class SettingImpl implements SettingsService {
             }
 
             if (channelId != null && channelId.isNotEmpty) {
-              // Check if already subscribed
+              // Check if already subscribed in this profile
               final existing = await isar.subscribes
                   .filter()
                   .idEqualTo(channelId)
+                  .profileNameEqualTo(profileName)
                   .findFirst();
 
               if (existing == null) {
                 final newSub = Subscribe(
                   id: channelId,
                   channelName: name,
+                  profileName: profileName,
                 );
                 await isar.subscribes.put(newSub);
                 importedCount++;
@@ -720,5 +729,14 @@ class SettingImpl implements SettingsService {
     } catch (e) {
       return const Left(MainFailure.serverFailure());
     }
+  }
+
+  @override
+  Future<Either<MainFailure, double>> setSubtitleSize({required double size}) async {
+    return _setSetting(
+      settingName: subtitleSizeKey,
+      value: size,
+      toStringValue: (v) => v.toString(),
+    );
   }
 }

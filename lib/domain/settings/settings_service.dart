@@ -61,6 +61,8 @@ abstract class SettingsService {
   Future<Either<MainFailure, List<String>>> renameProfile({required String oldName, required String newName});
   Future<Either<MainFailure, List<String>>> getProfiles();
   // Import/Export methods
-  Future<Either<MainFailure, String>> exportSubscriptions();
-  Future<Either<MainFailure, int>> importSubscriptions({required String filePath});
+  Future<Either<MainFailure, String>> exportSubscriptions({String profileName = 'default'});
+  Future<Either<MainFailure, int>> importSubscriptions({required String filePath, String profileName = 'default'});
+  // Subtitle size
+  Future<Either<MainFailure, double>> setSubtitleSize({required double size});
 }

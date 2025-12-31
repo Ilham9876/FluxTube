@@ -24,6 +24,7 @@ class NewPipeMediaKitPlayer extends StatefulWidget {
     this.videoFitMode = "contain",
     this.skipInterval = 10,
     this.isAudioFocusEnabled = true,
+    this.subtitleSize = 18.0,
   });
 
   final NewPipeWatchResp watchInfo;
@@ -34,6 +35,7 @@ class NewPipeMediaKitPlayer extends StatefulWidget {
   final String videoFitMode;
   final int skipInterval;
   final bool isAudioFocusEnabled;
+  final double subtitleSize;
 
   @override
   State<NewPipeMediaKitPlayer> createState() => _NewPipeMediaKitPlayerState();
@@ -216,14 +218,50 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     }
   }
 
-  /// Select a medium-quality audio stream (around 128kbps)
+  /// Select a medium-quality ORIGINAL audio stream (around 128kbps)
+  /// Prioritizes original audio over dubbed/translated versions
   /// Returns fresh URL each time - needed because YouTube URLs expire
   String? _selectMediumQualityAudio() {
     final audioStreams = widget.watchInfo.audioStreams ?? [];
     if (audioStreams.isEmpty) return null;
 
-    // Sort audio streams by quality
-    final sorted = NewPipeStreamHelper.sortAudioStreams(audioStreams);
+    // Debug: Log all audio streams with URL-based detection
+    debugPrint('=== Audio Stream Detection ===');
+    for (var audio in audioStreams) {
+      debugPrint('  - ${audio.quality} | ${audio.format} | type: ${audio.audioTrackType ?? "null"} | isOriginal: ${audio.isOriginal} | isDubbed: ${audio.isDubbed}');
+    }
+    debugPrint('==============================');
+
+    // Filter to only original audio streams (not dubbed or descriptive)
+    // Now also checks URL xtags for dubbed indicators when audioTrackType is null
+    final originalStreams = audioStreams.where((audio) {
+      if (audio.url == null || audio.url!.isEmpty) return false;
+      return audio.isOriginal;
+    }).toList();
+
+    debugPrint('Audio filtering: ${originalStreams.length} original streams found out of ${audioStreams.length} total');
+
+    // If no original streams found, fall back to all streams (excluding descriptive)
+    final candidateStreams = originalStreams.isNotEmpty
+        ? originalStreams
+        : audioStreams.where((audio) {
+            if (audio.url == null || audio.url!.isEmpty) return false;
+            return !audio.isDescriptive;
+          }).toList();
+
+    if (candidateStreams.isEmpty) {
+      // Last resort: use any available stream
+      final anyValid = audioStreams.firstWhere(
+        (audio) => audio.url != null && audio.url!.isNotEmpty,
+        orElse: () => audioStreams.first,
+      );
+      debugPrint(
+          'No suitable audio found, using fallback: ${anyValid.quality ?? "Unknown"}');
+      return anyValid.url;
+    }
+
+    // Sort by quality
+    final sorted = NewPipeStreamHelper.sortAudioStreams(candidateStreams);
 
     // Target medium quality (around 128kbps)
     // Find audio stream closest to 128kbps bitrate
@@ -232,8 +270,6 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     int smallestDiff = double.maxFinite.toInt();
 
     for (var audio in sorted) {
-      if (audio.url == null || audio.url!.isEmpty) continue;
-
       final bitrate = audio.averageBitrate ?? 0;
       final diff = (bitrate - targetBitrate).abs();
 
@@ -244,7 +280,7 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     }
 
     debugPrint(
-        'Selected audio: ${selectedAudio?.quality ?? "Unknown"} | Bitrate: ${selectedAudio?.averageBitrate ?? 0}kbps | Format: ${selectedAudio?.format ?? "Unknown"}');
+        'Selected audio: ${selectedAudio?.quality ?? "Unknown"} | Bitrate: ${selectedAudio?.averageBitrate ?? 0}kbps | Format: ${selectedAudio?.format ?? "Unknown"} | TrackType: ${selectedAudio?.audioTrackType ?? "null"} | isOriginal: ${selectedAudio?.isOriginal} | isDubbed: ${selectedAudio?.isDubbed} | Locale: ${selectedAudio?.audioLocale ?? "N/A"}');
     return selectedAudio?.url;
   }
 
@@ -351,12 +387,45 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
 
     return AspectRatio(
       aspectRatio: _getAspectRatio(),
-      child: Video(
-        controller: _videoController,
-        controls: (state) {
-          return _buildCustomControls(state);
-        },
-        fit: _getBoxFit(widget.videoFitMode),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Video(
+            controller: _videoController,
+            controls: (state) {
+              return _buildCustomControls(state);
+            },
+            fit: _getBoxFit(widget.videoFitMode),
+            subtitleViewConfiguration: SubtitleViewConfiguration(
+              style: TextStyle(
+                fontSize: widget.subtitleSize,
+                color: Colors.white,
+                backgroundColor: const Color(0x99000000),
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            ),
+          ),
+          // Buffering indicator overlay
+          StreamBuilder<bool>(
+            stream: _player.stream.buffering,
+            initialData: false,
+            builder: (context, snapshot) {
+              final isBuffering = snapshot.data ?? false;
+              if (!isBuffering) return const SizedBox.shrink();
+              return Container(
+                color: Colors.black.withValues(alpha: 0.3),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

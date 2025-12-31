@@ -66,6 +66,7 @@ class GlobalPipOverlay extends StatelessWidget {
       case 'invidious':
         return Positioned(
           child: InvidiousPipVideoPlayerWidget(
+            key: ValueKey('pip_${watchState.selectedVideoBasicDetails!.id}'),
             watchInfo: watchState.invidiousWatchResp,
             videoId: watchState.selectedVideoBasicDetails!.id,
             playbackPosition: watchState.playBack,
@@ -79,6 +80,7 @@ class GlobalPipOverlay extends StatelessWidget {
       case 'piped':
         return Positioned(
           child: PipVideoPlayerWidget(
+            key: ValueKey('pip_${watchState.selectedVideoBasicDetails!.id}'),
             watchInfo: watchState.watchResp,
             videoId: watchState.selectedVideoBasicDetails!.id,
             playbackPosition: watchState.playBack,
@@ -92,6 +94,7 @@ class GlobalPipOverlay extends StatelessWidget {
       case 'iframe':
         return Align(
           child: IFramePipVideoPlayer(
+            key: ValueKey('pip_${watchState.selectedVideoBasicDetails!.id}'),
             id: watchState.selectedVideoBasicDetails!.id,
             isLive: watchState.explodeWatchResp.isLive,
             channelId: watchState.selectedVideoBasicDetails!.channelId!,
@@ -107,6 +110,7 @@ class GlobalPipOverlay extends StatelessWidget {
       case 'explode':
         return Positioned(
           child: ExplodePipVideoPlayerWidget(
+            key: ValueKey('pip_${watchState.selectedVideoBasicDetails!.id}'),
             watchInfo: watchState.explodeWatchResp,
             videoId: watchState.selectedVideoBasicDetails!.id,
             playbackPosition: watchState.playBack,
@@ -120,6 +124,7 @@ class GlobalPipOverlay extends StatelessWidget {
 
       case 'newpipe':
         return NewPipePipVideoPlayerWidget(
+          key: ValueKey('pip_${watchState.selectedVideoBasicDetails!.id}'),
           watchInfo: watchState.newPipeWatchResp,
           videoId: watchState.selectedVideoBasicDetails!.id,
           playbackPosition: watchState.playBack,

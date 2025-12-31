@@ -47,8 +47,10 @@ mixin _$SettingsEvent {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -81,8 +83,9 @@ mixin _$SettingsEvent {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -115,8 +118,9 @@ mixin _$SettingsEvent {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -159,6 +163,7 @@ mixin _$SettingsEvent {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -195,6 +200,7 @@ mixin _$SettingsEvent {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -231,6 +237,7 @@ mixin _$SettingsEvent {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -327,8 +334,10 @@ class _$InitializeSettingsImpl implements InitializeSettings {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return initializeSettings();
   }
@@ -364,8 +373,9 @@ class _$InitializeSettingsImpl implements InitializeSettings {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return initializeSettings?.call();
   }
@@ -401,8 +411,9 @@ class _$InitializeSettingsImpl implements InitializeSettings {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (initializeSettings != null) {
@@ -451,6 +462,7 @@ class _$InitializeSettingsImpl implements InitializeSettings {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return initializeSettings(this);
   }
@@ -490,6 +502,7 @@ class _$InitializeSettingsImpl implements InitializeSettings {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return initializeSettings?.call(this);
   }
@@ -529,6 +542,7 @@ class _$InitializeSettingsImpl implements InitializeSettings {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (initializeSettings != null) {
@@ -641,8 +655,10 @@ class _$GetDefaultLanguageImpl implements GetDefaultLanguage {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return getDefaultLanguage(language);
   }
@@ -678,8 +694,9 @@ class _$GetDefaultLanguageImpl implements GetDefaultLanguage {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return getDefaultLanguage?.call(language);
   }
@@ -715,8 +732,9 @@ class _$GetDefaultLanguageImpl implements GetDefaultLanguage {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (getDefaultLanguage != null) {
@@ -765,6 +783,7 @@ class _$GetDefaultLanguageImpl implements GetDefaultLanguage {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return getDefaultLanguage(this);
   }
@@ -804,6 +823,7 @@ class _$GetDefaultLanguageImpl implements GetDefaultLanguage {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return getDefaultLanguage?.call(this);
   }
@@ -843,6 +863,7 @@ class _$GetDefaultLanguageImpl implements GetDefaultLanguage {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (getDefaultLanguage != null) {
@@ -963,8 +984,10 @@ class _$GetDefaultQualityImpl implements GetDefaultQuality {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return getDefaultQuality(quality);
   }
@@ -1000,8 +1023,9 @@ class _$GetDefaultQualityImpl implements GetDefaultQuality {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return getDefaultQuality?.call(quality);
   }
@@ -1037,8 +1061,9 @@ class _$GetDefaultQualityImpl implements GetDefaultQuality {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (getDefaultQuality != null) {
@@ -1087,6 +1112,7 @@ class _$GetDefaultQualityImpl implements GetDefaultQuality {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return getDefaultQuality(this);
   }
@@ -1126,6 +1152,7 @@ class _$GetDefaultQualityImpl implements GetDefaultQuality {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return getDefaultQuality?.call(this);
   }
@@ -1165,6 +1192,7 @@ class _$GetDefaultQualityImpl implements GetDefaultQuality {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (getDefaultQuality != null) {
@@ -1285,8 +1313,10 @@ class _$GetDefaultRegionImpl implements GetDefaultRegion {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return getDefaultRegion(region);
   }
@@ -1322,8 +1352,9 @@ class _$GetDefaultRegionImpl implements GetDefaultRegion {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return getDefaultRegion?.call(region);
   }
@@ -1359,8 +1390,9 @@ class _$GetDefaultRegionImpl implements GetDefaultRegion {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (getDefaultRegion != null) {
@@ -1409,6 +1441,7 @@ class _$GetDefaultRegionImpl implements GetDefaultRegion {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return getDefaultRegion(this);
   }
@@ -1448,6 +1481,7 @@ class _$GetDefaultRegionImpl implements GetDefaultRegion {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return getDefaultRegion?.call(this);
   }
@@ -1487,6 +1521,7 @@ class _$GetDefaultRegionImpl implements GetDefaultRegion {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (getDefaultRegion != null) {
@@ -1607,8 +1642,10 @@ class _$ChangeThemeImpl implements ChangeTheme {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return changeTheme(themeMode);
   }
@@ -1644,8 +1681,9 @@ class _$ChangeThemeImpl implements ChangeTheme {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return changeTheme?.call(themeMode);
   }
@@ -1681,8 +1719,9 @@ class _$ChangeThemeImpl implements ChangeTheme {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (changeTheme != null) {
@@ -1731,6 +1770,7 @@ class _$ChangeThemeImpl implements ChangeTheme {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return changeTheme(this);
   }
@@ -1770,6 +1810,7 @@ class _$ChangeThemeImpl implements ChangeTheme {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return changeTheme?.call(this);
   }
@@ -1809,6 +1850,7 @@ class _$ChangeThemeImpl implements ChangeTheme {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (changeTheme != null) {
@@ -1903,8 +1945,10 @@ class _$ToggleHistoryVisibilityImpl implements ToggleHistoryVisibility {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleHistoryVisibility();
   }
@@ -1940,8 +1984,9 @@ class _$ToggleHistoryVisibilityImpl implements ToggleHistoryVisibility {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleHistoryVisibility?.call();
   }
@@ -1977,8 +2022,9 @@ class _$ToggleHistoryVisibilityImpl implements ToggleHistoryVisibility {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleHistoryVisibility != null) {
@@ -2027,6 +2073,7 @@ class _$ToggleHistoryVisibilityImpl implements ToggleHistoryVisibility {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleHistoryVisibility(this);
   }
@@ -2066,6 +2113,7 @@ class _$ToggleHistoryVisibilityImpl implements ToggleHistoryVisibility {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleHistoryVisibility?.call(this);
   }
@@ -2105,6 +2153,7 @@ class _$ToggleHistoryVisibilityImpl implements ToggleHistoryVisibility {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleHistoryVisibility != null) {
@@ -2191,8 +2240,10 @@ class _$ToggleDislikeVisibilityImpl implements ToggleDislikeVisibility {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleDislikeVisibility();
   }
@@ -2228,8 +2279,9 @@ class _$ToggleDislikeVisibilityImpl implements ToggleDislikeVisibility {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleDislikeVisibility?.call();
   }
@@ -2265,8 +2317,9 @@ class _$ToggleDislikeVisibilityImpl implements ToggleDislikeVisibility {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleDislikeVisibility != null) {
@@ -2315,6 +2368,7 @@ class _$ToggleDislikeVisibilityImpl implements ToggleDislikeVisibility {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleDislikeVisibility(this);
   }
@@ -2354,6 +2408,7 @@ class _$ToggleDislikeVisibilityImpl implements ToggleDislikeVisibility {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleDislikeVisibility?.call(this);
   }
@@ -2393,6 +2448,7 @@ class _$ToggleDislikeVisibilityImpl implements ToggleDislikeVisibility {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleDislikeVisibility != null) {
@@ -2476,8 +2532,10 @@ class _$ToggleHlsPlayerImpl implements ToggleHlsPlayer {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleHlsPlayer();
   }
@@ -2513,8 +2571,9 @@ class _$ToggleHlsPlayerImpl implements ToggleHlsPlayer {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleHlsPlayer?.call();
   }
@@ -2550,8 +2609,9 @@ class _$ToggleHlsPlayerImpl implements ToggleHlsPlayer {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleHlsPlayer != null) {
@@ -2600,6 +2660,7 @@ class _$ToggleHlsPlayerImpl implements ToggleHlsPlayer {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleHlsPlayer(this);
   }
@@ -2639,6 +2700,7 @@ class _$ToggleHlsPlayerImpl implements ToggleHlsPlayer {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleHlsPlayer?.call(this);
   }
@@ -2678,6 +2740,7 @@ class _$ToggleHlsPlayerImpl implements ToggleHlsPlayer {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleHlsPlayer != null) {
@@ -2764,8 +2827,10 @@ class _$ToggleCommentVisibilityImpl implements ToggleCommentVisibility {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleCommentVisibility();
   }
@@ -2801,8 +2866,9 @@ class _$ToggleCommentVisibilityImpl implements ToggleCommentVisibility {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleCommentVisibility?.call();
   }
@@ -2838,8 +2904,9 @@ class _$ToggleCommentVisibilityImpl implements ToggleCommentVisibility {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleCommentVisibility != null) {
@@ -2888,6 +2955,7 @@ class _$ToggleCommentVisibilityImpl implements ToggleCommentVisibility {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleCommentVisibility(this);
   }
@@ -2927,6 +2995,7 @@ class _$ToggleCommentVisibilityImpl implements ToggleCommentVisibility {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleCommentVisibility?.call(this);
   }
@@ -2966,6 +3035,7 @@ class _$ToggleCommentVisibilityImpl implements ToggleCommentVisibility {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleCommentVisibility != null) {
@@ -3054,8 +3124,10 @@ class _$ToggleRelatedVideoVisibilityImpl
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleRelatedVideoVisibility();
   }
@@ -3091,8 +3163,9 @@ class _$ToggleRelatedVideoVisibilityImpl
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleRelatedVideoVisibility?.call();
   }
@@ -3128,8 +3201,9 @@ class _$ToggleRelatedVideoVisibilityImpl
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleRelatedVideoVisibility != null) {
@@ -3178,6 +3252,7 @@ class _$ToggleRelatedVideoVisibilityImpl
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleRelatedVideoVisibility(this);
   }
@@ -3217,6 +3292,7 @@ class _$ToggleRelatedVideoVisibilityImpl
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleRelatedVideoVisibility?.call(this);
   }
@@ -3256,6 +3332,7 @@ class _$ToggleRelatedVideoVisibilityImpl
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleRelatedVideoVisibility != null) {
@@ -3340,8 +3417,10 @@ class _$FetchPipedInstancesImpl implements FetchPipedInstances {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return fetchPipedInstances();
   }
@@ -3377,8 +3456,9 @@ class _$FetchPipedInstancesImpl implements FetchPipedInstances {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return fetchPipedInstances?.call();
   }
@@ -3414,8 +3494,9 @@ class _$FetchPipedInstancesImpl implements FetchPipedInstances {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (fetchPipedInstances != null) {
@@ -3464,6 +3545,7 @@ class _$FetchPipedInstancesImpl implements FetchPipedInstances {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return fetchPipedInstances(this);
   }
@@ -3503,6 +3585,7 @@ class _$FetchPipedInstancesImpl implements FetchPipedInstances {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return fetchPipedInstances?.call(this);
   }
@@ -3542,6 +3625,7 @@ class _$FetchPipedInstancesImpl implements FetchPipedInstances {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (fetchPipedInstances != null) {
@@ -3628,8 +3712,10 @@ class _$FetchInvidiousInstancesImpl implements FetchInvidiousInstances {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return fetchInvidiousInstances();
   }
@@ -3665,8 +3751,9 @@ class _$FetchInvidiousInstancesImpl implements FetchInvidiousInstances {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return fetchInvidiousInstances?.call();
   }
@@ -3702,8 +3789,9 @@ class _$FetchInvidiousInstancesImpl implements FetchInvidiousInstances {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (fetchInvidiousInstances != null) {
@@ -3752,6 +3840,7 @@ class _$FetchInvidiousInstancesImpl implements FetchInvidiousInstances {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return fetchInvidiousInstances(this);
   }
@@ -3791,6 +3880,7 @@ class _$FetchInvidiousInstancesImpl implements FetchInvidiousInstances {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return fetchInvidiousInstances?.call(this);
   }
@@ -3830,6 +3920,7 @@ class _$FetchInvidiousInstancesImpl implements FetchInvidiousInstances {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (fetchInvidiousInstances != null) {
@@ -3941,8 +4032,10 @@ class _$SetInstanceImpl implements SetInstance {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setInstance(instanceApi);
   }
@@ -3978,8 +4071,9 @@ class _$SetInstanceImpl implements SetInstance {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setInstance?.call(instanceApi);
   }
@@ -4015,8 +4109,9 @@ class _$SetInstanceImpl implements SetInstance {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setInstance != null) {
@@ -4065,6 +4160,7 @@ class _$SetInstanceImpl implements SetInstance {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setInstance(this);
   }
@@ -4104,6 +4200,7 @@ class _$SetInstanceImpl implements SetInstance {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setInstance?.call(this);
   }
@@ -4143,6 +4240,7 @@ class _$SetInstanceImpl implements SetInstance {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setInstance != null) {
@@ -4261,8 +4359,10 @@ class _$SetYTServiceImpl implements SetYTService {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setYTService(service);
   }
@@ -4298,8 +4398,9 @@ class _$SetYTServiceImpl implements SetYTService {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setYTService?.call(service);
   }
@@ -4335,8 +4436,9 @@ class _$SetYTServiceImpl implements SetYTService {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setYTService != null) {
@@ -4385,6 +4487,7 @@ class _$SetYTServiceImpl implements SetYTService {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setYTService(this);
   }
@@ -4424,6 +4527,7 @@ class _$SetYTServiceImpl implements SetYTService {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setYTService?.call(this);
   }
@@ -4463,6 +4567,7 @@ class _$SetYTServiceImpl implements SetYTService {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setYTService != null) {
@@ -4583,8 +4688,10 @@ class _$SetPlayerTypeImpl implements SetPlayerType {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setPlayerType(playerType);
   }
@@ -4620,8 +4727,9 @@ class _$SetPlayerTypeImpl implements SetPlayerType {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setPlayerType?.call(playerType);
   }
@@ -4657,8 +4765,9 @@ class _$SetPlayerTypeImpl implements SetPlayerType {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setPlayerType != null) {
@@ -4707,6 +4816,7 @@ class _$SetPlayerTypeImpl implements SetPlayerType {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setPlayerType(this);
   }
@@ -4746,6 +4856,7 @@ class _$SetPlayerTypeImpl implements SetPlayerType {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setPlayerType?.call(this);
   }
@@ -4785,6 +4896,7 @@ class _$SetPlayerTypeImpl implements SetPlayerType {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setPlayerType != null) {
@@ -4877,8 +4989,10 @@ class _$TogglePipPlayerImpl implements TogglePipPlayer {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return togglePipPlayer();
   }
@@ -4914,8 +5028,9 @@ class _$TogglePipPlayerImpl implements TogglePipPlayer {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return togglePipPlayer?.call();
   }
@@ -4951,8 +5066,9 @@ class _$TogglePipPlayerImpl implements TogglePipPlayer {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (togglePipPlayer != null) {
@@ -5001,6 +5117,7 @@ class _$TogglePipPlayerImpl implements TogglePipPlayer {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return togglePipPlayer(this);
   }
@@ -5040,6 +5157,7 @@ class _$TogglePipPlayerImpl implements TogglePipPlayer {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return togglePipPlayer?.call(this);
   }
@@ -5079,6 +5197,7 @@ class _$TogglePipPlayerImpl implements TogglePipPlayer {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (togglePipPlayer != null) {
@@ -5190,8 +5309,10 @@ class _$SetSearchFilterImpl implements SetSearchFilter {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setSearchFilter(filter);
   }
@@ -5227,8 +5348,9 @@ class _$SetSearchFilterImpl implements SetSearchFilter {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setSearchFilter?.call(filter);
   }
@@ -5264,8 +5386,9 @@ class _$SetSearchFilterImpl implements SetSearchFilter {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setSearchFilter != null) {
@@ -5314,6 +5437,7 @@ class _$SetSearchFilterImpl implements SetSearchFilter {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setSearchFilter(this);
   }
@@ -5353,6 +5477,7 @@ class _$SetSearchFilterImpl implements SetSearchFilter {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setSearchFilter?.call(this);
   }
@@ -5392,6 +5517,7 @@ class _$SetSearchFilterImpl implements SetSearchFilter {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setSearchFilter != null) {
@@ -5512,8 +5638,10 @@ class _$SetVideoFitModeImpl implements SetVideoFitMode {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setVideoFitMode(fitMode);
   }
@@ -5549,8 +5677,9 @@ class _$SetVideoFitModeImpl implements SetVideoFitMode {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setVideoFitMode?.call(fitMode);
   }
@@ -5586,8 +5715,9 @@ class _$SetVideoFitModeImpl implements SetVideoFitMode {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setVideoFitMode != null) {
@@ -5636,6 +5766,7 @@ class _$SetVideoFitModeImpl implements SetVideoFitMode {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setVideoFitMode(this);
   }
@@ -5675,6 +5806,7 @@ class _$SetVideoFitModeImpl implements SetVideoFitMode {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setVideoFitMode?.call(this);
   }
@@ -5714,6 +5846,7 @@ class _$SetVideoFitModeImpl implements SetVideoFitMode {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setVideoFitMode != null) {
@@ -5834,8 +5967,10 @@ class _$SetSkipIntervalImpl implements SetSkipInterval {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setSkipInterval(seconds);
   }
@@ -5871,8 +6006,9 @@ class _$SetSkipIntervalImpl implements SetSkipInterval {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setSkipInterval?.call(seconds);
   }
@@ -5908,8 +6044,9 @@ class _$SetSkipIntervalImpl implements SetSkipInterval {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setSkipInterval != null) {
@@ -5958,6 +6095,7 @@ class _$SetSkipIntervalImpl implements SetSkipInterval {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setSkipInterval(this);
   }
@@ -5997,6 +6135,7 @@ class _$SetSkipIntervalImpl implements SetSkipInterval {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setSkipInterval?.call(this);
   }
@@ -6036,6 +6175,7 @@ class _$SetSkipIntervalImpl implements SetSkipInterval {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setSkipInterval != null) {
@@ -6127,8 +6267,10 @@ class _$ToggleSponsorBlockImpl implements ToggleSponsorBlock {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleSponsorBlock();
   }
@@ -6164,8 +6306,9 @@ class _$ToggleSponsorBlockImpl implements ToggleSponsorBlock {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleSponsorBlock?.call();
   }
@@ -6201,8 +6344,9 @@ class _$ToggleSponsorBlockImpl implements ToggleSponsorBlock {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleSponsorBlock != null) {
@@ -6251,6 +6395,7 @@ class _$ToggleSponsorBlockImpl implements ToggleSponsorBlock {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleSponsorBlock(this);
   }
@@ -6290,6 +6435,7 @@ class _$ToggleSponsorBlockImpl implements ToggleSponsorBlock {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleSponsorBlock?.call(this);
   }
@@ -6329,6 +6475,7 @@ class _$ToggleSponsorBlockImpl implements ToggleSponsorBlock {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleSponsorBlock != null) {
@@ -6450,8 +6597,10 @@ class _$SetSponsorBlockCategoriesImpl implements SetSponsorBlockCategories {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setSponsorBlockCategories(categories);
   }
@@ -6487,8 +6636,9 @@ class _$SetSponsorBlockCategoriesImpl implements SetSponsorBlockCategories {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setSponsorBlockCategories?.call(categories);
   }
@@ -6524,8 +6674,9 @@ class _$SetSponsorBlockCategoriesImpl implements SetSponsorBlockCategories {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setSponsorBlockCategories != null) {
@@ -6574,6 +6725,7 @@ class _$SetSponsorBlockCategoriesImpl implements SetSponsorBlockCategories {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setSponsorBlockCategories(this);
   }
@@ -6613,6 +6765,7 @@ class _$SetSponsorBlockCategoriesImpl implements SetSponsorBlockCategories {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setSponsorBlockCategories?.call(this);
   }
@@ -6652,6 +6805,7 @@ class _$SetSponsorBlockCategoriesImpl implements SetSponsorBlockCategories {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setSponsorBlockCategories != null) {
@@ -6747,8 +6901,10 @@ class _$ToggleOpenLinksInBrowserImpl implements ToggleOpenLinksInBrowser {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleOpenLinksInBrowser();
   }
@@ -6784,8 +6940,9 @@ class _$ToggleOpenLinksInBrowserImpl implements ToggleOpenLinksInBrowser {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleOpenLinksInBrowser?.call();
   }
@@ -6821,8 +6978,9 @@ class _$ToggleOpenLinksInBrowserImpl implements ToggleOpenLinksInBrowser {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleOpenLinksInBrowser != null) {
@@ -6871,6 +7029,7 @@ class _$ToggleOpenLinksInBrowserImpl implements ToggleOpenLinksInBrowser {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleOpenLinksInBrowser(this);
   }
@@ -6910,6 +7069,7 @@ class _$ToggleOpenLinksInBrowserImpl implements ToggleOpenLinksInBrowser {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleOpenLinksInBrowser?.call(this);
   }
@@ -6949,6 +7109,7 @@ class _$ToggleOpenLinksInBrowserImpl implements ToggleOpenLinksInBrowser {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleOpenLinksInBrowser != null) {
@@ -7060,8 +7221,10 @@ class _$SetHomeFeedModeImpl implements SetHomeFeedMode {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return setHomeFeedMode(mode);
   }
@@ -7097,8 +7260,9 @@ class _$SetHomeFeedModeImpl implements SetHomeFeedMode {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return setHomeFeedMode?.call(mode);
   }
@@ -7134,8 +7298,9 @@ class _$SetHomeFeedModeImpl implements SetHomeFeedMode {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setHomeFeedMode != null) {
@@ -7184,6 +7349,7 @@ class _$SetHomeFeedModeImpl implements SetHomeFeedMode {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return setHomeFeedMode(this);
   }
@@ -7223,6 +7389,7 @@ class _$SetHomeFeedModeImpl implements SetHomeFeedMode {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return setHomeFeedMode?.call(this);
   }
@@ -7262,6 +7429,7 @@ class _$SetHomeFeedModeImpl implements SetHomeFeedMode {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (setHomeFeedMode != null) {
@@ -7353,8 +7521,10 @@ class _$ToggleAudioFocusImpl implements ToggleAudioFocus {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return toggleAudioFocus();
   }
@@ -7390,8 +7560,9 @@ class _$ToggleAudioFocusImpl implements ToggleAudioFocus {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return toggleAudioFocus?.call();
   }
@@ -7427,8 +7598,9 @@ class _$ToggleAudioFocusImpl implements ToggleAudioFocus {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleAudioFocus != null) {
@@ -7477,6 +7649,7 @@ class _$ToggleAudioFocusImpl implements ToggleAudioFocus {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return toggleAudioFocus(this);
   }
@@ -7516,6 +7689,7 @@ class _$ToggleAudioFocusImpl implements ToggleAudioFocus {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return toggleAudioFocus?.call(this);
   }
@@ -7555,6 +7729,7 @@ class _$ToggleAudioFocusImpl implements ToggleAudioFocus {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (toggleAudioFocus != null) {
@@ -7666,8 +7841,10 @@ class _$AddProfileImpl implements AddProfile {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return addProfile(profileName);
   }
@@ -7703,8 +7880,9 @@ class _$AddProfileImpl implements AddProfile {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return addProfile?.call(profileName);
   }
@@ -7740,8 +7918,9 @@ class _$AddProfileImpl implements AddProfile {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (addProfile != null) {
@@ -7790,6 +7969,7 @@ class _$AddProfileImpl implements AddProfile {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return addProfile(this);
   }
@@ -7829,6 +8009,7 @@ class _$AddProfileImpl implements AddProfile {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return addProfile?.call(this);
   }
@@ -7868,6 +8049,7 @@ class _$AddProfileImpl implements AddProfile {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (addProfile != null) {
@@ -7987,8 +8169,10 @@ class _$DeleteProfileImpl implements DeleteProfile {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return deleteProfile(profileName);
   }
@@ -8024,8 +8208,9 @@ class _$DeleteProfileImpl implements DeleteProfile {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return deleteProfile?.call(profileName);
   }
@@ -8061,8 +8246,9 @@ class _$DeleteProfileImpl implements DeleteProfile {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (deleteProfile != null) {
@@ -8111,6 +8297,7 @@ class _$DeleteProfileImpl implements DeleteProfile {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return deleteProfile(this);
   }
@@ -8150,6 +8337,7 @@ class _$DeleteProfileImpl implements DeleteProfile {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return deleteProfile?.call(this);
   }
@@ -8189,6 +8377,7 @@ class _$DeleteProfileImpl implements DeleteProfile {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (deleteProfile != null) {
@@ -8309,8 +8498,10 @@ class _$SwitchProfileImpl implements SwitchProfile {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return switchProfile(profileName);
   }
@@ -8346,8 +8537,9 @@ class _$SwitchProfileImpl implements SwitchProfile {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return switchProfile?.call(profileName);
   }
@@ -8383,8 +8575,9 @@ class _$SwitchProfileImpl implements SwitchProfile {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (switchProfile != null) {
@@ -8433,6 +8626,7 @@ class _$SwitchProfileImpl implements SwitchProfile {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return switchProfile(this);
   }
@@ -8472,6 +8666,7 @@ class _$SwitchProfileImpl implements SwitchProfile {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return switchProfile?.call(this);
   }
@@ -8511,6 +8706,7 @@ class _$SwitchProfileImpl implements SwitchProfile {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (switchProfile != null) {
@@ -8638,8 +8834,10 @@ class _$RenameProfileImpl implements RenameProfile {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
     return renameProfile(oldName, newName);
   }
@@ -8675,8 +8873,9 @@ class _$RenameProfileImpl implements RenameProfile {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
     return renameProfile?.call(oldName, newName);
   }
@@ -8712,8 +8911,9 @@ class _$RenameProfileImpl implements RenameProfile {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (renameProfile != null) {
@@ -8762,6 +8962,7 @@ class _$RenameProfileImpl implements RenameProfile {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return renameProfile(this);
   }
@@ -8801,6 +9002,7 @@ class _$RenameProfileImpl implements RenameProfile {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return renameProfile?.call(this);
   }
@@ -8840,6 +9042,7 @@ class _$RenameProfileImpl implements RenameProfile {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (renameProfile != null) {
@@ -8869,6 +9072,8 @@ abstract class _$$ExportSubscriptionsImplCopyWith<$Res> {
   factory _$$ExportSubscriptionsImplCopyWith(_$ExportSubscriptionsImpl value,
           $Res Function(_$ExportSubscriptionsImpl) then) =
       __$$ExportSubscriptionsImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String profileName});
 }
 
 /// @nodoc
@@ -8881,27 +9086,54 @@ class __$$ExportSubscriptionsImplCopyWithImpl<$Res>
 
   /// Create a copy of SettingsEvent
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? profileName = null,
+  }) {
+    return _then(_$ExportSubscriptionsImpl(
+      profileName: null == profileName
+          ? _value.profileName
+          : profileName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$ExportSubscriptionsImpl implements ExportSubscriptions {
-  _$ExportSubscriptionsImpl();
+  _$ExportSubscriptionsImpl({this.profileName = 'default'});
+
+  @override
+  @JsonKey()
+  final String profileName;
 
   @override
   String toString() {
-    return 'SettingsEvent.exportSubscriptions()';
+    return 'SettingsEvent.exportSubscriptions(profileName: $profileName)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ExportSubscriptionsImpl);
+            other is _$ExportSubscriptionsImpl &&
+            (identical(other.profileName, profileName) ||
+                other.profileName == profileName));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, profileName);
+
+  /// Create a copy of SettingsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ExportSubscriptionsImplCopyWith<_$ExportSubscriptionsImpl> get copyWith =>
+      __$$ExportSubscriptionsImplCopyWithImpl<_$ExportSubscriptionsImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8935,10 +9167,12 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
-    return exportSubscriptions();
+    return exportSubscriptions(profileName);
   }
 
   @override
@@ -8972,10 +9206,11 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
-    return exportSubscriptions?.call();
+    return exportSubscriptions?.call(profileName);
   }
 
   @override
@@ -9009,12 +9244,13 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (exportSubscriptions != null) {
-      return exportSubscriptions();
+      return exportSubscriptions(profileName);
     }
     return orElse();
   }
@@ -9059,6 +9295,7 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return exportSubscriptions(this);
   }
@@ -9098,6 +9335,7 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return exportSubscriptions?.call(this);
   }
@@ -9137,6 +9375,7 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (exportSubscriptions != null) {
@@ -9147,7 +9386,16 @@ class _$ExportSubscriptionsImpl implements ExportSubscriptions {
 }
 
 abstract class ExportSubscriptions implements SettingsEvent {
-  factory ExportSubscriptions() = _$ExportSubscriptionsImpl;
+  factory ExportSubscriptions({final String profileName}) =
+      _$ExportSubscriptionsImpl;
+
+  String get profileName;
+
+  /// Create a copy of SettingsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ExportSubscriptionsImplCopyWith<_$ExportSubscriptionsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -9156,7 +9404,7 @@ abstract class _$$ImportSubscriptionsImplCopyWith<$Res> {
           $Res Function(_$ImportSubscriptionsImpl) then) =
       __$$ImportSubscriptionsImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String filePath});
+  $Res call({String filePath, String profileName});
 }
 
 /// @nodoc
@@ -9173,11 +9421,16 @@ class __$$ImportSubscriptionsImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? filePath = null,
+    Object? profileName = null,
   }) {
     return _then(_$ImportSubscriptionsImpl(
       filePath: null == filePath
           ? _value.filePath
           : filePath // ignore: cast_nullable_to_non_nullable
+              as String,
+      profileName: null == profileName
+          ? _value.profileName
+          : profileName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -9186,14 +9439,18 @@ class __$$ImportSubscriptionsImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ImportSubscriptionsImpl implements ImportSubscriptions {
-  _$ImportSubscriptionsImpl({required this.filePath});
+  _$ImportSubscriptionsImpl(
+      {required this.filePath, this.profileName = 'default'});
 
   @override
   final String filePath;
+  @override
+  @JsonKey()
+  final String profileName;
 
   @override
   String toString() {
-    return 'SettingsEvent.importSubscriptions(filePath: $filePath)';
+    return 'SettingsEvent.importSubscriptions(filePath: $filePath, profileName: $profileName)';
   }
 
   @override
@@ -9202,11 +9459,13 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
         (other.runtimeType == runtimeType &&
             other is _$ImportSubscriptionsImpl &&
             (identical(other.filePath, filePath) ||
-                other.filePath == filePath));
+                other.filePath == filePath) &&
+            (identical(other.profileName, profileName) ||
+                other.profileName == profileName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, filePath);
+  int get hashCode => Object.hash(runtimeType, filePath, profileName);
 
   /// Create a copy of SettingsEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -9249,10 +9508,12 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
     required TResult Function(String profileName) deleteProfile,
     required TResult Function(String profileName) switchProfile,
     required TResult Function(String oldName, String newName) renameProfile,
-    required TResult Function() exportSubscriptions,
-    required TResult Function(String filePath) importSubscriptions,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
   }) {
-    return importSubscriptions(filePath);
+    return importSubscriptions(filePath, profileName);
   }
 
   @override
@@ -9286,10 +9547,11 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
     TResult? Function(String profileName)? deleteProfile,
     TResult? Function(String profileName)? switchProfile,
     TResult? Function(String oldName, String newName)? renameProfile,
-    TResult? Function()? exportSubscriptions,
-    TResult? Function(String filePath)? importSubscriptions,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
   }) {
-    return importSubscriptions?.call(filePath);
+    return importSubscriptions?.call(filePath, profileName);
   }
 
   @override
@@ -9323,12 +9585,13 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
     TResult Function(String profileName)? deleteProfile,
     TResult Function(String profileName)? switchProfile,
     TResult Function(String oldName, String newName)? renameProfile,
-    TResult Function()? exportSubscriptions,
-    TResult Function(String filePath)? importSubscriptions,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (importSubscriptions != null) {
-      return importSubscriptions(filePath);
+      return importSubscriptions(filePath, profileName);
     }
     return orElse();
   }
@@ -9373,6 +9636,7 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
     required TResult Function(RenameProfile value) renameProfile,
     required TResult Function(ExportSubscriptions value) exportSubscriptions,
     required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
   }) {
     return importSubscriptions(this);
   }
@@ -9412,6 +9676,7 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
     TResult? Function(RenameProfile value)? renameProfile,
     TResult? Function(ExportSubscriptions value)? exportSubscriptions,
     TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
   }) {
     return importSubscriptions?.call(this);
   }
@@ -9451,6 +9716,7 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
     TResult Function(RenameProfile value)? renameProfile,
     TResult Function(ExportSubscriptions value)? exportSubscriptions,
     TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
     required TResult orElse(),
   }) {
     if (importSubscriptions != null) {
@@ -9461,15 +9727,345 @@ class _$ImportSubscriptionsImpl implements ImportSubscriptions {
 }
 
 abstract class ImportSubscriptions implements SettingsEvent {
-  factory ImportSubscriptions({required final String filePath}) =
-      _$ImportSubscriptionsImpl;
+  factory ImportSubscriptions(
+      {required final String filePath,
+      final String profileName}) = _$ImportSubscriptionsImpl;
 
   String get filePath;
+  String get profileName;
 
   /// Create a copy of SettingsEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ImportSubscriptionsImplCopyWith<_$ImportSubscriptionsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SetSubtitleSizeImplCopyWith<$Res> {
+  factory _$$SetSubtitleSizeImplCopyWith(_$SetSubtitleSizeImpl value,
+          $Res Function(_$SetSubtitleSizeImpl) then) =
+      __$$SetSubtitleSizeImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({double size});
+}
+
+/// @nodoc
+class __$$SetSubtitleSizeImplCopyWithImpl<$Res>
+    extends _$SettingsEventCopyWithImpl<$Res, _$SetSubtitleSizeImpl>
+    implements _$$SetSubtitleSizeImplCopyWith<$Res> {
+  __$$SetSubtitleSizeImplCopyWithImpl(
+      _$SetSubtitleSizeImpl _value, $Res Function(_$SetSubtitleSizeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SettingsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? size = null,
+  }) {
+    return _then(_$SetSubtitleSizeImpl(
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SetSubtitleSizeImpl implements SetSubtitleSize {
+  _$SetSubtitleSizeImpl({required this.size});
+
+  @override
+  final double size;
+
+  @override
+  String toString() {
+    return 'SettingsEvent.setSubtitleSize(size: $size)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetSubtitleSizeImpl &&
+            (identical(other.size, size) || other.size == size));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, size);
+
+  /// Create a copy of SettingsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetSubtitleSizeImplCopyWith<_$SetSubtitleSizeImpl> get copyWith =>
+      __$$SetSubtitleSizeImplCopyWithImpl<_$SetSubtitleSizeImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initializeSettings,
+    required TResult Function(String? language) getDefaultLanguage,
+    required TResult Function(String? quality) getDefaultQuality,
+    required TResult Function(String? region) getDefaultRegion,
+    required TResult Function(String themeMode) changeTheme,
+    required TResult Function() toggleHistoryVisibility,
+    required TResult Function() toggleDislikeVisibility,
+    required TResult Function() toggleHlsPlayer,
+    required TResult Function() toggleCommentVisibility,
+    required TResult Function() toggleRelatedVideoVisibility,
+    required TResult Function() fetchPipedInstances,
+    required TResult Function() fetchInvidiousInstances,
+    required TResult Function(String instanceApi) setInstance,
+    required TResult Function(YouTubeServices service) setYTService,
+    required TResult Function(PlayerType playerType) setPlayerType,
+    required TResult Function() togglePipPlayer,
+    required TResult Function(String filter) setSearchFilter,
+    required TResult Function(String fitMode) setVideoFitMode,
+    required TResult Function(int seconds) setSkipInterval,
+    required TResult Function() toggleSponsorBlock,
+    required TResult Function(List<String> categories)
+        setSponsorBlockCategories,
+    required TResult Function() toggleOpenLinksInBrowser,
+    required TResult Function(String mode) setHomeFeedMode,
+    required TResult Function() toggleAudioFocus,
+    required TResult Function(String profileName) addProfile,
+    required TResult Function(String profileName) deleteProfile,
+    required TResult Function(String profileName) switchProfile,
+    required TResult Function(String oldName, String newName) renameProfile,
+    required TResult Function(String profileName) exportSubscriptions,
+    required TResult Function(String filePath, String profileName)
+        importSubscriptions,
+    required TResult Function(double size) setSubtitleSize,
+  }) {
+    return setSubtitleSize(size);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initializeSettings,
+    TResult? Function(String? language)? getDefaultLanguage,
+    TResult? Function(String? quality)? getDefaultQuality,
+    TResult? Function(String? region)? getDefaultRegion,
+    TResult? Function(String themeMode)? changeTheme,
+    TResult? Function()? toggleHistoryVisibility,
+    TResult? Function()? toggleDislikeVisibility,
+    TResult? Function()? toggleHlsPlayer,
+    TResult? Function()? toggleCommentVisibility,
+    TResult? Function()? toggleRelatedVideoVisibility,
+    TResult? Function()? fetchPipedInstances,
+    TResult? Function()? fetchInvidiousInstances,
+    TResult? Function(String instanceApi)? setInstance,
+    TResult? Function(YouTubeServices service)? setYTService,
+    TResult? Function(PlayerType playerType)? setPlayerType,
+    TResult? Function()? togglePipPlayer,
+    TResult? Function(String filter)? setSearchFilter,
+    TResult? Function(String fitMode)? setVideoFitMode,
+    TResult? Function(int seconds)? setSkipInterval,
+    TResult? Function()? toggleSponsorBlock,
+    TResult? Function(List<String> categories)? setSponsorBlockCategories,
+    TResult? Function()? toggleOpenLinksInBrowser,
+    TResult? Function(String mode)? setHomeFeedMode,
+    TResult? Function()? toggleAudioFocus,
+    TResult? Function(String profileName)? addProfile,
+    TResult? Function(String profileName)? deleteProfile,
+    TResult? Function(String profileName)? switchProfile,
+    TResult? Function(String oldName, String newName)? renameProfile,
+    TResult? Function(String profileName)? exportSubscriptions,
+    TResult? Function(String filePath, String profileName)? importSubscriptions,
+    TResult? Function(double size)? setSubtitleSize,
+  }) {
+    return setSubtitleSize?.call(size);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initializeSettings,
+    TResult Function(String? language)? getDefaultLanguage,
+    TResult Function(String? quality)? getDefaultQuality,
+    TResult Function(String? region)? getDefaultRegion,
+    TResult Function(String themeMode)? changeTheme,
+    TResult Function()? toggleHistoryVisibility,
+    TResult Function()? toggleDislikeVisibility,
+    TResult Function()? toggleHlsPlayer,
+    TResult Function()? toggleCommentVisibility,
+    TResult Function()? toggleRelatedVideoVisibility,
+    TResult Function()? fetchPipedInstances,
+    TResult Function()? fetchInvidiousInstances,
+    TResult Function(String instanceApi)? setInstance,
+    TResult Function(YouTubeServices service)? setYTService,
+    TResult Function(PlayerType playerType)? setPlayerType,
+    TResult Function()? togglePipPlayer,
+    TResult Function(String filter)? setSearchFilter,
+    TResult Function(String fitMode)? setVideoFitMode,
+    TResult Function(int seconds)? setSkipInterval,
+    TResult Function()? toggleSponsorBlock,
+    TResult Function(List<String> categories)? setSponsorBlockCategories,
+    TResult Function()? toggleOpenLinksInBrowser,
+    TResult Function(String mode)? setHomeFeedMode,
+    TResult Function()? toggleAudioFocus,
+    TResult Function(String profileName)? addProfile,
+    TResult Function(String profileName)? deleteProfile,
+    TResult Function(String profileName)? switchProfile,
+    TResult Function(String oldName, String newName)? renameProfile,
+    TResult Function(String profileName)? exportSubscriptions,
+    TResult Function(String filePath, String profileName)? importSubscriptions,
+    TResult Function(double size)? setSubtitleSize,
+    required TResult orElse(),
+  }) {
+    if (setSubtitleSize != null) {
+      return setSubtitleSize(size);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(InitializeSettings value) initializeSettings,
+    required TResult Function(GetDefaultLanguage value) getDefaultLanguage,
+    required TResult Function(GetDefaultQuality value) getDefaultQuality,
+    required TResult Function(GetDefaultRegion value) getDefaultRegion,
+    required TResult Function(ChangeTheme value) changeTheme,
+    required TResult Function(ToggleHistoryVisibility value)
+        toggleHistoryVisibility,
+    required TResult Function(ToggleDislikeVisibility value)
+        toggleDislikeVisibility,
+    required TResult Function(ToggleHlsPlayer value) toggleHlsPlayer,
+    required TResult Function(ToggleCommentVisibility value)
+        toggleCommentVisibility,
+    required TResult Function(ToggleRelatedVideoVisibility value)
+        toggleRelatedVideoVisibility,
+    required TResult Function(FetchPipedInstances value) fetchPipedInstances,
+    required TResult Function(FetchInvidiousInstances value)
+        fetchInvidiousInstances,
+    required TResult Function(SetInstance value) setInstance,
+    required TResult Function(SetYTService value) setYTService,
+    required TResult Function(SetPlayerType value) setPlayerType,
+    required TResult Function(TogglePipPlayer value) togglePipPlayer,
+    required TResult Function(SetSearchFilter value) setSearchFilter,
+    required TResult Function(SetVideoFitMode value) setVideoFitMode,
+    required TResult Function(SetSkipInterval value) setSkipInterval,
+    required TResult Function(ToggleSponsorBlock value) toggleSponsorBlock,
+    required TResult Function(SetSponsorBlockCategories value)
+        setSponsorBlockCategories,
+    required TResult Function(ToggleOpenLinksInBrowser value)
+        toggleOpenLinksInBrowser,
+    required TResult Function(SetHomeFeedMode value) setHomeFeedMode,
+    required TResult Function(ToggleAudioFocus value) toggleAudioFocus,
+    required TResult Function(AddProfile value) addProfile,
+    required TResult Function(DeleteProfile value) deleteProfile,
+    required TResult Function(SwitchProfile value) switchProfile,
+    required TResult Function(RenameProfile value) renameProfile,
+    required TResult Function(ExportSubscriptions value) exportSubscriptions,
+    required TResult Function(ImportSubscriptions value) importSubscriptions,
+    required TResult Function(SetSubtitleSize value) setSubtitleSize,
+  }) {
+    return setSubtitleSize(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(InitializeSettings value)? initializeSettings,
+    TResult? Function(GetDefaultLanguage value)? getDefaultLanguage,
+    TResult? Function(GetDefaultQuality value)? getDefaultQuality,
+    TResult? Function(GetDefaultRegion value)? getDefaultRegion,
+    TResult? Function(ChangeTheme value)? changeTheme,
+    TResult? Function(ToggleHistoryVisibility value)? toggleHistoryVisibility,
+    TResult? Function(ToggleDislikeVisibility value)? toggleDislikeVisibility,
+    TResult? Function(ToggleHlsPlayer value)? toggleHlsPlayer,
+    TResult? Function(ToggleCommentVisibility value)? toggleCommentVisibility,
+    TResult? Function(ToggleRelatedVideoVisibility value)?
+        toggleRelatedVideoVisibility,
+    TResult? Function(FetchPipedInstances value)? fetchPipedInstances,
+    TResult? Function(FetchInvidiousInstances value)? fetchInvidiousInstances,
+    TResult? Function(SetInstance value)? setInstance,
+    TResult? Function(SetYTService value)? setYTService,
+    TResult? Function(SetPlayerType value)? setPlayerType,
+    TResult? Function(TogglePipPlayer value)? togglePipPlayer,
+    TResult? Function(SetSearchFilter value)? setSearchFilter,
+    TResult? Function(SetVideoFitMode value)? setVideoFitMode,
+    TResult? Function(SetSkipInterval value)? setSkipInterval,
+    TResult? Function(ToggleSponsorBlock value)? toggleSponsorBlock,
+    TResult? Function(SetSponsorBlockCategories value)?
+        setSponsorBlockCategories,
+    TResult? Function(ToggleOpenLinksInBrowser value)? toggleOpenLinksInBrowser,
+    TResult? Function(SetHomeFeedMode value)? setHomeFeedMode,
+    TResult? Function(ToggleAudioFocus value)? toggleAudioFocus,
+    TResult? Function(AddProfile value)? addProfile,
+    TResult? Function(DeleteProfile value)? deleteProfile,
+    TResult? Function(SwitchProfile value)? switchProfile,
+    TResult? Function(RenameProfile value)? renameProfile,
+    TResult? Function(ExportSubscriptions value)? exportSubscriptions,
+    TResult? Function(ImportSubscriptions value)? importSubscriptions,
+    TResult? Function(SetSubtitleSize value)? setSubtitleSize,
+  }) {
+    return setSubtitleSize?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(InitializeSettings value)? initializeSettings,
+    TResult Function(GetDefaultLanguage value)? getDefaultLanguage,
+    TResult Function(GetDefaultQuality value)? getDefaultQuality,
+    TResult Function(GetDefaultRegion value)? getDefaultRegion,
+    TResult Function(ChangeTheme value)? changeTheme,
+    TResult Function(ToggleHistoryVisibility value)? toggleHistoryVisibility,
+    TResult Function(ToggleDislikeVisibility value)? toggleDislikeVisibility,
+    TResult Function(ToggleHlsPlayer value)? toggleHlsPlayer,
+    TResult Function(ToggleCommentVisibility value)? toggleCommentVisibility,
+    TResult Function(ToggleRelatedVideoVisibility value)?
+        toggleRelatedVideoVisibility,
+    TResult Function(FetchPipedInstances value)? fetchPipedInstances,
+    TResult Function(FetchInvidiousInstances value)? fetchInvidiousInstances,
+    TResult Function(SetInstance value)? setInstance,
+    TResult Function(SetYTService value)? setYTService,
+    TResult Function(SetPlayerType value)? setPlayerType,
+    TResult Function(TogglePipPlayer value)? togglePipPlayer,
+    TResult Function(SetSearchFilter value)? setSearchFilter,
+    TResult Function(SetVideoFitMode value)? setVideoFitMode,
+    TResult Function(SetSkipInterval value)? setSkipInterval,
+    TResult Function(ToggleSponsorBlock value)? toggleSponsorBlock,
+    TResult Function(SetSponsorBlockCategories value)?
+        setSponsorBlockCategories,
+    TResult Function(ToggleOpenLinksInBrowser value)? toggleOpenLinksInBrowser,
+    TResult Function(SetHomeFeedMode value)? setHomeFeedMode,
+    TResult Function(ToggleAudioFocus value)? toggleAudioFocus,
+    TResult Function(AddProfile value)? addProfile,
+    TResult Function(DeleteProfile value)? deleteProfile,
+    TResult Function(SwitchProfile value)? switchProfile,
+    TResult Function(RenameProfile value)? renameProfile,
+    TResult Function(ExportSubscriptions value)? exportSubscriptions,
+    TResult Function(ImportSubscriptions value)? importSubscriptions,
+    TResult Function(SetSubtitleSize value)? setSubtitleSize,
+    required TResult orElse(),
+  }) {
+    if (setSubtitleSize != null) {
+      return setSubtitleSize(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetSubtitleSize implements SettingsEvent {
+  factory SetSubtitleSize({required final double size}) = _$SetSubtitleSizeImpl;
+
+  double get size;
+
+  /// Create a copy of SettingsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetSubtitleSizeImplCopyWith<_$SetSubtitleSizeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -9518,7 +10114,9 @@ mixin _$SettingsState {
   bool get isAudioFocusEnabled =>
       throw _privateConstructorUsedError; // Profiles
   String get currentProfile => throw _privateConstructorUsedError;
-  List<String> get profiles => throw _privateConstructorUsedError;
+  List<String> get profiles =>
+      throw _privateConstructorUsedError; // Subtitle size (font size in pixels)
+  double get subtitleSize => throw _privateConstructorUsedError;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -9567,7 +10165,8 @@ abstract class $SettingsStateCopyWith<$Res> {
       String homeFeedMode,
       bool isAudioFocusEnabled,
       String currentProfile,
-      List<String> profiles});
+      List<String> profiles,
+      double subtitleSize});
 }
 
 /// @nodoc
@@ -9619,6 +10218,7 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? isAudioFocusEnabled = null,
     Object? currentProfile = null,
     Object? profiles = null,
+    Object? subtitleSize = null,
   }) {
     return _then(_value.copyWith(
       defaultLanguage: null == defaultLanguage
@@ -9757,6 +10357,10 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.profiles
           : profiles // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      subtitleSize: null == subtitleSize
+          ? _value.subtitleSize
+          : subtitleSize // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -9803,7 +10407,8 @@ abstract class _$$InitialImplCopyWith<$Res>
       String homeFeedMode,
       bool isAudioFocusEnabled,
       String currentProfile,
-      List<String> profiles});
+      List<String> profiles,
+      double subtitleSize});
 }
 
 /// @nodoc
@@ -9853,6 +10458,7 @@ class __$$InitialImplCopyWithImpl<$Res>
     Object? isAudioFocusEnabled = null,
     Object? currentProfile = null,
     Object? profiles = null,
+    Object? subtitleSize = null,
   }) {
     return _then(_$InitialImpl(
       defaultLanguage: null == defaultLanguage
@@ -9991,6 +10597,10 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value._profiles
           : profiles // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      subtitleSize: null == subtitleSize
+          ? _value.subtitleSize
+          : subtitleSize // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -10032,7 +10642,8 @@ class _$InitialImpl implements _Initial {
       required this.homeFeedMode,
       required this.isAudioFocusEnabled,
       required this.currentProfile,
-      required final List<String> profiles})
+      required final List<String> profiles,
+      required this.subtitleSize})
       : _pipedInstances = pipedInstances,
         _invidiousInstances = invidiousInstances,
         _sponsorBlockCategories = sponsorBlockCategories,
@@ -10142,9 +10753,13 @@ class _$InitialImpl implements _Initial {
     return EqualUnmodifiableListView(_profiles);
   }
 
+// Subtitle size (font size in pixels)
+  @override
+  final double subtitleSize;
+
   @override
   String toString() {
-    return 'SettingsState(defaultLanguage: $defaultLanguage, defaultQuality: $defaultQuality, defaultRegion: $defaultRegion, themeMode: $themeMode, version: $version, isHistoryVisible: $isHistoryVisible, isDislikeVisible: $isDislikeVisible, isHlsPlayer: $isHlsPlayer, isHideComments: $isHideComments, isHideRelated: $isHideRelated, pipedInstances: $pipedInstances, pipedInstanceStatus: $pipedInstanceStatus, instance: $instance, invidiousInstances: $invidiousInstances, invidiousInstanceStatus: $invidiousInstanceStatus, ytService: $ytService, playerType: $playerType, initialized: $initialized, settingsStatus: $settingsStatus, isPipDisabled: $isPipDisabled, connectingToInstance: $connectingToInstance, isTestingConnection: $isTestingConnection, userInstanceFailed: $userInstanceFailed, failedInstanceName: $failedInstanceName, searchFilter: $searchFilter, videoFitMode: $videoFitMode, skipInterval: $skipInterval, isSponsorBlockEnabled: $isSponsorBlockEnabled, sponsorBlockCategories: $sponsorBlockCategories, openLinksInBrowser: $openLinksInBrowser, homeFeedMode: $homeFeedMode, isAudioFocusEnabled: $isAudioFocusEnabled, currentProfile: $currentProfile, profiles: $profiles)';
+    return 'SettingsState(defaultLanguage: $defaultLanguage, defaultQuality: $defaultQuality, defaultRegion: $defaultRegion, themeMode: $themeMode, version: $version, isHistoryVisible: $isHistoryVisible, isDislikeVisible: $isDislikeVisible, isHlsPlayer: $isHlsPlayer, isHideComments: $isHideComments, isHideRelated: $isHideRelated, pipedInstances: $pipedInstances, pipedInstanceStatus: $pipedInstanceStatus, instance: $instance, invidiousInstances: $invidiousInstances, invidiousInstanceStatus: $invidiousInstanceStatus, ytService: $ytService, playerType: $playerType, initialized: $initialized, settingsStatus: $settingsStatus, isPipDisabled: $isPipDisabled, connectingToInstance: $connectingToInstance, isTestingConnection: $isTestingConnection, userInstanceFailed: $userInstanceFailed, failedInstanceName: $failedInstanceName, searchFilter: $searchFilter, videoFitMode: $videoFitMode, skipInterval: $skipInterval, isSponsorBlockEnabled: $isSponsorBlockEnabled, sponsorBlockCategories: $sponsorBlockCategories, openLinksInBrowser: $openLinksInBrowser, homeFeedMode: $homeFeedMode, isAudioFocusEnabled: $isAudioFocusEnabled, currentProfile: $currentProfile, profiles: $profiles, subtitleSize: $subtitleSize)';
   }
 
   @override
@@ -10218,7 +10833,9 @@ class _$InitialImpl implements _Initial {
                 other.isAudioFocusEnabled == isAudioFocusEnabled) &&
             (identical(other.currentProfile, currentProfile) ||
                 other.currentProfile == currentProfile) &&
-            const DeepCollectionEquality().equals(other._profiles, _profiles));
+            const DeepCollectionEquality().equals(other._profiles, _profiles) &&
+            (identical(other.subtitleSize, subtitleSize) ||
+                other.subtitleSize == subtitleSize));
   }
 
   @override
@@ -10257,7 +10874,8 @@ class _$InitialImpl implements _Initial {
         homeFeedMode,
         isAudioFocusEnabled,
         currentProfile,
-        const DeepCollectionEquality().hash(_profiles)
+        const DeepCollectionEquality().hash(_profiles),
+        subtitleSize
       ]);
 
   /// Create a copy of SettingsState
@@ -10304,7 +10922,8 @@ abstract class _Initial implements SettingsState {
       required final String homeFeedMode,
       required final bool isAudioFocusEnabled,
       required final String currentProfile,
-      required final List<String> profiles}) = _$InitialImpl;
+      required final List<String> profiles,
+      required final double subtitleSize}) = _$InitialImpl;
 
   @override
   String get defaultLanguage;
@@ -10375,7 +10994,9 @@ abstract class _Initial implements SettingsState {
   @override
   String get currentProfile;
   @override
-  List<String> get profiles;
+  List<String> get profiles; // Subtitle size (font size in pixels)
+  @override
+  double get subtitleSize;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

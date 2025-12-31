@@ -32,8 +32,11 @@ class SavedVideosSection extends StatelessWidget {
                       ApiStatus.error //empty list check
                   ? ErrorRetryWidget(
                       lottie: 'assets/black-cat.zip',
-                      onTap: () => BlocProvider.of<SavedBloc>(context)
-                          .add(const SavedEvent.getAllVideoInfoList()),
+                      onTap: () {
+                        final currentProfile = context.read<SettingsBloc>().state.currentProfile;
+                        BlocProvider.of<SavedBloc>(context)
+                            .add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
+                      },
                     )
                   // disply result
                   : ListView.builder(

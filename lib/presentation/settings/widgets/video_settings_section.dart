@@ -78,6 +78,13 @@ List<DropdownMenuItem<int>> _getSkipIntervals(S locals) => [
   DropdownMenuItem(value: 60, child: Text("60 ${locals.seconds}")),
 ];
 
+List<DropdownMenuItem<double>> _getSubtitleSizes(S locals) => [
+  DropdownMenuItem(value: 14.0, child: Text(locals.subtitleSizeSmall)),
+  DropdownMenuItem(value: 18.0, child: Text(locals.subtitleSizeMedium)),
+  DropdownMenuItem(value: 24.0, child: Text(locals.subtitleSizeLarge)),
+  DropdownMenuItem(value: 32.0, child: Text(locals.subtitleSizeExtraLarge)),
+];
+
 class VideoSettingsSection extends StatelessWidget {
   const VideoSettingsSection({super.key});
 
@@ -188,6 +195,21 @@ class VideoSettingsSection extends StatelessWidget {
                     if (interval == null) return;
                     BlocProvider.of<SettingsBloc>(context)
                         .add(SettingsEvent.setSkipInterval(seconds: interval));
+                  }),
+            ),
+            // Subtitle Size
+            ListTile(
+              title: Text(locals.subtitleSize,
+                  style: Theme.of(context).textTheme.titleMedium),
+              subtitle: Text(locals.subtitleSizeDescription),
+              leading: const Icon(Icons.subtitles),
+              trailing: DropdownButton(
+                  value: state.subtitleSize,
+                  items: _getSubtitleSizes(locals),
+                  onChanged: (size) {
+                    if (size == null) return;
+                    BlocProvider.of<SettingsBloc>(context)
+                        .add(SettingsEvent.setSubtitleSize(size: size));
                   }),
             ),
             ListTile(

@@ -19,11 +19,22 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   void _initializeSettings() {
-    // Initialize the settings bloc
+    // Initialize the settings bloc first
+    // Subscriptions will be loaded after settings are initialized (in _handleState)
     BlocProvider.of<SettingsBloc>(context)
         .add(SettingsEvent.initializeSettings());
+  }
+
+  bool _subscriptionsLoaded = false;
+
+  void _loadProfileData(String profileName) {
+    if (_subscriptionsLoaded) return;
+    _subscriptionsLoaded = true;
+
     BlocProvider.of<SubscribeBloc>(context)
-        .add(const SubscribeEvent.getAllSubscribeList());
+        .add(SubscribeEvent.getAllSubscribeList(profileName: profileName));
+    BlocProvider.of<SavedBloc>(context)
+        .add(SavedEvent.getAllVideoInfoList(profileName: profileName));
   }
 
   @override
@@ -92,6 +103,9 @@ class SplashScreenState extends State<SplashScreen> {
     final settingsBloc = BlocProvider.of<SettingsBloc>(context);
 
     if (!state.initialized) return;
+
+    // Load profile data once settings are initialized
+    _loadProfileData(state.currentProfile);
 
     final bool isNewPipe = state.ytService == YouTubeServices.newpipe.name;
     final bool isInvidious = state.ytService == YouTubeServices.invidious.name;

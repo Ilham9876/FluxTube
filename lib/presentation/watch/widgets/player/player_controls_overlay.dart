@@ -408,12 +408,28 @@ class _PlayerControlsOverlayState extends State<PlayerControlsOverlay>
         (s) => s.languageCode == subtitle,
         orElse: () => widget.subtitles.first,
       );
-      if (sub.url != null) {
+      if (sub.url != null && sub.url!.isNotEmpty) {
+        // Convert TTML format to VTT format for media_kit compatibility
+        // YouTube subtitles use TTML by default, but media_kit supports VTT better
+        String subtitleUrl = sub.url!;
+        if (subtitleUrl.contains('fmt=ttml')) {
+          subtitleUrl = subtitleUrl.replaceAll('fmt=ttml', 'fmt=vtt');
+        } else if (subtitleUrl.contains('&fmt=') == false && subtitleUrl.contains('youtube.com')) {
+          // If no format specified, append VTT format
+          subtitleUrl = '$subtitleUrl&fmt=vtt';
+        }
+
+        debugPrint('Setting subtitle track: ${sub.languageCode}');
+        debugPrint('Original URL: ${sub.url}');
+        debugPrint('Converted URL: $subtitleUrl');
         widget.player.setSubtitleTrack(
-          SubtitleTrack.uri(sub.url!, title: sub.languageCode ?? 'Unknown'),
+          SubtitleTrack.uri(subtitleUrl, title: sub.languageCode ?? 'Unknown'),
         );
+      } else {
+        debugPrint('Subtitle URL is null or empty for: ${sub.languageCode}');
       }
     } else {
+      debugPrint('Disabling subtitles');
       widget.player.setSubtitleTrack(SubtitleTrack.no());
     }
   }

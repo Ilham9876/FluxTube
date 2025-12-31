@@ -83,6 +83,12 @@
   "audioFocusDescription": "Pause playback on interruptions",
   "pauseOnCall": "Pause on Phone Call",
   "pauseOnHeadphones": "Pause on Headphone Disconnect",
+  "subtitleSize": "Subtitle Size",
+  "subtitleSizeDescription": "Adjust the size of subtitles on video",
+  "subtitleSizeSmall": "Small",
+  "subtitleSizeMedium": "Medium",
+  "subtitleSizeLarge": "Large",
+  "subtitleSizeExtraLarge": "Extra Large",
   "@home": {
     "description": "Home label"
   },

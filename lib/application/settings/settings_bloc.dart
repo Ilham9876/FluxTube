@@ -566,12 +566,23 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     // Import/Export events
     on<ExportSubscriptions>((event, emit) async {
       // Export happens but state doesn't change much - handled in UI
-      await settingsService.exportSubscriptions();
+      await settingsService.exportSubscriptions(profileName: event.profileName);
     });
 
     on<ImportSubscriptions>((event, emit) async {
       // Import happens - handled in UI with file picker
-      await settingsService.importSubscriptions(filePath: event.filePath);
+      await settingsService.importSubscriptions(
+        filePath: event.filePath,
+        profileName: event.profileName,
+      );
+    });
+
+    on<SetSubtitleSize>((event, emit) async {
+      final _result = await settingsService.setSubtitleSize(size: event.size);
+      final _state = _result.fold(
+          (MainFailure f) => state.copyWith(subtitleSize: state.subtitleSize),
+          (double size) => state.copyWith(subtitleSize: size));
+      emit(_state);
     });
   }
 }

@@ -34,6 +34,9 @@ const homeFeedModeKey = 'home-feed-mode';
 // Audio focus / pause on interruption
 const audioFocusEnabledKey = 'audio-focus-enabled';
 
+// Subtitle size (font size in pixels)
+const subtitleSizeKey = 'subtitle-size';
+
 // Profiles
 const currentProfileKey = 'current-profile';
 const profilesListKey = 'profiles-list';

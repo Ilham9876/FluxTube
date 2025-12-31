@@ -11,9 +11,9 @@ import 'package:fluxtube/core/enums.dart';
 import 'package:fluxtube/domain/watch/models/newpipe/newpipe_stream.dart';
 import 'package:fluxtube/domain/watch/models/newpipe/newpipe_watch_resp.dart';
 import 'package:fluxtube/generated/l10n.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../domain/saved/models/local_store.dart';
+import '../../../routes/app_routes.dart'; // For global router
 
 class NewPipePipVideoPlayerWidget extends StatefulWidget {
   const NewPipePipVideoPlayerWidget({
@@ -209,12 +209,29 @@ class _NewPipePipVideoPlayerWidgetState
   }
 
   @override
+  void didUpdateWidget(covariant NewPipePipVideoPlayerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If video ID changed, dispose the old player and reinitialize
+    if (oldWidget.videoId != widget.videoId) {
+      _betterPlayerController?.dispose(forceDispose: true);
+      _betterPlayerController = null;
+      availableVideoTracks = [
+        ...(widget.watchInfo.videoStreams ?? []),
+      ];
+      selectedAudioTrack = _selectBestAudioTrack();
+      _buildResolutionsMap();
+      selectedVideoTrack = _selectVideoTrack();
+      _setupPlayer(widget.playbackPosition);
+    }
+  }
+
+  @override
   void dispose() {
     _historyUpdateTimer?.cancel();
     _controlsTimer?.cancel();
     _updateVideoHistory();
     _watchBloc?.add(WatchEvent.togglePip(value: false));
-    _betterPlayerController?.dispose();
+    _betterPlayerController?.dispose(forceDispose: true);
     _entryAnimationController.dispose();
     _springAnimationController.dispose();
     _scaleAnimationController.dispose();
@@ -577,25 +594,36 @@ class _NewPipePipVideoPlayerWidgetState
   }
 
   Future<void> _expandToWatchScreen() async {
-    if (_isClosing) return;
+    debugPrint('PiP: _expandToWatchScreen called, _isClosing=$_isClosing');
+    if (_isClosing) {
+      debugPrint('PiP: Already closing, returning early');
+      return;
+    }
     _isClosing = true;
 
     _updateVideoHistory();
 
     // Get the channel ID from uploader URL
     final channelId = _extractChannelId(widget.watchInfo.uploaderUrl) ?? '';
+    final videoId = widget.videoId;
+    debugPrint('PiP: Expanding to watch screen - videoId=$videoId, channelId=$channelId');
 
-    // Dispose the player
-    _betterPlayerController?.dispose(forceDispose: true);
+    // Pause the player first to stop rendering
+    _betterPlayerController?.pause();
+
+    // Disable PiP (this will trigger widget removal and dispose)
     _watchBloc?.add(WatchEvent.togglePip(value: false));
 
-    // Navigate to the watch screen
-    if (context.mounted) {
-      context.pushNamed('watch', pathParameters: {
-        'videoId': widget.videoId,
-        'channelId': channelId,
-      });
-    }
+    // Wait for the PiP to be dismissed
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    debugPrint('PiP: Navigating to watch screen now');
+    // Navigate to the watch screen using the global router
+    // (GlobalPipOverlay is outside the GoRouter widget tree, so we can't use GoRouter.of(context))
+    router.goNamed('watch', pathParameters: {
+      'videoId': videoId,
+      'channelId': channelId,
+    });
   }
 
   Widget _buildPlayPauseButton() {
@@ -774,13 +802,23 @@ class _NewPipePipVideoPlayerWidgetState
     return uri != null && uri.hasScheme && uri.host.isNotEmpty;
   }
 
-  /// Select the best audio stream based on format compatibility and bitrate
+  /// Select the best audio stream based on format compatibility, original vs dubbed, and bitrate
   NewPipeAudioStream? _selectBestAudioTrack() {
     final audioStreams = widget.watchInfo.audioStreams;
     if (audioStreams == null || audioStreams.isEmpty) return null;
 
+    // First, separate original and dubbed streams
+    final originalStreams = audioStreams.where((s) => s.isOriginal).toList();
+    final dubbedStreams = audioStreams.where((s) => s.isDubbed).toList();
+
+    // Prefer original audio tracks
+    final preferredStreams = originalStreams.isNotEmpty ? originalStreams :
+                             (dubbedStreams.isNotEmpty ? dubbedStreams : audioStreams);
+
+    debugPrint('PiP Audio track selection: ${originalStreams.length} original, ${dubbedStreams.length} dubbed, using ${preferredStreams.length} streams');
+
     // Sort by bitrate (higher is better)
-    final sortedStreams = List<NewPipeAudioStream>.from(audioStreams)
+    final sortedStreams = List<NewPipeAudioStream>.from(preferredStreams)
       ..sort((a, b) => (b.averageBitrate ?? 0).compareTo(a.averageBitrate ?? 0));
 
     // Prefer M4A/AAC for better compatibility, then OPUS/WEBM
@@ -788,9 +826,13 @@ class _NewPipePipVideoPlayerWidgetState
       s.mimeType?.contains('mp4') == true ||
       s.format?.toLowerCase() == 'm4a').toList();
 
-    if (m4aStreams.isNotEmpty) return m4aStreams.first;
+    if (m4aStreams.isNotEmpty) {
+      debugPrint('PiP Selected audio: ${m4aStreams.first.audioTrackType ?? "unknown"} - ${m4aStreams.first.audioTrackName ?? "no name"} - ${m4aStreams.first.averageBitrate}kbps');
+      return m4aStreams.first;
+    }
 
     // Fallback to highest bitrate stream
+    debugPrint('PiP Selected audio: ${sortedStreams.first.audioTrackType ?? "unknown"} - ${sortedStreams.first.audioTrackName ?? "no name"} - ${sortedStreams.first.averageBitrate}kbps');
     return sortedStreams.first;
   }
 

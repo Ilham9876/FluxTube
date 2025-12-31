@@ -25,6 +25,10 @@ NewPipeAudioStream _$NewPipeAudioStreamFromJson(Map<String, dynamic> json) =>
       approxDurationMs: (json['approxDurationMs'] as num?)?.toInt(),
       audioChannels: (json['audioChannels'] as num?)?.toInt(),
       sampleRate: (json['sampleRate'] as num?)?.toInt(),
+      audioTrackId: json['audioTrackId'] as String?,
+      audioTrackName: json['audioTrackName'] as String?,
+      audioTrackType: json['audioTrackType'] as String?,
+      audioLocale: json['audioLocale'] as String?,
     );
 
 Map<String, dynamic> _$NewPipeAudioStreamToJson(NewPipeAudioStream instance) =>
@@ -46,6 +50,10 @@ Map<String, dynamic> _$NewPipeAudioStreamToJson(NewPipeAudioStream instance) =>
       'approxDurationMs': instance.approxDurationMs,
       'audioChannels': instance.audioChannels,
       'sampleRate': instance.sampleRate,
+      'audioTrackId': instance.audioTrackId,
+      'audioTrackName': instance.audioTrackName,
+      'audioTrackType': instance.audioTrackType,
+      'audioLocale': instance.audioLocale,
     };
 
 NewPipeVideoStream _$NewPipeVideoStreamFromJson(Map<String, dynamic> json) =>

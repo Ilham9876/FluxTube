@@ -22,6 +22,11 @@ class NewPipeAudioStream {
   final int? approxDurationMs;
   final int? audioChannels;
   final int? sampleRate;
+  // Audio track identification fields
+  final String? audioTrackId;
+  final String? audioTrackName;
+  final String? audioTrackType; // ORIGINAL, DUBBED, DESCRIPTIVE
+  final String? audioLocale;
 
   NewPipeAudioStream({
     this.url,
@@ -41,7 +46,50 @@ class NewPipeAudioStream {
     this.approxDurationMs,
     this.audioChannels,
     this.sampleRate,
+    this.audioTrackId,
+    this.audioTrackName,
+    this.audioTrackType,
+    this.audioLocale,
   });
+
+  /// Check if URL contains dubbed indicator in xtags parameter
+  /// URL may contain: xtags=acont%3Ddubbed-auto%3Alang%3Den-US (decoded: acont=dubbed-auto:lang=en-US)
+  bool get _urlIndicatesDubbed {
+    if (url == null) return false;
+    final decodedUrl = Uri.decodeFull(url!);
+    // Check for dubbed indicators in xtags parameter
+    return decodedUrl.contains('acont=dubbed') ||
+           decodedUrl.contains('acont%3Ddubbed');
+  }
+
+  /// Check if this is the original audio track (not dubbed)
+  /// Also checks URL xtags for dubbed indicators when audioTrackType is null
+  bool get isOriginal {
+    // If URL indicates dubbed, it's not original
+    if (_urlIndicatesDubbed) return false;
+    // If audioTrackType is explicitly set to DUBBED or DESCRIPTIVE, not original
+    if (audioTrackType != null && audioTrackType!.toUpperCase() == 'DUBBED') return false;
+    if (audioTrackType != null && audioTrackType!.toUpperCase() == 'DESCRIPTIVE') return false;
+    // Otherwise, consider original if type is null, ORIGINAL, or explicitly marked
+    return audioTrackType == null ||
+           audioTrackType == 'ORIGINAL' ||
+           audioTrackType!.toUpperCase() == 'ORIGINAL';
+  }
+
+  /// Check if this is a dubbed audio track
+  /// Also checks URL xtags for dubbed indicators
+  bool get isDubbed {
+    // Check URL for dubbed indicator first (more reliable when audioTrackType is null)
+    if (_urlIndicatesDubbed) return true;
+    // Then check audioTrackType field
+    return audioTrackType != null &&
+           audioTrackType!.toUpperCase() == 'DUBBED';
+  }
+
+  /// Check if this is a descriptive audio track
+  bool get isDescriptive =>
+      audioTrackType != null &&
+      audioTrackType!.toUpperCase() == 'DESCRIPTIVE';
 
   /// Check if this stream has valid DASH segment info
   bool get hasDashInfo =>

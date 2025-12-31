@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluxtube/application/settings/settings_bloc.dart';
+import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/colors.dart';
 import 'package:fluxtube/core/constants.dart';
 import 'package:fluxtube/generated/l10n.dart';
@@ -155,8 +155,14 @@ class ProfilesSettingsSection extends StatelessWidget {
                           : null),
                   onTap: () {
                     if (!isSelected) {
+                      // Switch profile
                       BlocProvider.of<SettingsBloc>(context)
                           .add(SettingsEvent.switchProfile(profileName: profile));
+                      // Reload subscriptions and saved data for the new profile
+                      BlocProvider.of<SubscribeBloc>(context)
+                          .add(SubscribeEvent.getAllSubscribeList(profileName: profile));
+                      BlocProvider.of<SavedBloc>(context)
+                          .add(SavedEvent.getAllVideoInfoList(profileName: profile));
                     }
                   },
                 ),

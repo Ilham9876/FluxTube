@@ -92,20 +92,30 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
     }
     debugPrint('Audio streams: ${widget.watchInfo.audioStreams?.length ?? 0}');
     for (var stream in widget.watchInfo.audioStreams ?? []) {
-      debugPrint('  - ${stream.quality} | ${stream.format} | ${stream.averageBitrate}kbps | URL valid: ${_isValidUrl(stream.url)}');
+      debugPrint('  - ${stream.quality} | ${stream.format} | ${stream.averageBitrate}kbps | type: ${stream.audioTrackType ?? "null"} | name: ${stream.audioTrackName ?? "null"} | locale: ${stream.audioLocale ?? "null"} | isOriginal: ${stream.isOriginal}');
     }
     debugPrint('HLS URL valid: ${_isValidUrl(widget.watchInfo.hlsUrl)}');
     debugPrint('DASH MPD URL valid: ${_isValidUrl(widget.watchInfo.dashMpdUrl)}');
     debugPrint('=== End Stream Debug ===');
   }
 
-  /// Select the best audio stream based on format compatibility and bitrate
+  /// Select the best audio stream based on format compatibility, original vs dubbed, and bitrate
   NewPipeAudioStream? _selectBestAudioTrack() {
     final audioStreams = widget.watchInfo.audioStreams;
     if (audioStreams == null || audioStreams.isEmpty) return null;
 
+    // First, separate original and dubbed streams
+    final originalStreams = audioStreams.where((s) => s.isOriginal).toList();
+    final dubbedStreams = audioStreams.where((s) => s.isDubbed).toList();
+
+    // Prefer original audio tracks
+    final preferredStreams = originalStreams.isNotEmpty ? originalStreams :
+                             (dubbedStreams.isNotEmpty ? dubbedStreams : audioStreams);
+
+    debugPrint('Audio track selection: ${originalStreams.length} original, ${dubbedStreams.length} dubbed, using ${preferredStreams.length} streams');
+
     // Sort by bitrate (higher is better)
-    final sortedStreams = List<NewPipeAudioStream>.from(audioStreams)
+    final sortedStreams = List<NewPipeAudioStream>.from(preferredStreams)
       ..sort((a, b) => (b.averageBitrate ?? 0).compareTo(a.averageBitrate ?? 0));
 
     // Prefer M4A/AAC for better compatibility, then OPUS/WEBM
@@ -113,9 +123,13 @@ class _NewPipeVideoPlayerWidgetState extends State<NewPipeVideoPlayerWidget> {
       s.mimeType?.contains('mp4') == true ||
       s.format?.toLowerCase() == 'm4a').toList();
 
-    if (m4aStreams.isNotEmpty) return m4aStreams.first;
+    if (m4aStreams.isNotEmpty) {
+      debugPrint('Selected audio: ${m4aStreams.first.audioTrackType ?? "unknown"} - ${m4aStreams.first.audioTrackName ?? "no name"} - ${m4aStreams.first.averageBitrate}kbps');
+      return m4aStreams.first;
+    }
 
     // Fallback to highest bitrate stream
+    debugPrint('Selected audio: ${sortedStreams.first.audioTrackType ?? "unknown"} - ${sortedStreams.first.audioTrackName ?? "no name"} - ${sortedStreams.first.averageBitrate}kbps');
     return sortedStreams.first;
   }
 

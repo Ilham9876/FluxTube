@@ -28,6 +28,7 @@ class _IFramScreenWatchState extends State<IFramScreenWatch> {
     final watchBloc = BlocProvider.of<WatchBloc>(context);
     final savedBloc = BlocProvider.of<SavedBloc>(context);
     final subscribeBloc = BlocProvider.of<SubscribeBloc>(context);
+    final currentProfile = BlocProvider.of<SettingsBloc>(context).state.currentProfile;
 
     watchBloc.add(WatchEvent.togglePip(value: false));
     watchBloc.add(WatchEvent.getExplodeWatchInfo(id: widget.id));
@@ -35,9 +36,9 @@ class _IFramScreenWatchState extends State<IFramScreenWatch> {
     watchBloc.add(WatchEvent.getExplodeRelatedVideoInfo(id: widget.id));
     watchBloc.add(WatchEvent.getSubtitles(id: widget.id));
 
-    savedBloc.add(const SavedEvent.getAllVideoInfoList());
-    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id));
-    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId));
+    savedBloc.add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
+    savedBloc.add(SavedEvent.checkVideoInfo(id: widget.id, profileName: currentProfile));
+    subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(id: widget.channelId, profileName: currentProfile));
   }
 
   @override
