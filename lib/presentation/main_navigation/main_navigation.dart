@@ -88,16 +88,12 @@ class MainNavigationState extends State<MainNavigation> {
           previous.ytService != current.ytService ||
           previous.userInstanceFailed != current.userInstanceFailed,
       builder: (context, settingsState) {
-        // Disable trending tab for NewPipe service
-        final showTrending = settingsState.ytService != YouTubeServices.newpipe.name;
+        // All services support trending now
+        const showTrending = true;
         final pages = _getPages(showTrending);
         final items = _getTabItems(locals, showTrending);
 
-        // Adjust index if trending was removed and current index is out of bounds
         final maxIndex = pages.length - 1;
-        if (indexChangeNotifier.value > maxIndex) {
-          indexChangeNotifier.value = maxIndex;
-        }
 
         return BlocListener<SettingsBloc, SettingsState>(
           listenWhen: (previous, current) =>

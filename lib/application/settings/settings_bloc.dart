@@ -219,7 +219,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     });
 
     on<FetchPipedInstances>((event, emit) async {
-      if (state.pipedInstances.isNotEmpty) {
+      if (state.pipedInstances.isNotEmpty && !event.forceRefresh) {
         return emit(state);
       }
 
@@ -326,7 +326,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     });
 
     on<FetchInvidiousInstances>((event, emit) async {
-      if (state.invidiousInstances.isNotEmpty) {
+      if (state.invidiousInstances.isNotEmpty && !event.forceRefresh) {
         return emit(state);
       }
 

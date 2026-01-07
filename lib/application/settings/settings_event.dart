@@ -16,8 +16,8 @@ class SettingsEvent with _$SettingsEvent {
   factory SettingsEvent.toggleCommentVisibility() = ToggleCommentVisibility;
   factory SettingsEvent.toggleRelatedVideoVisibility() =
       ToggleRelatedVideoVisibility;
-  factory SettingsEvent.fetchPipedInstances() = FetchPipedInstances;
-  factory SettingsEvent.fetchInvidiousInstances() = FetchInvidiousInstances;
+  factory SettingsEvent.fetchPipedInstances({@Default(false) bool forceRefresh}) = FetchPipedInstances;
+  factory SettingsEvent.fetchInvidiousInstances({@Default(false) bool forceRefresh}) = FetchInvidiousInstances;
   factory SettingsEvent.setInstance({required String instanceApi}) =
       SetInstance;
   factory SettingsEvent.setYTService({required YouTubeServices service}) =

@@ -134,9 +134,15 @@ class VideoSettingsSection extends StatelessWidget {
                     }
 
                     if (oldService != service.name) {
+                      final serviceName = switch (service) {
+                        YouTubeServices.newpipe => locals.serviceNewPipe,
+                        YouTubeServices.piped => locals.servicePiped,
+                        YouTubeServices.invidious => locals.serviceInvidious,
+                        YouTubeServices.explode => locals.serviceExplode,
+                      };
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Switched to ${service.name.toUpperCase()} service'),
+                          content: Text('Switched to $serviceName'),
                           duration: const Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
                         ),

@@ -2,22 +2,71 @@
 
 ### v0.9.0
 
-- Added NewPipe Extractor as the recommended YouTube service (Android only).
-- NewPipe provides direct extraction without requiring third-party instances.
-- NewPipe now supports home feed, trending tab, search with suggestions, and all filters.
-- Improved thumbnail quality for NewPipe (uses highest resolution available).
-- Skip instance selection on splash screen for NewPipe users (faster startup).
-- Added OmniPlayer (experimental cross-platform video player).
-- Added user profiles with separate subscriptions and history per profile.
-- Added auto-check instances feature for automatic failover.
-- Improved instances screen with auto-connect button and better UI.
-- Added playlist support.
-- Added home feed mode options (Auto/Subscriptions Only/Trending Only).
-- Added video fit mode, skip interval, and audio focus settings.
-- Added open links in external browser option.
-- Improved error handling with inline player error widgets.
+###### New Features
+
+- **SponsorBlock Integration**: Automatically skip sponsored segments, intros, outros, and more. Configurable categories in settings.
+- **Multiple User Profiles**: Create separate profiles with isolated subscriptions, history, and saved videos. Switch instantly between profiles.
+- **NewPipe-Compatible Backup/Restore**: Export and import data as NewPipe-compatible ZIP files. Selective import options for subscriptions, history, and saved videos.
+- **Deep Linking & Share Intent**: Open YouTube links directly in FluxTube from browsers or share menu. Supports watch URLs, shorts, channels, and @handles.
+- **NewPipe Extractor**: Native YouTube extraction without third-party instances. Recommended service for best reliability.
+- **Channel Page Tabs**: Browse Videos, Shorts, and Playlists separately on channel pages.
+- **Playlist Support**: View and browse YouTube playlists.
+- **Search History**: Save and manage search queries with privacy controls.
+- **Comment Replies**: Fetch and view nested comment replies (NewPipe backend).
+
+###### Video Player Enhancements
+
+- **Unified MediaKit Player**: Consolidated video player across all backends for consistency.
+- **Video Fit Modes**: Choose from Contain, Cover, Fill, Fit Width, or Fit Height.
+- **Customizable Skip Interval**: Double-tap to skip 5, 10, 15, 30, or 60 seconds.
+- **Subtitle Size Settings**: Adjust subtitle size (Small, Medium, Large, Extra Large).
+- **Live Stream Support**: Improved handling and UI for live streams.
+- **Player Controls Overlay**: Redesigned with better gestures and visual feedback.
+
+###### Settings & Privacy
+
+- **Distraction-Free Mode**: Hide comments and/or related videos from watch screen.
+- **Open Links in Browser**: Option to open external links in system browser.
+- **Home Feed Mode**: Choose between Auto, Subscriptions Only, or Trending Only.
+- **Search History Privacy**: Enable/disable search history saving and visibility.
+- **Disable PiP Option**: Turn off picture-in-picture if not needed.
+
+###### Library & Saved Videos
+
+- **Redesigned Library Screen**: Unified interface for saved videos and history.
+- **Bulk Selection**: Select multiple videos for batch deletion.
+- **Sorting Options**: Sort by date added, title, or duration.
+- **Search Within Library**: Find saved videos quickly.
+
+###### Improvements
+
+- **Auto-Check Instances**: Automatic failover when an instance becomes unavailable.
+- **Improved Error Handling**: Inline error widgets with retry and instance switching.
+- **Better Search UX**: Improved suggestions, fixed shorts thumbnails.
+- **Thumbnail Quality**: Higher resolution thumbnails for NewPipe.
+- **12 Language Updates**: Updated translations with 80+ new strings.
+- **Performance Optimizations**: Faster loading, reduced memory usage.
+- **Animation System**: New smooth animations for lists and transitions.
+
+###### Bug Fixes
+
 - Fixed video player dispose error when navigating away.
-- Performance and stability improvements.
+- Fixed search suggestions UI glitches.
+- Fixed shorts thumbnail aspect ratios.
+- Fixed channel navigation issues.
+- Fixed comments loading states.
+
+###### Technical Changes
+
+- Removed legacy OmniPlayer and iframe player implementations.
+- Removed redundant PiP player variants.
+- Added user preferences tracking infrastructure.
+- Updated dependencies (media_kit, isar, freezed, etc.).
+- Added Kotlin NewPipe handler for native stream extraction.
+
+###### Note
+
+- Some legacy settings may need to be reconfigured after update.
 
 ### v0.8.3
 

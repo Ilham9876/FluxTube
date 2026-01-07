@@ -67,9 +67,9 @@ class PipedInstanceListView extends StatelessWidget {
               context,
               state,
               onAutoConnect: () {
-                // Clear instances to force re-fetch and auto-connect
+                // Force re-fetch and auto-connect
                 BlocProvider.of<SettingsBloc>(context)
-                    .add(SettingsEvent.fetchPipedInstances());
+                    .add(SettingsEvent.fetchPipedInstances(forceRefresh: true));
               },
               instanceType: 'Piped',
             ),
@@ -173,9 +173,9 @@ class InvidiousInstanceListView extends StatelessWidget {
               context,
               state,
               onAutoConnect: () {
-                // Clear instances to force re-fetch and auto-connect
+                // Force re-fetch and auto-connect
                 BlocProvider.of<SettingsBloc>(context)
-                    .add(SettingsEvent.fetchInvidiousInstances());
+                    .add(SettingsEvent.fetchInvidiousInstances(forceRefresh: true));
               },
               instanceType: 'Invidious',
             ),
