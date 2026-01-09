@@ -84,14 +84,27 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Disable PIP when returning to watch screen from another route
-    // This handles the back navigation case
+    // Handle when this watch screen becomes visible again
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
         if (isCurrent) {
+          final globalPlayer = GlobalPlayerController();
+          final currentPlayingId = globalPlayer.currentVideoId;
+
+          // If a DIFFERENT video is currently playing, this is an old watch screen
+          // that the user navigated back to. Auto-pop it to go to the actual current video.
+          if (currentPlayingId != null &&
+              currentPlayingId != widget.id &&
+              globalPlayer.isPlaying) {
+            debugPrint(
+                '[NewPipeScreenWatch] Old watch screen detected (this: ${widget.id}, playing: $currentPlayingId). Auto-popping.');
+            Navigator.of(context).pop();
+            return;
+          }
+
+          // Disable PIP when returning to watch screen from another route
           final watchBloc = BlocProvider.of<WatchBloc>(context);
-          // Only disable PIP if it's currently enabled
           if (watchBloc.state.isPipEnabled) {
             watchBloc.add(WatchEvent.togglePip(value: false));
           }
@@ -108,28 +121,23 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
     final settingsState = settingsBloc.state;
     final currentProfile = settingsState.currentProfile;
 
-    // CRITICAL: Immediately stop any video that's not this one
-    // This is the FIRST thing we do, before any other checks
-    final currentPlayingId = GlobalPlayerController().currentVideoId;
+    final globalPlayer = GlobalPlayerController();
+    final currentPlayingId = globalPlayer.currentVideoId;
+
+    // If a different video is playing, stop it first
     if (currentPlayingId != null && currentPlayingId != widget.id) {
       debugPrint(
-          '[NewPipeScreenWatch] CRITICAL: Stopping wrong video immediately: $currentPlayingId (expected: ${widget.id})');
-      await GlobalPlayerController().stopAndClear();
-      // Wait to ensure stop completes
+          '[NewPipeScreenWatch] Stopping previous video: $currentPlayingId (starting: ${widget.id})');
+      await globalPlayer.stopAndClear();
       await Future.delayed(const Duration(milliseconds: 150));
     }
 
-    // STRICT: Validate before starting any video
-    // This ensures no other video is playing before we proceed
-    await GlobalPlayerController().validateBeforePlay(widget.id);
+    // Validate before starting any video
+    await globalPlayer.validateBeforePlay(widget.id);
 
     // Check if returning from PiP with same video already loaded
-    // Important: Only skip loading if both conditions are true:
-    // 1. Player is playing this exact video ID
-    // 2. Watch state already has data for this exact video ID
     final isReturningFromPip =
-        GlobalPlayerController().currentVideoId == widget.id &&
-            GlobalPlayerController().isPlayingVideo(widget.id) &&
+        globalPlayer.hasVideoLoaded(widget.id) &&
             watchBloc.state.newPipeWatchResp.id == widget.id;
 
     watchBloc.add(WatchEvent.togglePip(value: false));
@@ -263,21 +271,14 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                (state.fetchNewPipeWatchInfoStatus ==
-                                            ApiStatus.initial ||
-                                        state.fetchNewPipeWatchInfoStatus ==
-                                            ApiStatus.loading ||
-                                        // Also check if watchInfo matches the requested video
-                                        // This prevents using stale data when switching videos
-                                        state.newPipeWatchResp.id != widget.id)
-                                    ? Container(
-                                        height: 200,
-                                        color: kBlackColor,
-                                        child: Center(
-                                          child: cIndicator(context),
-                                        ),
-                                      )
-                                    : NewPipeMediaKitPlayer(
+                                // Show player if:
+                                // 1. Watch info is loaded for this video, OR
+                                // 2. Returning from PiP (player has this video with data)
+                                // The player widget handles its own internal loading state
+                                (state.fetchNewPipeWatchInfoStatus == ApiStatus.loaded &&
+                                    state.newPipeWatchResp.id == widget.id) ||
+                                GlobalPlayerController().hasVideoLoaded(widget.id)
+                                    ? NewPipeMediaKitPlayer(
                                         videoId: widget.id,
                                         watchInfo: state.newPipeWatchResp,
                                         // Only use playback position if it's for the current video
@@ -301,6 +302,13 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
                                             settingsState.isSponsorBlockEnabled
                                                 ? state.sponsorSegments
                                                 : const [],
+                                      )
+                                    : Container(
+                                        height: 200,
+                                        color: kBlackColor,
+                                        child: Center(
+                                          child: cIndicator(context),
+                                        ),
                                       ),
                                 Padding(
                                   padding: const EdgeInsets.only(

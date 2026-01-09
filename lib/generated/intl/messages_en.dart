@@ -62,6 +62,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "commentsDisabled":
             MessageLookupByLibrary.simpleMessage("Comments are disabled"),
         "commonSettingsTitle": MessageLookupByLibrary.simpleMessage("Common"),
+        "copiedToClipboard":
+            MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
+        "copyLink": MessageLookupByLibrary.simpleMessage("Copy link"),
         "dateAdded": MessageLookupByLibrary.simpleMessage("Date added"),
         "defaultProfile": MessageLookupByLibrary.simpleMessage("Default"),
         "defaultQuality":
@@ -228,6 +231,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "servicePiped": MessageLookupByLibrary.simpleMessage("Piped"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
+        "shareVia": MessageLookupByLibrary.simpleMessage("Share via"),
         "shorts": MessageLookupByLibrary.simpleMessage("Shorts"),
         "showLessText": MessageLookupByLibrary.simpleMessage("Show less"),
         "showSearchHistory":

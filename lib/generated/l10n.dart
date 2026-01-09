@@ -1959,6 +1959,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Copy link`
+  String get copyLink {
+    return Intl.message(
+      'Copy link',
+      name: 'copyLink',
+      desc: 'Copy link button label',
+      args: [],
+    );
+  }
+
+  /// `Share via`
+  String get shareVia {
+    return Intl.message(
+      'Share via',
+      name: 'shareVia',
+      desc: 'Share via apps button label',
+      args: [],
+    );
+  }
+
+  /// `Copied to clipboard`
+  String get copiedToClipboard {
+    return Intl.message(
+      'Copied to clipboard',
+      name: 'copiedToClipboard',
+      desc: 'Snackbar message when link is copied',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

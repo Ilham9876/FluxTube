@@ -326,5 +326,17 @@
   "searchHistoryEnabled": "Save Search History",
   "searchHistoryEnabledDescription": "Save your search queries for quick access",
   "showSearchHistory": "Show Search History",
-  "showSearchHistoryDescription": "Display your recent searches in search screen"
+  "showSearchHistoryDescription": "Display your recent searches in search screen",
+  "copyLink": "Copy link",
+  "@copyLink": {
+    "description": "Copy link button label"
+  },
+  "shareVia": "Share via",
+  "@shareVia": {
+    "description": "Share via apps button label"
+  },
+  "copiedToClipboard": "Copied to clipboard",
+  "@copiedToClipboard": {
+    "description": "Snackbar message when link is copied"
+  }
 }

@@ -237,7 +237,7 @@ class _InvidiousCommentSectionState extends State<InvidiousCommentSection> {
                     // Enable PIP before navigating to channel
                     BlocProvider.of<WatchBloc>(context)
                         .add(WatchEvent.togglePip(value: true));
-                    context.goNamed('channel', pathParameters: {
+                    context.pushNamed('channel', pathParameters: {
                       'channelId': comment.authorId!,
                     }, queryParameters: {
                       'avatarUrl': comment.authorThumbnails?.first.url,
@@ -974,7 +974,7 @@ class _ModernRepliesSheetState extends State<_ModernRepliesSheet> {
                                   BlocProvider.of<WatchBloc>(context)
                                       .add(WatchEvent.togglePip(value: true));
                                   Navigator.pop(context);
-                                  context.goNamed('channel', pathParameters: {
+                                  context.pushNamed('channel', pathParameters: {
                                     'channelId': reply.authorId!,
                                   }, queryParameters: {
                                     'avatarUrl':

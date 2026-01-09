@@ -86,6 +86,20 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
       if (mounted) {
         final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
         if (isCurrent) {
+          final globalPlayer = GlobalPlayerController();
+          final currentPlayingId = globalPlayer.currentVideoId;
+
+          // If a DIFFERENT video is currently playing, this is an old watch screen
+          // that the user navigated back to. Auto-pop it to go to the actual current video.
+          if (currentPlayingId != null &&
+              currentPlayingId != widget.id &&
+              globalPlayer.isPlaying) {
+            debugPrint(
+                '[PipedScreenWatch] Old watch screen detected (this: ${widget.id}, playing: $currentPlayingId). Auto-popping.');
+            Navigator.of(context).pop();
+            return;
+          }
+
           final watchBloc = BlocProvider.of<WatchBloc>(context);
           if (watchBloc.state.isPipEnabled) {
             watchBloc.add(WatchEvent.togglePip(value: false));
@@ -102,24 +116,23 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
     final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     final currentProfile = settingsBloc.state.currentProfile;
 
-    // CRITICAL: Immediately stop any video that's not this one
-    // This is the FIRST thing we do, before any other checks
-    final currentPlayingId = GlobalPlayerController().currentVideoId;
+    final globalPlayer = GlobalPlayerController();
+    final currentPlayingId = globalPlayer.currentVideoId;
+
+    // If a different video is playing, stop it first
     if (currentPlayingId != null && currentPlayingId != widget.id) {
       debugPrint(
-          '[PipedScreenWatch] CRITICAL: Stopping wrong video immediately: $currentPlayingId (expected: ${widget.id})');
-      await GlobalPlayerController().stopAndClear();
-      // Wait to ensure stop completes
+          '[PipedScreenWatch] Stopping previous video: $currentPlayingId (starting: ${widget.id})');
+      await globalPlayer.stopAndClear();
       await Future.delayed(const Duration(milliseconds: 150));
     }
 
-    // STRICT: Validate before starting any video
-    // This ensures no other video is playing before we proceed
-    await GlobalPlayerController().validateBeforePlay(widget.id);
+    // Validate before starting any video
+    await globalPlayer.validateBeforePlay(widget.id);
 
     // Check if returning from PiP with same video already loaded
     final isReturningFromPip =
-        GlobalPlayerController().isPlayingVideo(widget.id) &&
+        globalPlayer.hasVideoLoaded(widget.id) &&
             watchBloc.state.watchResp.title != null;
 
     watchBloc.add(WatchEvent.togglePip(value: false));
@@ -269,15 +282,18 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  (state.fetchWatchInfoStatus ==
+                                  // Show loading only if ALL conditions are true:
+                                  // 1. Status is initial/loading AND
+                                  // 2. Video data doesn't match current video AND
+                                  // 3. Global player doesn't have this video loaded (not returning from PiP)
+                                  ((state.fetchWatchInfoStatus ==
                                               ApiStatus.initial ||
                                           state.fetchWatchInfoStatus ==
                                               ApiStatus.loading ||
                                           state.fetchSubtitlesStatus ==
-                                              ApiStatus.loading ||
-                                          // Also check if watchInfo matches the requested video
-                                          // This prevents using stale data when switching videos
-                                          state.oldId != widget.id)
+                                              ApiStatus.loading) &&
+                                      state.oldId != widget.id &&
+                                      !GlobalPlayerController().hasVideoLoaded(widget.id))
                                       ? Container(
                                           height: 200,
                                           color: kBlackColor,

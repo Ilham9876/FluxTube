@@ -526,37 +526,47 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    // Show loading only for fresh initialization, not when restoring from PiP
-    // Check if player is already active (has video) to skip loading state
-    final bool playerHasVideo = _globalPlayer.hasActivePlayer &&
-        _globalPlayer.currentVideoId == widget.videoId;
+    // Use StreamBuilder to react to player duration changes
+    // This ensures we show loading until video is actually ready
+    return StreamBuilder<Duration>(
+      stream: _player.stream.duration,
+      initialData: _player.state.duration,
+      builder: (context, durationSnapshot) {
+        // Show loading only for fresh initialization, not when restoring from PiP
+        // Check if player is already active with loaded media to skip loading state
+        // A video is "ready" when:
+        // 1. ID matches AND
+        // 2. Either duration > 0 (metadata loaded) OR position > 0 (has played)
+        final duration = durationSnapshot.data ?? Duration.zero;
+        final bool playerIsReady = _globalPlayer.currentVideoId == widget.videoId &&
+            (duration.inSeconds > 0 || _player.state.position.inSeconds > 0);
 
-    if (!_isInitialized && !playerHasVideo) {
-      return AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          color: Colors.black,
-          child: const Center(
-            child: CircularProgressIndicator(color: Colors.white),
-          ),
-        ),
-      );
-    }
+        if (!_isInitialized && !playerIsReady) {
+          return AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              color: Colors.black,
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            ),
+          );
+        }
 
-    // For controls, we need config - but we can still show video without it
-    if (_currentConfig == null && !playerHasVideo) {
-      return AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          color: Colors.black,
-          child: const Center(
-            child: CircularProgressIndicator(color: Colors.white),
-          ),
-        ),
-      );
-    }
+        // For controls, we need config - but we can still show video without it
+        if (_currentConfig == null && !playerIsReady) {
+          return AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              color: Colors.black,
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            ),
+          );
+        }
 
-    return AspectRatio(
+        return AspectRatio(
       aspectRatio: _getAspectRatio(),
       child: Stack(
         alignment: Alignment.center,
@@ -614,6 +624,8 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           ),
         ],
       ),
+    );
+      },
     );
   }
 

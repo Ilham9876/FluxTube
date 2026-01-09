@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/colors.dart';
 import 'package:fluxtube/core/enums.dart';
+import 'package:fluxtube/core/player/global_player_controller.dart';
 import 'package:fluxtube/core/operations/math_operations.dart';
 import 'package:fluxtube/domain/watch/models/piped/comments/comment.dart';
 import 'package:fluxtube/domain/watch/models/newpipe/newpipe_comments_resp.dart';
@@ -81,11 +82,25 @@ class _ScreenShortsState extends State<ScreenShorts> {
     // Initialize controllers for each short
     _controllers = widget.shorts.map((short) => _ShortVideoController()).toList();
 
+    // Pause any video playing in the global player before starting shorts
+    _pauseGlobalPlayer();
+
     // Load the initial video
     _loadVideo(_currentIndex);
 
     // Hide system UI for immersive experience
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  Future<void> _pauseGlobalPlayer() async {
+    try {
+      final globalPlayer = GlobalPlayerController();
+      if (globalPlayer.currentVideoId != null) {
+        await globalPlayer.pausePlayback();
+      }
+    } catch (e) {
+      debugPrint('[Shorts] Error pausing global player: $e');
+    }
   }
 
   @override
@@ -97,6 +112,10 @@ class _ScreenShortsState extends State<ScreenShorts> {
       controller.dispose();
     }
     _pageController.dispose();
+
+    // Note: We don't auto-resume the global player here because
+    // the user might navigate elsewhere after closing shorts
+
     super.dispose();
   }
 

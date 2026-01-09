@@ -71,8 +71,8 @@ class GlobalPlayerController extends ChangeNotifier {
     log('[GlobalPlayer] Set current video ID: $videoId');
   }
 
-  /// Check if we're already playing the requested video
-  /// Returns true ONLY if the player is in a stable state (playing or paused)
+  /// Check if we're already playing (or have paused) the requested video
+  /// Returns true if the player has this video loaded in a stable state
   /// Returns false if player is still initializing or in an unstable state
   bool isPlayingVideo(String videoId) {
     if (_currentVideoId != videoId || _player == null) {
@@ -80,12 +80,40 @@ class GlobalPlayerController extends ChangeNotifier {
     }
 
     // Check if player is in a stable state (not buffering/starting)
-    // Only return true if we're actually playing or explicitly paused
+    // Return true if we're playing, paused with progress, or have a video URL loaded
     final isStable = _player!.state.playing ||
                      (_player!.state.position.inSeconds > 0) ||
-                     (_player!.state.duration.inSeconds > 0);
+                     (_player!.state.duration.inSeconds > 0) ||
+                     (_currentVideoUrl != null && _currentVideoUrl!.isNotEmpty);
 
     return isStable;
+  }
+
+  /// Check if we have a video loaded (playing or paused) with the given ID
+  /// This is less strict than isPlayingVideo - just checks if video is loaded
+  /// Checks video ID match and either URL is set OR player has active media (duration > 0)
+  bool hasVideoLoaded(String videoId) {
+    if (_currentVideoId != videoId || _player == null) {
+      log('[GlobalPlayer] hasVideoLoaded($videoId): false - ID mismatch or no player. _currentVideoId=$_currentVideoId');
+      return false;
+    }
+
+    // Check if video URL is set (for GlobalPlayer-managed playback)
+    final hasUrl = _currentVideoUrl != null && _currentVideoUrl!.isNotEmpty;
+
+    // OR check if player has ACTUALLY loaded media (for externally-managed playback like NewPipe)
+    // Media is loaded when:
+    // - duration > 0 (video metadata received), OR
+    // - position > 0 (has played some), OR
+    // - _lastPosition > 0 (saved state from PiP/navigation - video was playing before)
+    // Note: We do NOT check playing=true alone, as that can be true before media loads
+    final hasLoadedMedia = _player!.state.duration.inSeconds > 0 ||
+                           _player!.state.position.inSeconds > 0 ||
+                           _lastPosition.inSeconds > 0;
+
+    final result = hasUrl || hasLoadedMedia;
+    log('[GlobalPlayer] hasVideoLoaded($videoId): result=$result, hasUrl=$hasUrl, hasLoadedMedia=$hasLoadedMedia (dur=${_player!.state.duration.inSeconds}s, pos=${_player!.state.position.inSeconds}s, lastPos=${_lastPosition.inSeconds}s)');
+    return result;
   }
 
   /// STRICT: Enforce that the current video matches the expected video ID
@@ -282,6 +310,24 @@ class GlobalPlayerController extends ChangeNotifier {
       log('[GlobalPlayer] Quality changed');
     } catch (e) {
       log('[GlobalPlayer] Error changing quality: $e');
+    }
+  }
+
+  /// Pause player temporarily (e.g., when opening shorts)
+  /// Unlike stopAndClear, this preserves the video state so it can be resumed
+  Future<void> pausePlayback() async {
+    if (_player != null && _player!.state.playing) {
+      savePlaybackState();
+      await _player!.pause();
+      log('[GlobalPlayer] Paused playback (state preserved)');
+    }
+  }
+
+  /// Resume playback if it was paused
+  Future<void> resumePlayback() async {
+    if (_player != null && _currentVideoId != null && _wasPlaying) {
+      await _player!.play();
+      log('[GlobalPlayer] Resumed playback');
     }
   }
 

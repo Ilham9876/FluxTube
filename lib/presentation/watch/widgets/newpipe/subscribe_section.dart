@@ -40,7 +40,7 @@ class NewPipeChannelInfoSection extends StatelessWidget {
                 BlocProvider.of<WatchBloc>(context)
                     .add(WatchEvent.togglePip(value: true));
               }
-              context.goNamed('channel', pathParameters: {
+              context.pushNamed('channel', pathParameters: {
                 'channelId': channelId,
               }, queryParameters: {
                 'avatarUrl': watchInfo.uploaderAvatarUrl,

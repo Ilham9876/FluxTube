@@ -26,6 +26,7 @@ class MainNavigation extends StatefulWidget {
 class MainNavigationState extends State<MainNavigation> {
   bool _hasShownInstanceFailedSnackbar = false;
   final DeepLinkHandler _deepLinkHandler = DeepLinkHandler();
+  bool? _previousShowTrending;
 
   List<Widget> _getPages(bool showTrending) {
     if (showTrending) {
@@ -88,12 +89,46 @@ class MainNavigationState extends State<MainNavigation> {
           previous.ytService != current.ytService ||
           previous.userInstanceFailed != current.userInstanceFailed,
       builder: (context, settingsState) {
-        // All services support trending now
-        const showTrending = true;
+        // Disable trending tab for NewPipe Extractor service
+        final showTrending = settingsState.ytService != YouTubeServices.newpipe.name;
         final pages = _getPages(showTrending);
         final items = _getTabItems(locals, showTrending);
 
         final maxIndex = pages.length - 1;
+
+        // Adjust index when transitioning between services with different tab counts
+        if (_previousShowTrending != null && _previousShowTrending != showTrending) {
+          final currentIndex = indexChangeNotifier.value;
+          int newIndex;
+
+          if (showTrending && !_previousShowTrending!) {
+            // Switching FROM NewPipe (4 tabs) TO other service (5 tabs)
+            // Indices after Home need to shift up by 1 to account for Trending tab
+            // 0 (Home) -> 0 (Home)
+            // 1 (Subscriptions) -> 2 (Subscriptions)
+            // 2 (Saved) -> 3 (Saved)
+            // 3 (Settings) -> 4 (Settings)
+            newIndex = currentIndex == 0 ? 0 : currentIndex + 1;
+          } else {
+            // Switching FROM other service (5 tabs) TO NewPipe (4 tabs)
+            // Indices after Trending need to shift down by 1
+            // 0 (Home) -> 0 (Home)
+            // 1 (Trending) -> 0 (Home) - Trending doesn't exist, go to Home
+            // 2 (Subscriptions) -> 1 (Subscriptions)
+            // 3 (Saved) -> 2 (Saved)
+            // 4 (Settings) -> 3 (Settings)
+            if (currentIndex <= 1) {
+              newIndex = 0;
+            } else {
+              newIndex = currentIndex - 1;
+            }
+          }
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            indexChangeNotifier.value = newIndex;
+          });
+        }
+        _previousShowTrending = showTrending;
 
         return BlocListener<SettingsBloc, SettingsState>(
           listenWhen: (previous, current) =>
@@ -124,6 +159,12 @@ class MainNavigationState extends State<MainNavigation> {
             builder: (BuildContext context, int index, Widget? _) {
               // Ensure index is within bounds
               final safeIndex = index.clamp(0, maxIndex);
+              // Update the notifier if index was out of bounds (e.g., when trending tab is removed)
+              if (index != safeIndex) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  indexChangeNotifier.value = safeIndex;
+                });
+              }
               return Scaffold(
                 body: SafeArea(
                   child: pages[safeIndex],

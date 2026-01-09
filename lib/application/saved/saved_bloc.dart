@@ -69,17 +69,17 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
         final List<LocalStoreVideoInfo> savedVideos =
             resp.where((e) => e.isSaved ?? false).toList();
 
+        // Also update videoInfo directly to avoid needing a second CheckVideoInfo call
+        // This prevents the double-emit that causes button flickering
         return state.copyWith(
             savedVideosFetchStatus: ApiStatus.loaded,
             localSavedVideos: savedVideos,
-            localSavedHistoryVideos: historyVideos);
+            localSavedHistoryVideos: historyVideos,
+            videoInfo: event.videoInfo);
       });
 
-      // update to ui
+      // update to ui - single emit, no need for CheckVideoInfo
       emit(_state);
-      // Add CheckVideoInfo event to verify and update the state
-      add(CheckVideoInfo(
-          id: event.videoInfo.id, profileName: event.profileName));
     });
 
     // delete video data from local storage
@@ -99,15 +99,40 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
         final List<LocalStoreVideoInfo> savedVideos =
             resp.where((e) => e.isSaved ?? false).toList();
 
+        // Update videoInfo if this was the current video - mark as not saved
+        LocalStoreVideoInfo? updatedVideoInfo = state.videoInfo;
+        if (state.videoInfo?.id == event.id && state.videoInfo != null) {
+          final current = state.videoInfo!;
+          updatedVideoInfo = LocalStoreVideoInfo(
+            id: current.id,
+            title: current.title,
+            views: current.views,
+            thumbnail: current.thumbnail,
+            uploadedDate: current.uploadedDate,
+            uploaderName: current.uploaderName,
+            uploaderId: current.uploaderId,
+            uploaderAvatar: current.uploaderAvatar,
+            uploaderSubscriberCount: current.uploaderSubscriberCount,
+            duration: current.duration,
+            uploaderVerified: current.uploaderVerified,
+            isSaved: false, // Mark as not saved
+            isHistory: current.isHistory,
+            isLive: current.isLive,
+            playbackPosition: current.playbackPosition,
+            time: current.time,
+            profileName: current.profileName,
+          );
+        }
+
         return state.copyWith(
             savedVideosFetchStatus: ApiStatus.loaded,
             localSavedVideos: savedVideos,
-            localSavedHistoryVideos: historyVideos);
+            localSavedHistoryVideos: historyVideos,
+            videoInfo: updatedVideoInfo);
       });
 
-      // update to ui
+      // update to ui - single emit, no need for CheckVideoInfo
       emit(_state);
-      add(CheckVideoInfo(id: event.id, profileName: event.profileName));
     });
 
     // check the playing video present in the saved video
