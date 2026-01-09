@@ -62,6 +62,8 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
   bool _isInitializing = false; // Guard against concurrent initializations
   bool _isRestoringFromPip = false;
   bool _isChangingQuality = false;
+  bool _isSeekingToPosition = false; // Track initial seek to saved position
+  bool _isInitialBuffering = true; // Track initial buffering phase
   late BoxFit _currentFitMode;
 
   // SponsorBlock
@@ -140,6 +142,8 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         _isInitialized = false;
         _isInitializing = false;
         _isRestoringFromPip = false;
+        _isSeekingToPosition = false;
+        _isInitialBuffering = true;
       });
       // Initialize new video using the guarded method
       _initializeAsync();
@@ -171,10 +175,14 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     // Mark as initialized immediately - player is already playing
     _isInitialized = true;
 
+    // Check if player is still buffering (e.g., went to PiP while loading)
+    // If buffering, keep showing the loading indicator - StreamBuilder will clear it when done
+    _isInitialBuffering = _player.state.buffering;
+
     // Exit PiP mode in background (don't await)
     _globalPlayer.exitPipMode();
 
-    debugPrint('[NewPipePlayer] Restored from PiP successfully (sync)');
+    debugPrint('[NewPipePlayer] Restored from PiP successfully (sync), buffering: $_isInitialBuffering');
   }
 
   Future<void> _initializePlayback() async {
@@ -396,8 +404,7 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         debugPrint('Seeked to position: ${widget.playbackPosition}s (after play)');
       }
 
-      // Wait for first frame to render to avoid showing stale frame
-      await _waitForFirstFrame();
+      // Note: _isInitialBuffering will be cleared by StreamBuilder when buffering stops
       debugPrint('Started playback');
     } catch (e) {
       debugPrint('Error setting up media source: $e');
@@ -486,24 +493,6 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     }
 
     debugPrint('[Player] Player ready, duration: ${_player.state.duration}');
-  }
-
-  /// Wait for the first frame to be rendered (playing state and not buffering)
-  Future<void> _waitForFirstFrame({Duration timeout = const Duration(seconds: 3)}) async {
-    final startTime = DateTime.now();
-
-    // Wait until player is actually playing and not buffering
-    while (!_player.state.playing || _player.state.buffering) {
-      if (DateTime.now().difference(startTime) > timeout) {
-        debugPrint('[Player] Timeout waiting for first frame, proceeding anyway');
-        break;
-      }
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-
-    // Small additional delay to ensure frame is rendered
-    await Future.delayed(const Duration(milliseconds: 50));
-    debugPrint('[Player] First frame ready, playing: ${_player.state.playing}, buffering: ${_player.state.buffering}');
   }
 
   String _findClosestQuality(String targetQuality) {
@@ -704,11 +693,37 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           // Buffering indicator overlay
           StreamBuilder<bool>(
             stream: _player.stream.buffering,
-            initialData: false,
-            builder: (context, snapshot) {
-              final isBuffering = snapshot.data ?? false;
-              // Show loading for buffering OR quality change
-              if (!isBuffering && !_isChangingQuality) return const SizedBox.shrink();
+            initialData: true,
+            builder: (context, bufferingSnapshot) {
+              final isBuffering = bufferingSnapshot.data ?? false;
+
+              // Auto-clear initial buffering flag when buffering stops
+              if (!isBuffering && _isInitialBuffering && mounted) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted && _isInitialBuffering && !_player.state.buffering) {
+                    setState(() {
+                      _isInitialBuffering = false;
+                    });
+                  }
+                });
+              }
+
+              // Show loading for buffering, quality change, seeking, or initial load
+              final shouldShowOverlay = isBuffering || _isChangingQuality || _isSeekingToPosition || _isInitialBuffering;
+              if (!shouldShowOverlay) {
+                return const SizedBox.shrink();
+              }
+
+              // Determine the message to show
+              String? message;
+              if (_isChangingQuality) {
+                message = 'Changing quality...';
+              } else if (_isSeekingToPosition || _isInitialBuffering) {
+                // Show "Resuming playback..." if seeking, otherwise "Loading video..."
+                message = widget.playbackPosition > 0 ? 'Resuming playback...' : 'Loading video...';
+              }
+              // For regular buffering (after initial load), just show spinner without message
+
               return Container(
                 color: Colors.black.withValues(alpha: 0.3),
                 child: Center(
@@ -719,11 +734,11 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
                         color: Colors.white,
                         strokeWidth: 3,
                       ),
-                      if (_isChangingQuality) ...[
+                      if (message != null) ...[
                         const SizedBox(height: 12),
-                        const Text(
-                          'Changing quality...',
-                          style: TextStyle(
+                        Text(
+                          message,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                           ),

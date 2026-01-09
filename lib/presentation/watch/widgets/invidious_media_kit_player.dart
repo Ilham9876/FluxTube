@@ -62,6 +62,7 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
   bool _isInitialized = false;
   bool _isRestoringFromPip = false;
   bool _isChangingQuality = false;
+  bool _isSeekingToPosition = false; // Track initial seek to saved position
   late BoxFit _currentFitMode;
 
   // SponsorBlock
@@ -132,6 +133,7 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
       setState(() {
         _isInitialized = false;
         _isRestoringFromPip = false;
+        _isSeekingToPosition = false;
       });
       // Initialize new video
       _initializePlayback();
@@ -284,19 +286,58 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
         ),
       );
 
-      // Seek to start position (for non-live streams)
+      // Start playback first
+      await _player.play();
+
+      // Seek AFTER playback has started to avoid codec issues
       if (widget.playbackPosition > 0 && !isLive) {
+        // Show seeking indicator
+        if (mounted) {
+          setState(() {
+            _isSeekingToPosition = true;
+          });
+        }
+
+        // Small delay to let playback stabilize before seeking
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (!mounted) return;
+
         await _player.seek(Duration(seconds: widget.playbackPosition));
-        debugPrint('Seeked to position: ${widget.playbackPosition}s');
+        debugPrint('Seeked to position: ${widget.playbackPosition}s (after play)');
+
+        // Wait for buffering to complete after seek
+        await _waitForBufferingComplete();
+
+        // Hide seeking indicator after buffering is done
+        if (mounted) {
+          setState(() {
+            _isSeekingToPosition = false;
+          });
+        }
       }
 
-      // Start playback
-      await _player.play();
       debugPrint('Started playback');
     } catch (e) {
       debugPrint('Error setting up media source: $e');
       _showError('Failed to load video');
     }
+  }
+
+  /// Wait for buffering to complete after seek
+  Future<void> _waitForBufferingComplete({Duration timeout = const Duration(seconds: 5)}) async {
+    final startTime = DateTime.now();
+
+    // Wait until player is not buffering
+    while (_player.state.buffering) {
+      if (DateTime.now().difference(startTime) > timeout) {
+        debugPrint('[Player] Timeout waiting for buffering complete, proceeding anyway');
+        break;
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (!mounted) return;
+    }
+
+    debugPrint('[Player] Buffering complete');
   }
 
   String _findClosestQuality(String targetQuality) {
@@ -458,8 +499,10 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
             initialData: false,
             builder: (context, snapshot) {
               final isBuffering = snapshot.data ?? false;
-              // Show loading for buffering OR quality change
-              if (!isBuffering && !_isChangingQuality) return const SizedBox.shrink();
+              // Show loading for buffering, quality change, or seeking to position
+              if (!isBuffering && !_isChangingQuality && !_isSeekingToPosition) {
+                return const SizedBox.shrink();
+              }
               return Container(
                 color: Colors.black.withValues(alpha: 0.3),
                 child: Center(
@@ -474,6 +517,15 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
                         const SizedBox(height: 12),
                         const Text(
                           'Changing quality...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ] else if (_isSeekingToPosition) ...[
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Resuming playback...',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
