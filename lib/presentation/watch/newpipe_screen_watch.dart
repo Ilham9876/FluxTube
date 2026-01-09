@@ -34,6 +34,11 @@ class NewPipeScreenWatch extends StatefulWidget {
 
 class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
     with WidgetsBindingObserver {
+  // Track if player should be shown - once shown, keep it shown until video ID changes
+  // This prevents the player from being disposed during BlocBuilder rebuilds
+  bool _showPlayer = false;
+  // Track the video ID for which the player is shown
+  String? _playerVideoId;
 
   @override
   void initState() {
@@ -77,6 +82,11 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
     if (oldWidget.id != widget.id) {
       debugPrint(
           '[NewPipeScreenWatch] Video ID changed from ${oldWidget.id} to ${widget.id}');
+      // Reset player visibility for new video
+      setState(() {
+        _showPlayer = false;
+        _playerVideoId = null;
+      });
       _initializeVideo();
     }
   }
@@ -154,9 +164,18 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
     }
 
     // Saved state and subscription check can run in parallel
-    savedBloc.add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
-    savedBloc.add(
-        SavedEvent.checkVideoInfo(id: widget.id, profileName: currentProfile));
+    // Only fetch all videos list if not returning from PiP
+    if (!isReturningFromPip) {
+      savedBloc.add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
+    }
+
+    // Only check video info if we don't already have it for this video
+    // This prevents flickering when returning from PiP
+    if (savedBloc.state.videoInfo?.id != widget.id) {
+      savedBloc.add(
+          SavedEvent.checkVideoInfo(id: widget.id, profileName: currentProfile));
+    }
+
     subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(
         id: widget.channelId, profileName: currentProfile));
   }
@@ -274,11 +293,35 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
                                 // Show player if:
                                 // 1. Watch info is loaded for this video, OR
                                 // 2. Returning from PiP (player has this video with data)
-                                // The player widget handles its own internal loading state
-                                (state.fetchNewPipeWatchInfoStatus == ApiStatus.loaded &&
-                                    state.newPipeWatchResp.id == widget.id) ||
-                                GlobalPlayerController().hasVideoLoaded(widget.id)
-                                    ? NewPipeMediaKitPlayer(
+                                // CRITICAL: Once player is shown, keep it shown to prevent
+                                // disposal during BlocBuilder rebuilds
+                                Builder(
+                                  builder: (context) {
+                                    // Check if we should show the player
+                                    final shouldShowPlayer = _showPlayer && _playerVideoId == widget.id;
+                                    final canShowPlayer = (state.fetchNewPipeWatchInfoStatus == ApiStatus.loaded &&
+                                        state.newPipeWatchResp.id == widget.id) ||
+                                        GlobalPlayerController().hasVideoLoaded(widget.id);
+
+                                    // Once we can show the player, set _showPlayer to true
+                                    // This ensures the player stays in the tree during rebuilds
+                                    if (canShowPlayer && !shouldShowPlayer) {
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        if (mounted && !_showPlayer) {
+                                          setState(() {
+                                            _showPlayer = true;
+                                            _playerVideoId = widget.id;
+                                          });
+                                        }
+                                      });
+                                    }
+
+                                    // Show player if either condition is true
+                                    return (shouldShowPlayer || canShowPlayer)
+                                        ? NewPipeMediaKitPlayer(
+                                        // CRITICAL: Use ValueKey to prevent widget recreation
+                                        // when watchInfo updates. Only recreate on videoId change.
+                                        key: ValueKey('player_${widget.id}'),
                                         videoId: widget.id,
                                         watchInfo: state.newPipeWatchResp,
                                         // Only use playback position if it's for the current video
@@ -303,13 +346,15 @@ class _NewPipeScreenWatchState extends State<NewPipeScreenWatch>
                                                 ? state.sponsorSegments
                                                 : const [],
                                       )
-                                    : Container(
-                                        height: 200,
-                                        color: kBlackColor,
-                                        child: Center(
-                                          child: cIndicator(context),
-                                        ),
-                                      ),
+                                        : Container(
+                                            height: 200,
+                                            color: kBlackColor,
+                                            child: Center(
+                                              child: cIndicator(context),
+                                            ),
+                                          );
+                                  },
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       top: 12, left: 20, right: 20),

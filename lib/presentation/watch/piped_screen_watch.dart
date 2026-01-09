@@ -33,6 +33,11 @@ class PipedScreenWatch extends StatefulWidget {
 class _PipedScreenWatchState extends State<PipedScreenWatch>
     with WidgetsBindingObserver {
   bool _sponsorBlockFetched = false;
+  // Track if player should be shown - once shown, keep it shown until video ID changes
+  // This prevents the player from being disposed during BlocBuilder rebuilds
+  bool _showPlayer = false;
+  // Track the video ID for which the player is shown
+  String? _playerVideoId;
 
   @override
   void initState() {
@@ -75,6 +80,11 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
       debugPrint(
           '[PipedScreenWatch] Video ID changed from ${oldWidget.id} to ${widget.id}');
       _sponsorBlockFetched = false;
+      // Reset player visibility for new video
+      setState(() {
+        _showPlayer = false;
+        _playerVideoId = null;
+      });
       _initializeVideo();
     }
   }
@@ -150,9 +160,18 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
     // Fetch SponsorBlock segments if enabled
     _fetchSponsorBlockIfEnabled();
 
-    savedBloc.add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
-    savedBloc.add(
-        SavedEvent.checkVideoInfo(id: widget.id, profileName: currentProfile));
+    // Only fetch all videos list if not returning from PiP
+    if (!isReturningFromPip) {
+      savedBloc.add(SavedEvent.getAllVideoInfoList(profileName: currentProfile));
+    }
+
+    // Only check video info if we don't already have it for this video
+    // This prevents flickering when returning from PiP
+    if (savedBloc.state.videoInfo?.id != widget.id) {
+      savedBloc.add(
+          SavedEvent.checkVideoInfo(id: widget.id, profileName: currentProfile));
+    }
+
     subscribeBloc.add(SubscribeEvent.checkSubscribeInfo(
         id: widget.channelId, profileName: currentProfile));
   }
@@ -282,37 +301,60 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  // Show loading only if ALL conditions are true:
-                                  // 1. Status is initial/loading AND
-                                  // 2. Video data doesn't match current video AND
-                                  // 3. Global player doesn't have this video loaded (not returning from PiP)
-                                  ((state.fetchWatchInfoStatus ==
-                                              ApiStatus.initial ||
-                                          state.fetchWatchInfoStatus ==
-                                              ApiStatus.loading ||
-                                          state.fetchSubtitlesStatus ==
-                                              ApiStatus.loading) &&
-                                      state.oldId != widget.id &&
-                                      !GlobalPlayerController().hasVideoLoaded(widget.id))
-                                      ? Container(
+                                  // Show player with stable visibility to prevent disposal during rebuilds
+                                  Builder(
+                                    builder: (context) {
+                                      // Check if we should show the player
+                                      final shouldShowPlayer = _showPlayer && _playerVideoId == widget.id;
+                                      final canShowPlayer = !((state.fetchWatchInfoStatus ==
+                                                  ApiStatus.initial ||
+                                              state.fetchWatchInfoStatus ==
+                                                  ApiStatus.loading ||
+                                              state.fetchSubtitlesStatus ==
+                                                  ApiStatus.loading) &&
+                                          state.oldId != widget.id &&
+                                          !GlobalPlayerController().hasVideoLoaded(widget.id));
+
+                                      // Once we can show the player, set _showPlayer to true
+                                      if (canShowPlayer && !shouldShowPlayer && !hasPlayerUrlError) {
+                                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                                          if (mounted && !_showPlayer) {
+                                            setState(() {
+                                              _showPlayer = true;
+                                              _playerVideoId = widget.id;
+                                            });
+                                          }
+                                        });
+                                      }
+
+                                      // Show loading indicator
+                                      if (!shouldShowPlayer && !canShowPlayer) {
+                                        return Container(
                                           height: 200,
                                           color: kBlackColor,
                                           child: Center(
                                             child: cIndicator(context),
                                           ),
-                                        )
-                                      : hasPlayerUrlError
-                                          ? PlayerErrorWidget(
-                                              message: locals.hlsPlayer ==
-                                                      'HLS Player'
-                                                  ? 'HLS stream unavailable for this video. Try disabling HLS in settings.'
-                                                  : 'Video stream unavailable',
-                                              onRetry: () => BlocProvider.of<
-                                                      WatchBloc>(context)
-                                                  .add(WatchEvent.getWatchInfo(
-                                                      id: widget.id)),
-                                            )
-                                          : PipedMediaKitPlayer(
+                                        );
+                                      }
+
+                                      // Show error widget
+                                      if (hasPlayerUrlError) {
+                                        return PlayerErrorWidget(
+                                          message: locals.hlsPlayer ==
+                                                  'HLS Player'
+                                              ? 'HLS stream unavailable for this video. Try disabling HLS in settings.'
+                                              : 'Video stream unavailable',
+                                          onRetry: () => BlocProvider.of<
+                                                  WatchBloc>(context)
+                                              .add(WatchEvent.getWatchInfo(
+                                                  id: widget.id)),
+                                        );
+                                      }
+
+                                      // Show player
+                                      return PipedMediaKitPlayer(
+                                        key: ValueKey('player_${widget.id}'),
                                               videoId: widget.id,
                                               watchInfo: state.watchResp,
                                               defaultQuality:
@@ -341,11 +383,13 @@ class _PipedScreenWatchState extends State<PipedScreenWatch>
                                                   .isAudioFocusEnabled,
                                               subtitleSize:
                                                   settingsState.subtitleSize,
-                                              sponsorSegments: settingsState
-                                                      .isSponsorBlockEnabled
-                                                  ? state.sponsorSegments
-                                                  : const [],
-                                            ),
+                                        sponsorSegments: settingsState
+                                                .isSponsorBlockEnabled
+                                            ? state.sponsorSegments
+                                            : const [],
+                                      );
+                                    },
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 12, left: 20, right: 20),

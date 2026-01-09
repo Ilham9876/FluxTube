@@ -59,6 +59,7 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
   List<StreamQualityInfo>? _availableQualities;
   String? _currentQualityLabel;
   bool _isInitialized = false;
+  bool _isInitializing = false; // Guard against concurrent initializations
   bool _isRestoringFromPip = false;
   bool _isChangingQuality = false;
   late BoxFit _currentFitMode;
@@ -90,21 +91,33 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
 
   /// Async initialization - matches pattern used by other player widgets
   Future<void> _initializeAsync() async {
-    // Check if we're returning from PiP for the same video
-    // Only restore if the player is actually in a stable playing state for this video
-    _isRestoringFromPip = _globalPlayer.isPlayingVideo(widget.videoId);
-
-    if (_isRestoringFromPip) {
-      // Restore from PiP - set initialized immediately since player is already active
-      debugPrint('[NewPipePlayer] Restoring from PiP for video ${widget.videoId}');
-      _restoreFromPipSync();
-    } else {
-      // New video - initialize fresh
-      debugPrint('[NewPipePlayer] Starting fresh initialization for video ${widget.videoId}');
-      _initializePlayback();
+    // CRITICAL: Prevent concurrent initializations
+    // Multiple BlocBuilder rebuilds can trigger initState multiple times
+    if (_isInitializing) {
+      debugPrint('[NewPipePlayer] Initialization already in progress, skipping');
+      return;
     }
-    _setupHistoryListener();
-    _setupSponsorBlockListener();
+    _isInitializing = true;
+
+    try {
+      // Check if we're returning from PiP for the same video
+      // Only restore if the player is actually in a stable playing state for this video
+      _isRestoringFromPip = _globalPlayer.isPlayingVideo(widget.videoId);
+
+      if (_isRestoringFromPip) {
+        // Restore from PiP - set initialized immediately since player is already active
+        debugPrint('[NewPipePlayer] Restoring from PiP for video ${widget.videoId}');
+        _restoreFromPipSync();
+      } else {
+        // New video - initialize fresh
+        debugPrint('[NewPipePlayer] Starting fresh initialization for video ${widget.videoId}');
+        await _initializePlayback();
+      }
+      _setupHistoryListener();
+      _setupSponsorBlockListener();
+    } finally {
+      _isInitializing = false;
+    }
   }
 
   @override
@@ -122,14 +135,22 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
       // Cancel old sponsor block subscription
       _sponsorBlockSubscription?.cancel();
       _skippedSegments.clear();
-      // Reset state
+      // Reset state - also reset _isInitializing to allow new video init
       setState(() {
         _isInitialized = false;
+        _isInitializing = false;
         _isRestoringFromPip = false;
       });
-      // Initialize new video
-      _initializePlayback();
-      _setupSponsorBlockListener();
+      // Initialize new video using the guarded method
+      _initializeAsync();
+    }
+    // If watchInfo was updated (same videoId but new data), update available qualities
+    // This happens when BlocBuilder passes new watchInfo after API response
+    else if (oldWidget.watchInfo != widget.watchInfo &&
+             widget.watchInfo.videoStreams != null &&
+             widget.watchInfo.videoStreams!.isNotEmpty) {
+      debugPrint('[NewPipePlayer] watchInfo updated for same video, updating qualities');
+      _availableQualities = NewPipeStreamHelper.getAvailableQualities(widget.watchInfo);
     }
   }
 
@@ -164,12 +185,30 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         await _globalPlayer.stopAndClear();
       }
 
+      // Check mounted after async operation
+      if (!mounted) {
+        debugPrint('[NewPipePlayer] Widget disposed during initialization (after stopAndClear)');
+        return;
+      }
+
       // Ensure global player is initialized before use
       await _globalPlayer.ensureInitialized();
+
+      // Check mounted after async operation
+      if (!mounted) {
+        debugPrint('[NewPipePlayer] Widget disposed during initialization (after ensureInitialized)');
+        return;
+      }
 
       // STRICT: Enforce that we're about to play the correct video
       // This is a critical safety check to prevent video mismatches
       await _globalPlayer.enforceVideoId(widget.videoId);
+
+      // Check mounted after async operation
+      if (!mounted) {
+        debugPrint('[NewPipePlayer] Widget disposed during initialization (after enforceVideoId)');
+        return;
+      }
 
       // Get available qualities
       _availableQualities =
@@ -211,6 +250,12 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
       // Setup media source
       await _setupMediaSource(_currentConfig!);
 
+      // Check mounted after async operation
+      if (!mounted) {
+        debugPrint('[NewPipePlayer] Widget disposed during initialization (after setupMediaSource)');
+        return;
+      }
+
       // Update global player controller state for PiP support
       _globalPlayer.setCurrentVideoId(widget.videoId);
 
@@ -250,7 +295,7 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           // Get fresh medium-quality audio URL for this quality change
           final audioUrl = _selectMediumQualityAudio();
 
-          // First open video
+          // First open video - don't wait for ready here, just open
           await _player.open(
             Media(
               config.videoUrl!,
@@ -261,18 +306,23 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
             ),
             play: false,
           );
+          debugPrint('Opening merging stream');
 
-          // Wait for the player to be ready (duration > 0) before setting audio
-          await _waitForPlayerReady();
+          // Check mounted after async operation
+          if (!mounted) return;
+
+          // Wait for initial buffering to stabilize
+          await Future.delayed(const Duration(milliseconds: 300));
+
+          // Check mounted after delay
+          if (!mounted) return;
 
           if (audioUrl != null) {
-            // Set audio track after video is opened and ready
+            // Set audio track
             try {
               await _player.setAudioTrack(
                 AudioTrack.uri(audioUrl),
               );
-              // Give time for audio track to sync
-              await Future.delayed(const Duration(milliseconds: 150));
               debugPrint('Opened video + audio (${config.qualityLabel})');
               debugPrint('Video: ${config.videoUrl?.substring(0, 80)}...');
               debugPrint('Audio: ${audioUrl.substring(0, 80)}...');
@@ -282,6 +332,12 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           } else {
             debugPrint('Warning: No audio URL available');
           }
+
+          // Check mounted after async operation
+          if (!mounted) return;
+
+          // Wait for audio track to be attached before any seek/play
+          await Future.delayed(const Duration(milliseconds: 200));
           break;
 
         case MediaSourceType.hls:
@@ -296,6 +352,9 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           debugPrint('Opened DASH stream');
           break;
       }
+
+      // Check mounted after switch block
+      if (!mounted) return;
 
       // Setup subtitles
       if (config.subtitles.isNotEmpty) {
@@ -314,26 +373,37 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         }
       }
 
-      // Wait for player to be ready before seeking/playing (for non-merging types)
-      // Merging type already waits in its own branch
-      if (config.sourceType != MediaSourceType.merging) {
-        await _waitForPlayerReady();
-      }
+      // Wait for player to be ready before playing
+      await _waitForPlayerReady();
 
-      // Seek to start position
-      if (widget.playbackPosition > 0 && !config.isLive) {
-        await _player.seek(Duration(seconds: widget.playbackPosition));
-        // Wait for seek to complete
-        await Future.delayed(const Duration(milliseconds: 100));
-        debugPrint('Seeked to position: ${widget.playbackPosition}s');
-      }
+      // Check mounted after waiting for player
+      if (!mounted) return;
 
-      // Start playback
+      // Start playback first
       await _player.play();
+
+      // Check mounted after play
+      if (!mounted) return;
+
+      // Seek AFTER playback has started to avoid codec recreation
+      // The codec is already running and stable at this point
+      if (widget.playbackPosition > 0 && !config.isLive) {
+        // Small delay to let playback stabilize before seeking
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (!mounted) return;
+
+        await _player.seek(Duration(seconds: widget.playbackPosition));
+        debugPrint('Seeked to position: ${widget.playbackPosition}s (after play)');
+      }
+
+      // Wait for first frame to render to avoid showing stale frame
+      await _waitForFirstFrame();
       debugPrint('Started playback');
     } catch (e) {
       debugPrint('Error setting up media source: $e');
-      _showError('Failed to load video');
+      if (mounted) {
+        _showError('Failed to load video');
+      }
     }
   }
 
@@ -416,6 +486,24 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     }
 
     debugPrint('[Player] Player ready, duration: ${_player.state.duration}');
+  }
+
+  /// Wait for the first frame to be rendered (playing state and not buffering)
+  Future<void> _waitForFirstFrame({Duration timeout = const Duration(seconds: 3)}) async {
+    final startTime = DateTime.now();
+
+    // Wait until player is actually playing and not buffering
+    while (!_player.state.playing || _player.state.buffering) {
+      if (DateTime.now().difference(startTime) > timeout) {
+        debugPrint('[Player] Timeout waiting for first frame, proceeding anyway');
+        break;
+      }
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    // Small additional delay to ensure frame is rendered
+    await Future.delayed(const Duration(milliseconds: 50));
+    debugPrint('[Player] First frame ready, playing: ${_player.state.playing}, buffering: ${_player.state.buffering}');
   }
 
   String _findClosestQuality(String targetQuality) {
