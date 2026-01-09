@@ -33,7 +33,7 @@ An ad-free YouTube client built with Flutter. Watch YouTube videos without ads, 
 - **Video Fit Modes**: Contain, cover, fill, fit-width, fit-height.
 - **Customizable Skip Interval**: Double-tap to skip 5-60 seconds.
 - **Watch Videos up to 4K Quality**: Enjoy videos in high quality up to 4K resolution.
-- **Picture-in-Picture**: Continue watching while using other apps.
+- **Picture-in-Picture**: Continue watching going through other screens.
 - **Distraction-Free Mode**: Hide comments and related videos.
 
 ###### Note:
