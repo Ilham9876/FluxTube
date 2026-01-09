@@ -50,8 +50,8 @@ class ActionButtonsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locals = S.of(context);
-    final formattedLikes = formatCount(likes.toString());
-    final formattedDislikes = formatCount(dislikes.toString());
+    final formattedLikes = likes == -1 ? locals.like : formatCount(likes.toString());
+    final formattedDislikes = dislikes == -1 ? locals.dislike : formatCount(dislikes.toString());
 
     return SizedBox(
       height: 70,
@@ -302,7 +302,8 @@ class ActionButtonsRowCompact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formattedLikes = formatCount(likes.toString());
+    final locals = S.of(context);
+    final formattedLikes = likes == -1 ? locals.like : formatCount(likes.toString());
 
     return Row(
       mainAxisSize: MainAxisSize.min,

@@ -338,5 +338,13 @@
   "copiedToClipboard": "Copied to clipboard",
   "@copiedToClipboard": {
     "description": "Snackbar message when link is copied"
+  },
+  "like": "Like",
+  "@like": {
+    "description": "Like button label when count is unavailable"
+  },
+  "dislike": "Dislike",
+  "@dislike": {
+    "description": "Dislike button label when count is unavailable"
   }
 }

@@ -125,16 +125,22 @@ class _ScreenShortsState extends State<ScreenShorts> {
     final short = widget.shorts[index];
     final controller = _controllers[index];
 
-    if (!controller.isInitialized && mounted) {
+    // Mark this controller as the one that should play
+    controller.setShouldPlay(true);
+
+    if (controller.isInitialized) {
+      // Already initialized, just play
+      controller.play();
+    } else if (!controller.isInitializing) {
+      // Not initialized and not currently initializing, start initialization
       controller.addListener(() {
         if (mounted) setState(() {});
       });
       await controller.initialize(short.id, context);
       if (mounted) setState(() {});
-    } else if (controller.isInitialized) {
-      // Resume playback if already initialized
-      controller.play();
     }
+    // If isInitializing is true, the setShouldPlay(true) above will ensure
+    // it plays when initialization completes
 
     // Preload adjacent videos
     if (index + 1 < widget.shorts.length && mounted) {
@@ -152,9 +158,13 @@ class _ScreenShortsState extends State<ScreenShorts> {
   }
 
   void _onPageChanged(int index) {
-    // Pause the previous video
-    if (_currentIndex >= 0 && _currentIndex < _controllers.length) {
-      _controllers[_currentIndex].pause();
+    final previousIndex = _currentIndex;
+
+    // Mark previous controller as should not play and pause it
+    if (previousIndex >= 0 && previousIndex < _controllers.length) {
+      final prevController = _controllers[previousIndex];
+      prevController.setShouldPlay(false);
+      prevController.pause();
     }
 
     setState(() {
@@ -661,8 +671,10 @@ class _ShortVideoPage extends StatelessWidget {
               _ActionButton(
                 icon: CupertinoIcons.heart_fill,
                 label: controller.likeCount != null
-                    ? formatCount(controller.likeCount.toString())
-                    : (short.likeCount != null ? formatCount(short.likeCount.toString()) : ''),
+                    ? (controller.likeCount == -1 ? locals.like : formatCount(controller.likeCount.toString()))
+                    : (short.likeCount != null
+                        ? (short.likeCount == -1 ? locals.like : formatCount(short.likeCount.toString()))
+                        : ''),
                 onTap: () {},
                 isActive: true,
               ),
@@ -1112,6 +1124,8 @@ class _ShortVideoController extends ChangeNotifier {
   bool _isLoading = false;
   bool _isBuffering = false;
   bool _hasError = false;
+  bool _shouldPlay = false; // Track if this controller should play when ready (default false)
+  bool _isInitializing = false; // Prevent concurrent initialization
 
   // Quality
   List<StreamQualityInfo>? _availableQualities;
@@ -1131,6 +1145,7 @@ class _ShortVideoController extends ChangeNotifier {
   int? _viewCount;
 
   bool get isInitialized => _isInitialized;
+  bool get isInitializing => _isInitializing;
   bool get isPlaying => _isPlaying;
   bool get isLoading => _isLoading;
   bool get isBuffering => _isBuffering;
@@ -1150,7 +1165,8 @@ class _ShortVideoController extends ChangeNotifier {
   int? get viewCount => _viewCount;
 
   Future<void> initialize(String videoId, BuildContext context) async {
-    if (_isInitialized) return;
+    if (_isInitialized || _isInitializing) return;
+    _isInitializing = true;
     _isLoading = true;
     _hasError = false;
     notifyListeners();
@@ -1213,11 +1229,13 @@ class _ShortVideoController extends ChangeNotifier {
       await _player!.setPlaylistMode(PlaylistMode.loop);
 
       _isInitialized = true;
+      _isInitializing = false;
       _isLoading = false;
       notifyListeners();
     } catch (e) {
       debugPrint('Error initializing short video: $e');
       _hasError = true;
+      _isInitializing = false;
       _isLoading = false;
       notifyListeners();
     }
@@ -1245,7 +1263,7 @@ class _ShortVideoController extends ChangeNotifier {
   Future<void> _setupMediaSource(PlaybackConfiguration config) async {
     switch (config.sourceType) {
       case MediaSourceType.progressive:
-        // Muxed stream (has audio)
+        // Muxed stream (has audio) - open without auto-play, then play if shouldPlay
         await _player!.open(
           Media(
             config.videoUrl!,
@@ -1253,8 +1271,12 @@ class _ShortVideoController extends ChangeNotifier {
               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             },
           ),
+          play: false,
         );
-        debugPrint('[Shorts] Opened progressive stream');
+        if (_shouldPlay) {
+          await _player!.play();
+        }
+        debugPrint('[Shorts] Opened progressive stream, shouldPlay: $_shouldPlay');
         break;
 
       case MediaSourceType.merging:
@@ -1282,17 +1304,26 @@ class _ShortVideoController extends ChangeNotifier {
           }
         }
 
-        await _player!.play();
+        if (_shouldPlay) {
+          await _player!.play();
+        }
+        debugPrint('[Shorts] Merging stream ready, shouldPlay: $_shouldPlay');
         break;
 
       case MediaSourceType.hls:
-        await _player!.open(Media(config.manifestUrl!));
-        debugPrint('[Shorts] Opened HLS stream');
+        await _player!.open(Media(config.manifestUrl!), play: false);
+        if (_shouldPlay) {
+          await _player!.play();
+        }
+        debugPrint('[Shorts] Opened HLS stream, shouldPlay: $_shouldPlay');
         break;
 
       case MediaSourceType.dash:
-        await _player!.open(Media(config.manifestUrl!));
-        debugPrint('[Shorts] Opened DASH stream');
+        await _player!.open(Media(config.manifestUrl!), play: false);
+        if (_shouldPlay) {
+          await _player!.play();
+        }
+        debugPrint('[Shorts] Opened DASH stream, shouldPlay: $_shouldPlay');
         break;
     }
   }
@@ -1531,13 +1562,19 @@ class _ShortVideoController extends ChangeNotifier {
     }
   }
 
+  void setShouldPlay(bool value) {
+    _shouldPlay = value;
+  }
+
   void play() {
+    _shouldPlay = true;
     if (_player != null && !_isPlaying) {
       _player!.play();
     }
   }
 
   void pause() {
+    _shouldPlay = false;
     if (_player != null && _isPlaying) {
       _player!.pause();
     }
