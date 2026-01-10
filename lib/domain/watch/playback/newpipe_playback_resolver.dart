@@ -12,14 +12,14 @@ class NewPipePlaybackResolver {
     required String preferredQuality,
     bool preferHighQuality = true,
   }) {
-    // Priority: Live streams -> High-quality video+audio merging -> Muxed streams -> DASH/HLS fallback
+    // Priority: Live streams -> Merging (high quality) -> HLS -> DASH -> Progressive (muxed)
 
-    // 1. Check for live stream
+    // 1. Check for live stream - use HLS/DASH
     if (watchResp.isLive == true) {
       return _resolveLiveStream(watchResp);
     }
 
-    // 2. Try to get the preferred quality
+    // 2. First priority: Try to get the preferred quality via merging or progressive
     final qualityInfo = NewPipeStreamHelper.getAvailableQualities(watchResp)
         .where((q) => q.label == preferredQuality)
         .firstOrNull;
@@ -43,9 +43,8 @@ class NewPipePlaybackResolver {
       }
     }
 
-    // 3. Preferred quality not available - find closest alternative
+    // 3. Preferred quality not available - find closest alternative from merging/progressive
     if (preferHighQuality) {
-      // Try to get highest available quality
       final availableQualities =
           NewPipeStreamHelper.getAvailableQualities(watchResp);
       if (availableQualities.isNotEmpty) {
@@ -67,17 +66,18 @@ class NewPipePlaybackResolver {
       }
     }
 
-    // 4. Fallback to DASH or HLS if available
+    // 4. Fallback to HLS (not for live, already handled above)
+    if (watchResp.hlsUrl != null && watchResp.hlsUrl!.isNotEmpty) {
+      return _resolveHlsStream(watchResp.hlsUrl!, watchResp.subtitles ?? []);
+    }
+
+    // 5. Fallback to DASH
     if (watchResp.dashMpdUrl != null && watchResp.dashMpdUrl!.isNotEmpty) {
       return _resolveDashStream(
           watchResp.dashMpdUrl!, watchResp.subtitles ?? []);
     }
 
-    if (watchResp.hlsUrl != null && watchResp.hlsUrl!.isNotEmpty) {
-      return _resolveHlsStream(watchResp.hlsUrl!, watchResp.subtitles ?? []);
-    }
-
-    // 5. Last resort - any muxed stream
+    // 6. Last resort - any muxed stream
     final videoStreams = watchResp.videoStreams ?? [];
     if (videoStreams.isNotEmpty) {
       final sorted = NewPipeStreamHelper.sortVideoStreams(videoStreams);

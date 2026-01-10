@@ -62,13 +62,21 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
   bool _isInitializing = false; // Guard against concurrent initializations
   bool _isRestoringFromPip = false;
   bool _isChangingQuality = false;
-  bool _isSeekingToPosition = false; // Track initial seek to saved position
   bool _isInitialBuffering = true; // Track initial buffering phase
   late BoxFit _currentFitMode;
 
   // SponsorBlock
   StreamSubscription<Duration>? _sponsorBlockSubscription;
   final Set<String> _skippedSegments = {};
+
+  // History tracking - throttle updates
+  StreamSubscription<Duration>? _historySubscription;
+  int _lastSavedPositionSeconds = -1;
+
+  // HLS/DASH adaptive streaming - track video tracks from player
+  StreamSubscription<Tracks>? _tracksSubscription;
+  List<VideoTrack> _hlsDashVideoTracks = [];
+  VideoTrack? _currentVideoTrack;
 
   late final SavedBloc _savedBloc;
   late final WatchBloc _watchBloc;
@@ -117,6 +125,7 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
       }
       _setupHistoryListener();
       _setupSponsorBlockListener();
+      _setupTracksListener();
     } finally {
       _isInitializing = false;
     }
@@ -134,16 +143,20 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
       _player.stop();
       _globalPlayer.stopAndClear();
 
-      // Cancel old sponsor block subscription
+      // Cancel old subscriptions
       _sponsorBlockSubscription?.cancel();
+      _historySubscription?.cancel();
+      _tracksSubscription?.cancel();
       _skippedSegments.clear();
+      _hlsDashVideoTracks = [];
+      _currentVideoTrack = null;
       // Reset state - also reset _isInitializing to allow new video init
       setState(() {
         _isInitialized = false;
         _isInitializing = false;
         _isRestoringFromPip = false;
-        _isSeekingToPosition = false;
         _isInitialBuffering = true;
+        _lastSavedPositionSeconds = -1;
       });
       // Initialize new video using the guarded method
       _initializeAsync();
@@ -242,6 +255,15 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         preferHighQuality: true,
       );
 
+      // For HLS/DASH, set initial quality label to "Auto" since adaptive streaming handles quality
+      final isAdaptive = _currentConfig!.sourceType == MediaSourceType.hls ||
+          _currentConfig!.sourceType == MediaSourceType.dash;
+      if (isAdaptive) {
+        _currentQualityLabel = 'Auto';
+        // Clear video stream qualities - will be populated by tracks listener
+        _availableQualities = null;
+      }
+
       debugPrint('=== MediaKit Playback Debug ===');
       debugPrint('Source type: ${_currentConfig!.sourceType}');
       debugPrint('Quality: ${_currentConfig!.qualityLabel}');
@@ -283,6 +305,9 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
 
   Future<void> _setupMediaSource(PlaybackConfiguration config) async {
     try {
+      final isAdaptive = config.sourceType == MediaSourceType.hls ||
+          config.sourceType == MediaSourceType.dash;
+
       switch (config.sourceType) {
         case MediaSourceType.progressive:
           // Muxed stream (has audio, ≤360p)
@@ -319,10 +344,8 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           // Check mounted after async operation
           if (!mounted) return;
 
-          // Wait for initial buffering to stabilize
+          // Wait for initial buffering to stabilize before setting audio
           await Future.delayed(const Duration(milliseconds: 300));
-
-          // Check mounted after delay
           if (!mounted) return;
 
           if (audioUrl != null) {
@@ -346,16 +369,17 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
 
           // Wait for audio track to be attached before any seek/play
           await Future.delayed(const Duration(milliseconds: 200));
+          if (!mounted) return;
           break;
 
         case MediaSourceType.hls:
-          // Live HLS stream
+          // HLS stream - fast initialization, no separate wait needed
           await _player.open(Media(config.manifestUrl!));
           debugPrint('Opened HLS stream');
           break;
 
         case MediaSourceType.dash:
-          // DASH manifest
+          // DASH manifest - fast initialization, no separate wait needed
           await _player.open(Media(config.manifestUrl!));
           debugPrint('Opened DASH stream');
           break;
@@ -364,30 +388,19 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
       // Check mounted after switch block
       if (!mounted) return;
 
-      // Setup subtitles
+      // Setup subtitles asynchronously - don't block playback
       if (config.subtitles.isNotEmpty) {
-        for (var subtitle in config.subtitles) {
-          if (subtitle.url != null && subtitle.url!.isNotEmpty) {
-            try {
-              _player.setSubtitleTrack(
-                SubtitleTrack.uri(subtitle.url!,
-                    title: subtitle.languageCode ?? 'Unknown'),
-              );
-              debugPrint('Added subtitle: ${subtitle.languageCode}');
-            } catch (e) {
-              debugPrint('Failed to add subtitle: $e');
-            }
-          }
-        }
+        _setupSubtitlesAsync(config.subtitles);
       }
 
-      // Wait for player to be ready before playing
-      await _waitForPlayerReady();
+      // For HLS/DASH, start playback immediately - they handle buffering internally
+      // For progressive/merging, wait for duration to be available
+      if (!isAdaptive) {
+        await _waitForPlayerReady(timeout: const Duration(seconds: 3));
+        if (!mounted) return;
+      }
 
-      // Check mounted after waiting for player
-      if (!mounted) return;
-
-      // Start playback first
+      // Start playback
       await _player.play();
 
       // Check mounted after play
@@ -396,9 +409,12 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
       // Seek AFTER playback has started to avoid codec recreation
       // The codec is already running and stable at this point
       if (widget.playbackPosition > 0 && !config.isLive) {
-        // Small delay to let playback stabilize before seeking
-        await Future.delayed(const Duration(milliseconds: 100));
-        if (!mounted) return;
+        // For HLS/DASH, seek can happen faster due to keyframe-based seeking
+        if (!isAdaptive) {
+          // Small delay only for non-adaptive streams
+          await Future.delayed(const Duration(milliseconds: 50));
+          if (!mounted) return;
+        }
 
         await _player.seek(Duration(seconds: widget.playbackPosition));
         debugPrint('Seeked to position: ${widget.playbackPosition}s (after play)');
@@ -412,6 +428,25 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         _showError('Failed to load video');
       }
     }
+  }
+
+  /// Setup subtitles asynchronously to not block playback
+  void _setupSubtitlesAsync(List subtitles) {
+    Future.microtask(() {
+      for (var subtitle in subtitles) {
+        if (subtitle.url != null && subtitle.url!.isNotEmpty) {
+          try {
+            _player.setSubtitleTrack(
+              SubtitleTrack.uri(subtitle.url!,
+                  title: subtitle.languageCode ?? 'Unknown'),
+            );
+            debugPrint('Added subtitle: ${subtitle.languageCode}');
+          } catch (e) {
+            debugPrint('Failed to add subtitle: $e');
+          }
+        }
+      }
+    });
   }
 
   /// Select a medium-quality ORIGINAL audio stream (around 128kbps)
@@ -481,18 +516,38 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
   }
 
   /// Wait for the player to be ready (duration > 0) with timeout
-  Future<void> _waitForPlayerReady({Duration timeout = const Duration(seconds: 5)}) async {
-    final startTime = DateTime.now();
-
-    while (_player.state.duration == Duration.zero) {
-      if (DateTime.now().difference(startTime) > timeout) {
-        debugPrint('[Player] Timeout waiting for player ready, proceeding anyway');
-        break;
-      }
-      await Future.delayed(const Duration(milliseconds: 50));
+  /// Uses stream-based waiting for efficiency instead of polling
+  Future<void> _waitForPlayerReady({Duration timeout = const Duration(seconds: 3)}) async {
+    // If already ready, return immediately
+    if (_player.state.duration > Duration.zero) {
+      debugPrint('[Player] Player already ready, duration: ${_player.state.duration}');
+      return;
     }
 
-    debugPrint('[Player] Player ready, duration: ${_player.state.duration}');
+    // Use Completer with stream listening for efficient waiting
+    final completer = Completer<void>();
+    StreamSubscription<Duration>? subscription;
+
+    // Set up timeout
+    final timer = Timer(timeout, () {
+      if (!completer.isCompleted) {
+        debugPrint('[Player] Timeout waiting for player ready, proceeding anyway');
+        subscription?.cancel();
+        completer.complete();
+      }
+    });
+
+    // Listen for duration changes
+    subscription = _player.stream.duration.listen((duration) {
+      if (duration > Duration.zero && !completer.isCompleted) {
+        debugPrint('[Player] Player ready, duration: $duration');
+        timer.cancel();
+        subscription?.cancel();
+        completer.complete();
+      }
+    });
+
+    await completer.future;
   }
 
   String _findClosestQuality(String targetQuality) {
@@ -520,12 +575,122 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
   }
 
   void _setupHistoryListener() {
-    // Update history every 5 seconds
-    _player.stream.position.listen((position) {
-      if (position.inSeconds % 5 == 0) {
+    // Cancel any existing subscription
+    _historySubscription?.cancel();
+
+    // Update history every 5 seconds (throttled - only when position crosses 5-second boundary)
+    _historySubscription = _player.stream.position.listen((position) {
+      final currentSeconds = position.inSeconds;
+      // Only update when we cross a 5-second boundary AND haven't already saved this position
+      if (currentSeconds > 0 &&
+          currentSeconds % 5 == 0 &&
+          currentSeconds != _lastSavedPositionSeconds) {
+        _lastSavedPositionSeconds = currentSeconds;
         _updateVideoHistory();
       }
     });
+  }
+
+  /// Setup listener for HLS/DASH video tracks
+  /// This allows quality selection for adaptive streaming
+  void _setupTracksListener() {
+    _tracksSubscription?.cancel();
+    _tracksSubscription = _player.stream.tracks.listen((tracks) {
+      if (!mounted) return;
+
+      // Only process if using HLS/DASH
+      final isAdaptive = _currentConfig?.sourceType == MediaSourceType.hls ||
+          _currentConfig?.sourceType == MediaSourceType.dash;
+
+      if (isAdaptive && tracks.video.isNotEmpty) {
+        debugPrint('[NewPipePlayer] HLS/DASH tracks available: ${tracks.video.length} video tracks');
+
+        // Filter valid video tracks (non-empty id and resolution info)
+        final validTracks = tracks.video.where((track) {
+          // VideoTrack.auto() has empty id, keep it
+          // Other tracks should have resolution info
+          return track.id.isEmpty || (track.w != null && track.h != null);
+        }).toList();
+
+        // Sort by resolution (highest first), keeping auto at the beginning
+        validTracks.sort((a, b) {
+          if (a.id.isEmpty) return -1; // auto goes first
+          if (b.id.isEmpty) return 1;
+          final aRes = (a.h ?? 0);
+          final bRes = (b.h ?? 0);
+          return bRes.compareTo(aRes); // Higher resolution first
+        });
+
+        setState(() {
+          _hlsDashVideoTracks = validTracks;
+          // Get current track
+          _currentVideoTrack = _player.state.track.video;
+
+          // Update quality label based on current track
+          if (_currentVideoTrack != null) {
+            _currentQualityLabel = _getTrackQualityLabel(_currentVideoTrack!);
+          }
+
+          // Build quality list for UI from adaptive tracks
+          _availableQualities = _buildQualitiesFromTracks(validTracks);
+        });
+
+        debugPrint('[NewPipePlayer] Available HLS/DASH qualities: ${_availableQualities?.map((q) => q.label).join(", ")}');
+      }
+    });
+  }
+
+  /// Build StreamQualityInfo list from VideoTrack list (for HLS/DASH)
+  List<StreamQualityInfo> _buildQualitiesFromTracks(List<VideoTrack> tracks) {
+    return tracks.map((track) {
+      final label = _getTrackQualityLabel(track);
+      final resolution = track.h ?? 0;
+
+      return StreamQualityInfo(
+        label: label,
+        resolution: resolution,
+        fps: track.fps?.toInt(),
+        format: null,
+        requiresMerging: false, // HLS/DASH handles this internally
+        isVideoOnly: false, // HLS/DASH includes audio
+        videoStream: null, // Not applicable for adaptive
+        audioStream: null,
+      );
+    }).toList();
+  }
+
+  /// Get quality label from VideoTrack
+  String _getTrackQualityLabel(VideoTrack track) {
+    if (track.id.isEmpty) {
+      return 'Auto';
+    }
+
+    final height = track.h ?? 0;
+    final fps = track.fps?.toInt();
+
+    if (height == 0) {
+      return track.title ?? track.id;
+    }
+
+    // Format as "1080p" or "1080p60" for high frame rate
+    if (fps != null && fps > 30) {
+      return '${height}p$fps';
+    }
+    return '${height}p';
+  }
+
+  /// Find VideoTrack by quality label
+  VideoTrack? _findTrackByQualityLabel(String qualityLabel) {
+    if (qualityLabel == 'Auto') {
+      return VideoTrack.auto();
+    }
+
+    for (final track in _hlsDashVideoTracks) {
+      if (_getTrackQualityLabel(track) == qualityLabel) {
+        return track;
+      }
+    }
+    return null;
   }
 
   void _setupSponsorBlockListener() {
@@ -565,47 +730,17 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     });
 
     try {
-      final currentPosition = _player.state.position;
-      final wasPlaying = _player.state.playing;
+      // Check if we're using HLS/DASH - use track selection instead of reopening stream
+      final isAdaptive = _currentConfig?.sourceType == MediaSourceType.hls ||
+          _currentConfig?.sourceType == MediaSourceType.dash;
 
-      // Resolve new configuration (only video URL will be used, audio stays the same)
-      final newConfig = _resolver.resolve(
-        watchResp: widget.watchInfo,
-        preferredQuality: newQualityLabel,
-        preferHighQuality: true,
-      );
-
-      if (!newConfig.isValid) {
-        _showError('Quality not available');
-        setState(() {
-          _isChangingQuality = false;
-        });
-        return;
+      if (isAdaptive && _hlsDashVideoTracks.isNotEmpty) {
+        // HLS/DASH quality change - use setVideoTrack
+        await _changeQualityAdaptive(newQualityLabel);
+      } else {
+        // Progressive/Merging quality change - reopen stream
+        await _changeQualityProgressive(newQualityLabel);
       }
-
-      debugPrint('Changing quality to: $newQualityLabel (keeping fixed audio)');
-
-      // Setup new source (will use fixed audio URL, only video changes)
-      await _setupMediaSource(newConfig);
-
-      // Restore position
-      if (currentPosition.inSeconds > 0 && !newConfig.isLive) {
-        await _player.seek(currentPosition);
-      }
-
-      // Restore playback state
-      if (wasPlaying) {
-        await _player.play();
-      }
-
-      setState(() {
-        _currentConfig = newConfig;
-        _currentQualityLabel = newQualityLabel;
-        _isChangingQuality = false;
-      });
-
-      _showToast('Quality changed to $newQualityLabel');
-      debugPrint('Quality changed to: $newQualityLabel');
     } catch (e) {
       debugPrint('Error changing quality: $e');
       _showError('Failed to change quality');
@@ -615,9 +750,121 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
     }
   }
 
+  /// Change quality for HLS/DASH streams using setVideoTrack
+  Future<void> _changeQualityAdaptive(String newQualityLabel) async {
+    final targetTrack = _findTrackByQualityLabel(newQualityLabel);
+
+    if (targetTrack == null) {
+      debugPrint('[NewPipePlayer] Could not find track for quality: $newQualityLabel');
+      _showError('Quality not available');
+      setState(() {
+        _isChangingQuality = false;
+      });
+      return;
+    }
+
+    debugPrint('[NewPipePlayer] Changing HLS/DASH quality to: $newQualityLabel (track: ${targetTrack.id})');
+
+    // Set the video track
+    await _player.setVideoTrack(targetTrack);
+
+    // Wait for buffering to complete after quality change
+    await _waitForBufferingComplete(timeout: const Duration(seconds: 5));
+
+    if (!mounted) return;
+
+    setState(() {
+      _currentVideoTrack = targetTrack;
+      _currentQualityLabel = newQualityLabel;
+      _isChangingQuality = false;
+    });
+
+    _showToast('Quality changed to $newQualityLabel');
+    debugPrint('[NewPipePlayer] HLS/DASH quality changed to: $newQualityLabel');
+  }
+
+  /// Wait for buffering to complete after quality change
+  Future<void> _waitForBufferingComplete({Duration timeout = const Duration(seconds: 5)}) async {
+    // If not buffering, return immediately
+    if (!_player.state.buffering) {
+      return;
+    }
+
+    final completer = Completer<void>();
+    StreamSubscription<bool>? subscription;
+
+    // Set up timeout
+    final timer = Timer(timeout, () {
+      if (!completer.isCompleted) {
+        debugPrint('[Player] Timeout waiting for buffering complete');
+        subscription?.cancel();
+        completer.complete();
+      }
+    });
+
+    // Listen for buffering changes
+    subscription = _player.stream.buffering.listen((isBuffering) {
+      if (!isBuffering && !completer.isCompleted) {
+        debugPrint('[Player] Buffering complete');
+        timer.cancel();
+        subscription?.cancel();
+        completer.complete();
+      }
+    });
+
+    await completer.future;
+  }
+
+  /// Change quality for progressive/merging streams (requires reopening stream)
+  Future<void> _changeQualityProgressive(String newQualityLabel) async {
+    final currentPosition = _player.state.position;
+    final wasPlaying = _player.state.playing;
+
+    // Resolve new configuration (only video URL will be used, audio stays the same)
+    final newConfig = _resolver.resolve(
+      watchResp: widget.watchInfo,
+      preferredQuality: newQualityLabel,
+      preferHighQuality: true,
+    );
+
+    if (!newConfig.isValid) {
+      _showError('Quality not available');
+      setState(() {
+        _isChangingQuality = false;
+      });
+      return;
+    }
+
+    debugPrint('Changing quality to: $newQualityLabel (keeping fixed audio)');
+
+    // Setup new source (will use fixed audio URL, only video changes)
+    await _setupMediaSource(newConfig);
+
+    // Restore position
+    if (currentPosition.inSeconds > 0 && !newConfig.isLive) {
+      await _player.seek(currentPosition);
+    }
+
+    // Restore playback state
+    if (wasPlaying) {
+      await _player.play();
+    }
+
+    setState(() {
+      _currentConfig = newConfig;
+      _currentQualityLabel = newQualityLabel;
+      _isChangingQuality = false;
+    });
+
+    _showToast('Quality changed to $newQualityLabel');
+    debugPrint('Quality changed to: $newQualityLabel');
+  }
+
   @override
   void dispose() {
     _sponsorBlockSubscription?.cancel();
+    _historySubscription?.cancel();
+    _tracksSubscription?.cancel();
     _updateVideoHistory();
     // Don't dispose the global player - save state for PiP transition
     // The player will persist and can be restored when returning from PiP
@@ -693,14 +940,15 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
           // Buffering indicator overlay
           StreamBuilder<bool>(
             stream: _player.stream.buffering,
-            initialData: true,
+            initialData: _player.state.buffering,
             builder: (context, bufferingSnapshot) {
               final isBuffering = bufferingSnapshot.data ?? false;
+              final isPlaying = _player.state.playing && _player.state.position.inSeconds > 0;
 
-              // Auto-clear initial buffering flag when buffering stops
-              if (!isBuffering && _isInitialBuffering && mounted) {
+              // Auto-clear initial buffering flag when video starts playing
+              if (_isInitialBuffering && isPlaying && mounted) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted && _isInitialBuffering && !_player.state.buffering) {
+                  if (mounted && _isInitialBuffering) {
                     setState(() {
                       _isInitialBuffering = false;
                     });
@@ -708,8 +956,8 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
                 });
               }
 
-              // Show loading for buffering, quality change, seeking, or initial load
-              final shouldShowOverlay = isBuffering || _isChangingQuality || _isSeekingToPosition || _isInitialBuffering;
+              // Show loading for buffering or quality change
+              final shouldShowOverlay = isBuffering || _isChangingQuality;
               if (!shouldShowOverlay) {
                 return const SizedBox.shrink();
               }
@@ -718,33 +966,38 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
               String? message;
               if (_isChangingQuality) {
                 message = 'Changing quality...';
-              } else if (_isSeekingToPosition || _isInitialBuffering) {
-                // Show "Resuming playback..." if seeking, otherwise "Loading video..."
-                message = widget.playbackPosition > 0 ? 'Resuming playback...' : 'Loading video...';
+              } else if (_isInitialBuffering && !isPlaying) {
+                // Only show initial load message if video hasn't started playing yet
+                final isLive = widget.watchInfo.isLive == true;
+                message = (widget.playbackPosition > 0 && !isLive) ? 'Resuming playback...' : 'Loading video...';
               }
-              // For regular buffering (after initial load), just show spinner without message
+              // For regular buffering (after video started), just show spinner without message
 
-              return Container(
-                color: Colors.black.withValues(alpha: 0.3),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 3,
-                      ),
-                      if (message != null) ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          message,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
+              // Allow touch interactions - don't block controls during loading
+              return IgnorePointer(
+                ignoring: true, // Let touches pass through to controls below
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
                         ),
+                        if (message != null) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            message,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               );
