@@ -76,23 +76,50 @@ class _ScreenDownloadsState extends State<ScreenDownloads>
     final locals = S.of(context);
 
     return SafeArea(
-      child: BlocListener<DownloadBloc, DownloadState>(
-        listenWhen: (previous, current) =>
-            current.errorMessage != null &&
-            current.errorMessage != previous.errorMessage,
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  locals.downloadFailed(state.failedDownloadTitle ?? 'Unknown'),
-                ),
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: AppColors.error,
-              ),
-            );
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<DownloadBloc, DownloadState>(
+            listenWhen: (previous, current) =>
+                current.errorMessage != null &&
+                current.errorMessage != previous.errorMessage,
+            listener: (context, state) {
+              if (state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      locals.downloadFailed(state.failedDownloadTitle ?? 'Unknown'),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+              }
+            },
+          ),
+          BlocListener<DownloadBloc, DownloadState>(
+            listenWhen: (previous, current) =>
+                previous.saveToDeviceStatus != current.saveToDeviceStatus,
+            listener: (context, state) {
+              if (state.saveToDeviceStatus == ApiStatus.loaded) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(locals.savedToDevice),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              } else if (state.saveToDeviceStatus == ApiStatus.error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(locals.saveToDeviceFailed),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
@@ -189,6 +216,7 @@ class _ScreenDownloadsState extends State<ScreenDownloads>
               onPause: () => _onPause(item),
               onResume: () => _onResume(item),
               onCancel: () => _onCancel(item),
+              onSaveToDevice: () => _onSaveToDevice(item),
             ),
           );
         },
@@ -304,6 +332,25 @@ class _ScreenDownloadsState extends State<ScreenDownloads>
           DownloadEvent.cancelDownload(downloadId: item.id!),
         );
   }
+
+  Future<void> _onSaveToDevice(DownloadItem item) async {
+    if (item.outputFilePath == null) return;
+
+    final locals = S.of(context);
+
+    // Show saving indicator
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(locals.savingToDevice),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 1),
+      ),
+    );
+
+    context.read<DownloadBloc>().add(
+          DownloadEvent.saveToDevice(downloadItem: item),
+        );
+  }
 }
 
 class _DownloadItemCard extends StatelessWidget {
@@ -315,6 +362,7 @@ class _DownloadItemCard extends StatelessWidget {
   final VoidCallback onPause;
   final VoidCallback onResume;
   final VoidCallback onCancel;
+  final VoidCallback? onSaveToDevice;
 
   const _DownloadItemCard({
     required this.item,
@@ -325,6 +373,7 @@ class _DownloadItemCard extends StatelessWidget {
     required this.onPause,
     required this.onResume,
     required this.onCancel,
+    this.onSaveToDevice,
   });
 
   @override
@@ -652,6 +701,9 @@ class _DownloadItemCard extends StatelessWidget {
           case 'delete':
             onDelete();
             break;
+          case 'save_to_device':
+            onSaveToDevice?.call();
+            break;
         }
       },
       itemBuilder: (context) {
@@ -692,6 +744,20 @@ class _DownloadItemCard extends StatelessWidget {
                 const Icon(CupertinoIcons.xmark),
                 AppSpacing.width8,
                 Text(locals.cancel),
+              ],
+            ),
+          ));
+        }
+
+        // Save to device option for completed downloads
+        if (item.status == DownloadStatus.completed) {
+          items.add(PopupMenuItem(
+            value: 'save_to_device',
+            child: Row(
+              children: [
+                const Icon(CupertinoIcons.square_arrow_down),
+                AppSpacing.width8,
+                Text(locals.saveToDevice),
               ],
             ),
           ));

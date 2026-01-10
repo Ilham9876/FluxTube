@@ -71,4 +71,8 @@ abstract class DownloadService {
 
   /// Clean up incomplete downloads
   Future<void> cleanupIncompleteDownloads();
+
+  /// Save downloaded file to device storage (gallery/downloads folder)
+  /// This makes the file visible in file managers and media apps
+  Future<Either<MainFailure, Unit>> saveToDevice(DownloadItem item);
 }

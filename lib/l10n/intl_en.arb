@@ -488,5 +488,21 @@
   "autoPipDescription": "Automatically enter PiP mode when pressing home button while video is playing",
   "@autoPipDescription": {
     "description": "Description for auto PiP setting"
+  },
+  "saveToDevice": "Save to Device",
+  "@saveToDevice": {
+    "description": "Save downloaded file to device storage"
+  },
+  "savingToDevice": "Saving to device...",
+  "@savingToDevice": {
+    "description": "Message shown while saving file to device"
+  },
+  "savedToDevice": "Saved to device",
+  "@savedToDevice": {
+    "description": "Success message when file is saved to device"
+  },
+  "saveToDeviceFailed": "Failed to save to device",
+  "@saveToDeviceFailed": {
+    "description": "Error message when save to device fails"
   }
 }

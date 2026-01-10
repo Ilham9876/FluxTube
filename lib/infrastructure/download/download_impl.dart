@@ -1369,4 +1369,78 @@ class DownloadImpl implements DownloadService {
       await _db.updateDownload(_toCompanion(item));
     }
   }
+
+  @override
+  Future<Either<MainFailure, Unit>> saveToDevice(domain.DownloadItem item) async {
+    try {
+      if (item.outputFilePath == null) {
+        return const Left(MainFailure.notFound(resource: 'Output file path'));
+      }
+
+      final sourceFile = File(item.outputFilePath!);
+      if (!await sourceFile.exists()) {
+        return const Left(MainFailure.notFound(resource: 'Downloaded file'));
+      }
+
+      // Determine the public directory based on download type
+      // For video: Movies folder, for audio: Music folder
+      Directory? publicDir;
+      String subFolder;
+
+      if (Platform.isAndroid) {
+        // On Android, use the public downloads directory
+        // This makes files visible in file managers and media apps
+        if (item.downloadType == domain.DownloadType.audioOnly) {
+          publicDir = Directory('/storage/emulated/0/Music');
+          subFolder = 'FluxTube';
+        } else {
+          publicDir = Directory('/storage/emulated/0/Movies');
+          subFolder = 'FluxTube';
+        }
+      } else {
+        // On other platforms, use the downloads directory
+        publicDir = await getDownloadsDirectory();
+        subFolder = 'FluxTube';
+      }
+
+      if (publicDir == null) {
+        return const Left(MainFailure.unknown(message: 'Could not access public storage'));
+      }
+
+      // Create the FluxTube subfolder
+      final targetDir = Directory('${publicDir.path}/$subFolder');
+      if (!await targetDir.exists()) {
+        await targetDir.create(recursive: true);
+      }
+
+      // Generate a safe filename from the title
+      final safeTitle = item.title
+          .replaceAll(RegExp(r'[<>:"/\\|?*]'), '_')
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .trim();
+
+      // Get file extension from source
+      final sourceExt = item.outputFilePath!.split('.').last;
+      final targetFileName = '$safeTitle.$sourceExt';
+      final targetPath = '${targetDir.path}/$targetFileName';
+
+      // Check if file already exists, if so add a number suffix
+      var finalPath = targetPath;
+      var counter = 1;
+      while (await File(finalPath).exists()) {
+        finalPath = '${targetDir.path}/$safeTitle ($counter).$sourceExt';
+        counter++;
+      }
+
+      // Copy the file to public storage
+      await sourceFile.copy(finalPath);
+
+      log('[Download] Saved to device: $finalPath');
+
+      return const Right(unit);
+    } catch (e) {
+      log('[Download] Save to device failed: $e');
+      return Left(MainFailure.unknown(message: 'Failed to save to device: $e'));
+    }
+  }
 }

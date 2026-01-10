@@ -38,6 +38,7 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadState> {
     on<_DownloadCompleted>(_onDownloadCompleted);
     on<_DownloadFailed>(_onDownloadFailed);
     on<_ClearDownloadOptions>(_onClearDownloadOptions);
+    on<_SaveToDevice>(_onSaveToDevice);
   }
 
   Future<void> _initNotifications() async {
@@ -470,5 +471,28 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadState> {
       downloadOptions: null,
       fetchOptionsStatus: ApiStatus.initial,
     ));
+  }
+
+  Future<void> _onSaveToDevice(
+    _SaveToDevice event,
+    Emitter<DownloadState> emit,
+  ) async {
+    emit(state.copyWith(
+      saveToDeviceStatus: ApiStatus.loading,
+      savedToDeviceTitle: null,
+    ));
+
+    final result = await _downloadService.saveToDevice(event.downloadItem);
+
+    result.fold(
+      (failure) => emit(state.copyWith(
+        saveToDeviceStatus: ApiStatus.error,
+        errorMessage: failure.toString(),
+      )),
+      (_) => emit(state.copyWith(
+        saveToDeviceStatus: ApiStatus.loaded,
+        savedToDeviceTitle: event.downloadItem.title,
+      )),
+    );
   }
 }

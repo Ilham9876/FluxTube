@@ -1998,6 +1998,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Save to Device`
+  String get saveToDevice {
+    return Intl.message(
+      'Save to Device',
+      name: 'saveToDevice',
+      desc: 'Save downloaded file to device storage',
+      args: [],
+    );
+  }
+
+  /// `Saving to device...`
+  String get savingToDevice {
+    return Intl.message(
+      'Saving to device...',
+      name: 'savingToDevice',
+      desc: 'Message shown while saving file to device',
+      args: [],
+    );
+  }
+
+  /// `Saved to device`
+  String get savedToDevice {
+    return Intl.message(
+      'Saved to device',
+      name: 'savedToDevice',
+      desc: 'Success message when file is saved to device',
+      args: [],
+    );
+  }
+
+  /// `Failed to save to device`
+  String get saveToDeviceFailed {
+    return Intl.message(
+      'Failed to save to device',
+      name: 'saveToDeviceFailed',
+      desc: 'Error message when save to device fails',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

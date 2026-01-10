@@ -264,8 +264,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Retrieve Dislikes",
     ),
     "retry": MessageLookupByLibrary.simpleMessage("Retry"),
+    "saveToDevice": MessageLookupByLibrary.simpleMessage("Save to Device"),
+    "saveToDeviceFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to save to device",
+    ),
     "saved": MessageLookupByLibrary.simpleMessage("Saved"),
+    "savedToDevice": MessageLookupByLibrary.simpleMessage("Saved to device"),
     "savedVideosTitle": MessageLookupByLibrary.simpleMessage("Saved Videos"),
+    "savingToDevice": MessageLookupByLibrary.simpleMessage(
+      "Saving to device...",
+    ),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "searchFilters": MessageLookupByLibrary.simpleMessage("Filters"),
     "searchForVideosChannels": MessageLookupByLibrary.simpleMessage(

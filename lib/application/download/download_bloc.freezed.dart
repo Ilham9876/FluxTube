@@ -51,6 +51,7 @@ mixin _$DownloadEvent {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -86,6 +87,7 @@ mixin _$DownloadEvent {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -121,6 +123,7 @@ mixin _$DownloadEvent {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -140,6 +143,7 @@ mixin _$DownloadEvent {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -157,6 +161,7 @@ mixin _$DownloadEvent {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -174,6 +179,7 @@ mixin _$DownloadEvent {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -312,6 +318,7 @@ class _$GetDownloadOptionsImpl implements _GetDownloadOptions {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return getDownloadOptions(videoId, serviceType);
   }
@@ -350,6 +357,7 @@ class _$GetDownloadOptionsImpl implements _GetDownloadOptions {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return getDownloadOptions?.call(videoId, serviceType);
   }
@@ -388,6 +396,7 @@ class _$GetDownloadOptionsImpl implements _GetDownloadOptions {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (getDownloadOptions != null) {
@@ -413,6 +422,7 @@ class _$GetDownloadOptionsImpl implements _GetDownloadOptions {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return getDownloadOptions(this);
   }
@@ -433,6 +443,7 @@ class _$GetDownloadOptionsImpl implements _GetDownloadOptions {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return getDownloadOptions?.call(this);
   }
@@ -453,6 +464,7 @@ class _$GetDownloadOptionsImpl implements _GetDownloadOptions {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (getDownloadOptions != null) {
@@ -692,6 +704,7 @@ class _$SetDownloadOptionsFromStreamsImpl
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return setDownloadOptionsFromStreams(videoId, title, channelName,
         thumbnailUrl, duration, videoStreams, videoOnlyStreams, audioStreams);
@@ -731,6 +744,7 @@ class _$SetDownloadOptionsFromStreamsImpl
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return setDownloadOptionsFromStreams?.call(videoId, title, channelName,
         thumbnailUrl, duration, videoStreams, videoOnlyStreams, audioStreams);
@@ -770,6 +784,7 @@ class _$SetDownloadOptionsFromStreamsImpl
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (setDownloadOptionsFromStreams != null) {
@@ -796,6 +811,7 @@ class _$SetDownloadOptionsFromStreamsImpl
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return setDownloadOptionsFromStreams(this);
   }
@@ -816,6 +832,7 @@ class _$SetDownloadOptionsFromStreamsImpl
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return setDownloadOptionsFromStreams?.call(this);
   }
@@ -836,6 +853,7 @@ class _$SetDownloadOptionsFromStreamsImpl
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (setDownloadOptionsFromStreams != null) {
@@ -1075,6 +1093,7 @@ class _$StartDownloadImpl implements _StartDownload {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return startDownload(videoId, title, channelName, downloadType, profileName,
         thumbnailUrl, duration, videoQuality, audioQuality);
@@ -1114,6 +1133,7 @@ class _$StartDownloadImpl implements _StartDownload {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return startDownload?.call(videoId, title, channelName, downloadType,
         profileName, thumbnailUrl, duration, videoQuality, audioQuality);
@@ -1153,6 +1173,7 @@ class _$StartDownloadImpl implements _StartDownload {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (startDownload != null) {
@@ -1179,6 +1200,7 @@ class _$StartDownloadImpl implements _StartDownload {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return startDownload(this);
   }
@@ -1199,6 +1221,7 @@ class _$StartDownloadImpl implements _StartDownload {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return startDownload?.call(this);
   }
@@ -1219,6 +1242,7 @@ class _$StartDownloadImpl implements _StartDownload {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (startDownload != null) {
@@ -1359,6 +1383,7 @@ class _$PauseDownloadImpl implements _PauseDownload {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return pauseDownload(downloadId);
   }
@@ -1397,6 +1422,7 @@ class _$PauseDownloadImpl implements _PauseDownload {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return pauseDownload?.call(downloadId);
   }
@@ -1435,6 +1461,7 @@ class _$PauseDownloadImpl implements _PauseDownload {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (pauseDownload != null) {
@@ -1460,6 +1487,7 @@ class _$PauseDownloadImpl implements _PauseDownload {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return pauseDownload(this);
   }
@@ -1480,6 +1508,7 @@ class _$PauseDownloadImpl implements _PauseDownload {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return pauseDownload?.call(this);
   }
@@ -1500,6 +1529,7 @@ class _$PauseDownloadImpl implements _PauseDownload {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (pauseDownload != null) {
@@ -1625,6 +1655,7 @@ class _$ResumeDownloadImpl implements _ResumeDownload {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return resumeDownload(downloadId);
   }
@@ -1663,6 +1694,7 @@ class _$ResumeDownloadImpl implements _ResumeDownload {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return resumeDownload?.call(downloadId);
   }
@@ -1701,6 +1733,7 @@ class _$ResumeDownloadImpl implements _ResumeDownload {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (resumeDownload != null) {
@@ -1726,6 +1759,7 @@ class _$ResumeDownloadImpl implements _ResumeDownload {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return resumeDownload(this);
   }
@@ -1746,6 +1780,7 @@ class _$ResumeDownloadImpl implements _ResumeDownload {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return resumeDownload?.call(this);
   }
@@ -1766,6 +1801,7 @@ class _$ResumeDownloadImpl implements _ResumeDownload {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (resumeDownload != null) {
@@ -1891,6 +1927,7 @@ class _$CancelDownloadImpl implements _CancelDownload {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return cancelDownload(downloadId);
   }
@@ -1929,6 +1966,7 @@ class _$CancelDownloadImpl implements _CancelDownload {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return cancelDownload?.call(downloadId);
   }
@@ -1967,6 +2005,7 @@ class _$CancelDownloadImpl implements _CancelDownload {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (cancelDownload != null) {
@@ -1992,6 +2031,7 @@ class _$CancelDownloadImpl implements _CancelDownload {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return cancelDownload(this);
   }
@@ -2012,6 +2052,7 @@ class _$CancelDownloadImpl implements _CancelDownload {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return cancelDownload?.call(this);
   }
@@ -2032,6 +2073,7 @@ class _$CancelDownloadImpl implements _CancelDownload {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (cancelDownload != null) {
@@ -2157,6 +2199,7 @@ class _$DeleteDownloadImpl implements _DeleteDownload {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return deleteDownload(downloadId);
   }
@@ -2195,6 +2238,7 @@ class _$DeleteDownloadImpl implements _DeleteDownload {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return deleteDownload?.call(downloadId);
   }
@@ -2233,6 +2277,7 @@ class _$DeleteDownloadImpl implements _DeleteDownload {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (deleteDownload != null) {
@@ -2258,6 +2303,7 @@ class _$DeleteDownloadImpl implements _DeleteDownload {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return deleteDownload(this);
   }
@@ -2278,6 +2324,7 @@ class _$DeleteDownloadImpl implements _DeleteDownload {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return deleteDownload?.call(this);
   }
@@ -2298,6 +2345,7 @@ class _$DeleteDownloadImpl implements _DeleteDownload {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (deleteDownload != null) {
@@ -2424,6 +2472,7 @@ class _$GetAllDownloadsImpl implements _GetAllDownloads {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return getAllDownloads(profileName);
   }
@@ -2462,6 +2511,7 @@ class _$GetAllDownloadsImpl implements _GetAllDownloads {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return getAllDownloads?.call(profileName);
   }
@@ -2500,6 +2550,7 @@ class _$GetAllDownloadsImpl implements _GetAllDownloads {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (getAllDownloads != null) {
@@ -2525,6 +2576,7 @@ class _$GetAllDownloadsImpl implements _GetAllDownloads {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return getAllDownloads(this);
   }
@@ -2545,6 +2597,7 @@ class _$GetAllDownloadsImpl implements _GetAllDownloads {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return getAllDownloads?.call(this);
   }
@@ -2565,6 +2618,7 @@ class _$GetAllDownloadsImpl implements _GetAllDownloads {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (getAllDownloads != null) {
@@ -2692,6 +2746,7 @@ class _$UpdateDownloadProgressImpl implements _UpdateDownloadProgress {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return updateDownloadProgress(downloadItem);
   }
@@ -2730,6 +2785,7 @@ class _$UpdateDownloadProgressImpl implements _UpdateDownloadProgress {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return updateDownloadProgress?.call(downloadItem);
   }
@@ -2768,6 +2824,7 @@ class _$UpdateDownloadProgressImpl implements _UpdateDownloadProgress {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (updateDownloadProgress != null) {
@@ -2793,6 +2850,7 @@ class _$UpdateDownloadProgressImpl implements _UpdateDownloadProgress {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return updateDownloadProgress(this);
   }
@@ -2813,6 +2871,7 @@ class _$UpdateDownloadProgressImpl implements _UpdateDownloadProgress {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return updateDownloadProgress?.call(this);
   }
@@ -2833,6 +2892,7 @@ class _$UpdateDownloadProgressImpl implements _UpdateDownloadProgress {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (updateDownloadProgress != null) {
@@ -2959,6 +3019,7 @@ class _$DownloadCompletedImpl implements _DownloadCompleted {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return downloadCompleted(downloadItem);
   }
@@ -2997,6 +3058,7 @@ class _$DownloadCompletedImpl implements _DownloadCompleted {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return downloadCompleted?.call(downloadItem);
   }
@@ -3035,6 +3097,7 @@ class _$DownloadCompletedImpl implements _DownloadCompleted {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (downloadCompleted != null) {
@@ -3060,6 +3123,7 @@ class _$DownloadCompletedImpl implements _DownloadCompleted {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return downloadCompleted(this);
   }
@@ -3080,6 +3144,7 @@ class _$DownloadCompletedImpl implements _DownloadCompleted {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return downloadCompleted?.call(this);
   }
@@ -3100,6 +3165,7 @@ class _$DownloadCompletedImpl implements _DownloadCompleted {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (downloadCompleted != null) {
@@ -3233,6 +3299,7 @@ class _$DownloadFailedImpl implements _DownloadFailed {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return downloadFailed(downloadItem, error);
   }
@@ -3271,6 +3338,7 @@ class _$DownloadFailedImpl implements _DownloadFailed {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return downloadFailed?.call(downloadItem, error);
   }
@@ -3309,6 +3377,7 @@ class _$DownloadFailedImpl implements _DownloadFailed {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (downloadFailed != null) {
@@ -3334,6 +3403,7 @@ class _$DownloadFailedImpl implements _DownloadFailed {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return downloadFailed(this);
   }
@@ -3354,6 +3424,7 @@ class _$DownloadFailedImpl implements _DownloadFailed {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return downloadFailed?.call(this);
   }
@@ -3374,6 +3445,7 @@ class _$DownloadFailedImpl implements _DownloadFailed {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (downloadFailed != null) {
@@ -3473,6 +3545,7 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
     required TResult Function(DownloadItem downloadItem, String error)
         downloadFailed,
     required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
   }) {
     return clearDownloadOptions();
   }
@@ -3511,6 +3584,7 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
     TResult? Function(DownloadItem downloadItem)? downloadCompleted,
     TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
   }) {
     return clearDownloadOptions?.call();
   }
@@ -3549,6 +3623,7 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
     TResult Function(DownloadItem downloadItem)? downloadCompleted,
     TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
     TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
     required TResult orElse(),
   }) {
     if (clearDownloadOptions != null) {
@@ -3574,6 +3649,7 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
     required TResult Function(_DownloadCompleted value) downloadCompleted,
     required TResult Function(_DownloadFailed value) downloadFailed,
     required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
   }) {
     return clearDownloadOptions(this);
   }
@@ -3594,6 +3670,7 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
     TResult? Function(_DownloadCompleted value)? downloadCompleted,
     TResult? Function(_DownloadFailed value)? downloadFailed,
     TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
   }) {
     return clearDownloadOptions?.call(this);
   }
@@ -3614,6 +3691,7 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
     TResult Function(_DownloadCompleted value)? downloadCompleted,
     TResult Function(_DownloadFailed value)? downloadFailed,
     TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
     required TResult orElse(),
   }) {
     if (clearDownloadOptions != null) {
@@ -3625,6 +3703,277 @@ class _$ClearDownloadOptionsImpl implements _ClearDownloadOptions {
 
 abstract class _ClearDownloadOptions implements DownloadEvent {
   const factory _ClearDownloadOptions() = _$ClearDownloadOptionsImpl;
+}
+
+/// @nodoc
+abstract class _$$SaveToDeviceImplCopyWith<$Res> {
+  factory _$$SaveToDeviceImplCopyWith(
+          _$SaveToDeviceImpl value, $Res Function(_$SaveToDeviceImpl) then) =
+      __$$SaveToDeviceImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({DownloadItem downloadItem});
+}
+
+/// @nodoc
+class __$$SaveToDeviceImplCopyWithImpl<$Res>
+    extends _$DownloadEventCopyWithImpl<$Res, _$SaveToDeviceImpl>
+    implements _$$SaveToDeviceImplCopyWith<$Res> {
+  __$$SaveToDeviceImplCopyWithImpl(
+      _$SaveToDeviceImpl _value, $Res Function(_$SaveToDeviceImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DownloadEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? downloadItem = null,
+  }) {
+    return _then(_$SaveToDeviceImpl(
+      downloadItem: null == downloadItem
+          ? _value.downloadItem
+          : downloadItem // ignore: cast_nullable_to_non_nullable
+              as DownloadItem,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SaveToDeviceImpl implements _SaveToDevice {
+  const _$SaveToDeviceImpl({required this.downloadItem});
+
+  @override
+  final DownloadItem downloadItem;
+
+  @override
+  String toString() {
+    return 'DownloadEvent.saveToDevice(downloadItem: $downloadItem)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SaveToDeviceImpl &&
+            (identical(other.downloadItem, downloadItem) ||
+                other.downloadItem == downloadItem));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, downloadItem);
+
+  /// Create a copy of DownloadEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SaveToDeviceImplCopyWith<_$SaveToDeviceImpl> get copyWith =>
+      __$$SaveToDeviceImplCopyWithImpl<_$SaveToDeviceImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String videoId, String serviceType)
+        getDownloadOptions,
+    required TResult Function(
+            String videoId,
+            String title,
+            String channelName,
+            String? thumbnailUrl,
+            int? duration,
+            List<NewPipeVideoStream> videoStreams,
+            List<NewPipeVideoStream> videoOnlyStreams,
+            List<NewPipeAudioStream> audioStreams)
+        setDownloadOptionsFromStreams,
+    required TResult Function(
+            String videoId,
+            String title,
+            String channelName,
+            DownloadType downloadType,
+            String profileName,
+            String? thumbnailUrl,
+            int? duration,
+            VideoQualityOption? videoQuality,
+            AudioQualityOption? audioQuality)
+        startDownload,
+    required TResult Function(int downloadId) pauseDownload,
+    required TResult Function(int downloadId) resumeDownload,
+    required TResult Function(int downloadId) cancelDownload,
+    required TResult Function(int downloadId) deleteDownload,
+    required TResult Function(String profileName) getAllDownloads,
+    required TResult Function(DownloadItem downloadItem) updateDownloadProgress,
+    required TResult Function(DownloadItem downloadItem) downloadCompleted,
+    required TResult Function(DownloadItem downloadItem, String error)
+        downloadFailed,
+    required TResult Function() clearDownloadOptions,
+    required TResult Function(DownloadItem downloadItem) saveToDevice,
+  }) {
+    return saveToDevice(downloadItem);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String videoId, String serviceType)? getDownloadOptions,
+    TResult? Function(
+            String videoId,
+            String title,
+            String channelName,
+            String? thumbnailUrl,
+            int? duration,
+            List<NewPipeVideoStream> videoStreams,
+            List<NewPipeVideoStream> videoOnlyStreams,
+            List<NewPipeAudioStream> audioStreams)?
+        setDownloadOptionsFromStreams,
+    TResult? Function(
+            String videoId,
+            String title,
+            String channelName,
+            DownloadType downloadType,
+            String profileName,
+            String? thumbnailUrl,
+            int? duration,
+            VideoQualityOption? videoQuality,
+            AudioQualityOption? audioQuality)?
+        startDownload,
+    TResult? Function(int downloadId)? pauseDownload,
+    TResult? Function(int downloadId)? resumeDownload,
+    TResult? Function(int downloadId)? cancelDownload,
+    TResult? Function(int downloadId)? deleteDownload,
+    TResult? Function(String profileName)? getAllDownloads,
+    TResult? Function(DownloadItem downloadItem)? updateDownloadProgress,
+    TResult? Function(DownloadItem downloadItem)? downloadCompleted,
+    TResult? Function(DownloadItem downloadItem, String error)? downloadFailed,
+    TResult? Function()? clearDownloadOptions,
+    TResult? Function(DownloadItem downloadItem)? saveToDevice,
+  }) {
+    return saveToDevice?.call(downloadItem);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String videoId, String serviceType)? getDownloadOptions,
+    TResult Function(
+            String videoId,
+            String title,
+            String channelName,
+            String? thumbnailUrl,
+            int? duration,
+            List<NewPipeVideoStream> videoStreams,
+            List<NewPipeVideoStream> videoOnlyStreams,
+            List<NewPipeAudioStream> audioStreams)?
+        setDownloadOptionsFromStreams,
+    TResult Function(
+            String videoId,
+            String title,
+            String channelName,
+            DownloadType downloadType,
+            String profileName,
+            String? thumbnailUrl,
+            int? duration,
+            VideoQualityOption? videoQuality,
+            AudioQualityOption? audioQuality)?
+        startDownload,
+    TResult Function(int downloadId)? pauseDownload,
+    TResult Function(int downloadId)? resumeDownload,
+    TResult Function(int downloadId)? cancelDownload,
+    TResult Function(int downloadId)? deleteDownload,
+    TResult Function(String profileName)? getAllDownloads,
+    TResult Function(DownloadItem downloadItem)? updateDownloadProgress,
+    TResult Function(DownloadItem downloadItem)? downloadCompleted,
+    TResult Function(DownloadItem downloadItem, String error)? downloadFailed,
+    TResult Function()? clearDownloadOptions,
+    TResult Function(DownloadItem downloadItem)? saveToDevice,
+    required TResult orElse(),
+  }) {
+    if (saveToDevice != null) {
+      return saveToDevice(downloadItem);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GetDownloadOptions value) getDownloadOptions,
+    required TResult Function(_SetDownloadOptionsFromStreams value)
+        setDownloadOptionsFromStreams,
+    required TResult Function(_StartDownload value) startDownload,
+    required TResult Function(_PauseDownload value) pauseDownload,
+    required TResult Function(_ResumeDownload value) resumeDownload,
+    required TResult Function(_CancelDownload value) cancelDownload,
+    required TResult Function(_DeleteDownload value) deleteDownload,
+    required TResult Function(_GetAllDownloads value) getAllDownloads,
+    required TResult Function(_UpdateDownloadProgress value)
+        updateDownloadProgress,
+    required TResult Function(_DownloadCompleted value) downloadCompleted,
+    required TResult Function(_DownloadFailed value) downloadFailed,
+    required TResult Function(_ClearDownloadOptions value) clearDownloadOptions,
+    required TResult Function(_SaveToDevice value) saveToDevice,
+  }) {
+    return saveToDevice(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GetDownloadOptions value)? getDownloadOptions,
+    TResult? Function(_SetDownloadOptionsFromStreams value)?
+        setDownloadOptionsFromStreams,
+    TResult? Function(_StartDownload value)? startDownload,
+    TResult? Function(_PauseDownload value)? pauseDownload,
+    TResult? Function(_ResumeDownload value)? resumeDownload,
+    TResult? Function(_CancelDownload value)? cancelDownload,
+    TResult? Function(_DeleteDownload value)? deleteDownload,
+    TResult? Function(_GetAllDownloads value)? getAllDownloads,
+    TResult? Function(_UpdateDownloadProgress value)? updateDownloadProgress,
+    TResult? Function(_DownloadCompleted value)? downloadCompleted,
+    TResult? Function(_DownloadFailed value)? downloadFailed,
+    TResult? Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult? Function(_SaveToDevice value)? saveToDevice,
+  }) {
+    return saveToDevice?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GetDownloadOptions value)? getDownloadOptions,
+    TResult Function(_SetDownloadOptionsFromStreams value)?
+        setDownloadOptionsFromStreams,
+    TResult Function(_StartDownload value)? startDownload,
+    TResult Function(_PauseDownload value)? pauseDownload,
+    TResult Function(_ResumeDownload value)? resumeDownload,
+    TResult Function(_CancelDownload value)? cancelDownload,
+    TResult Function(_DeleteDownload value)? deleteDownload,
+    TResult Function(_GetAllDownloads value)? getAllDownloads,
+    TResult Function(_UpdateDownloadProgress value)? updateDownloadProgress,
+    TResult Function(_DownloadCompleted value)? downloadCompleted,
+    TResult Function(_DownloadFailed value)? downloadFailed,
+    TResult Function(_ClearDownloadOptions value)? clearDownloadOptions,
+    TResult Function(_SaveToDevice value)? saveToDevice,
+    required TResult orElse(),
+  }) {
+    if (saveToDevice != null) {
+      return saveToDevice(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SaveToDevice implements DownloadEvent {
+  const factory _SaveToDevice({required final DownloadItem downloadItem}) =
+      _$SaveToDeviceImpl;
+
+  DownloadItem get downloadItem;
+
+  /// Create a copy of DownloadEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SaveToDeviceImplCopyWith<_$SaveToDeviceImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -3657,6 +4006,12 @@ mixin _$DownloadState {
   /// Title of the failed download (for snackbar display)
   String? get failedDownloadTitle => throw _privateConstructorUsedError;
 
+  /// Save to device operation status
+  ApiStatus get saveToDeviceStatus => throw _privateConstructorUsedError;
+
+  /// Title of the file that was saved to device (for success message)
+  String? get savedToDeviceTitle => throw _privateConstructorUsedError;
+
   /// Create a copy of DownloadState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3679,7 +4034,9 @@ abstract class $DownloadStateCopyWith<$Res> {
       List<DownloadItem> activeDownloads,
       List<DownloadItem> pendingDownloads,
       String? errorMessage,
-      String? failedDownloadTitle});
+      String? failedDownloadTitle,
+      ApiStatus saveToDeviceStatus,
+      String? savedToDeviceTitle});
 }
 
 /// @nodoc
@@ -3706,6 +4063,8 @@ class _$DownloadStateCopyWithImpl<$Res, $Val extends DownloadState>
     Object? pendingDownloads = null,
     Object? errorMessage = freezed,
     Object? failedDownloadTitle = freezed,
+    Object? saveToDeviceStatus = null,
+    Object? savedToDeviceTitle = freezed,
   }) {
     return _then(_value.copyWith(
       fetchOptionsStatus: null == fetchOptionsStatus
@@ -3744,6 +4103,14 @@ class _$DownloadStateCopyWithImpl<$Res, $Val extends DownloadState>
           ? _value.failedDownloadTitle
           : failedDownloadTitle // ignore: cast_nullable_to_non_nullable
               as String?,
+      saveToDeviceStatus: null == saveToDeviceStatus
+          ? _value.saveToDeviceStatus
+          : saveToDeviceStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      savedToDeviceTitle: freezed == savedToDeviceTitle
+          ? _value.savedToDeviceTitle
+          : savedToDeviceTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -3765,7 +4132,9 @@ abstract class _$$DownloadStateImplCopyWith<$Res>
       List<DownloadItem> activeDownloads,
       List<DownloadItem> pendingDownloads,
       String? errorMessage,
-      String? failedDownloadTitle});
+      String? failedDownloadTitle,
+      ApiStatus saveToDeviceStatus,
+      String? savedToDeviceTitle});
 }
 
 /// @nodoc
@@ -3790,6 +4159,8 @@ class __$$DownloadStateImplCopyWithImpl<$Res>
     Object? pendingDownloads = null,
     Object? errorMessage = freezed,
     Object? failedDownloadTitle = freezed,
+    Object? saveToDeviceStatus = null,
+    Object? savedToDeviceTitle = freezed,
   }) {
     return _then(_$DownloadStateImpl(
       fetchOptionsStatus: null == fetchOptionsStatus
@@ -3828,6 +4199,14 @@ class __$$DownloadStateImplCopyWithImpl<$Res>
           ? _value.failedDownloadTitle
           : failedDownloadTitle // ignore: cast_nullable_to_non_nullable
               as String?,
+      saveToDeviceStatus: null == saveToDeviceStatus
+          ? _value.saveToDeviceStatus
+          : saveToDeviceStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      savedToDeviceTitle: freezed == savedToDeviceTitle
+          ? _value.savedToDeviceTitle
+          : savedToDeviceTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -3844,7 +4223,9 @@ class _$DownloadStateImpl implements _DownloadState {
       required final List<DownloadItem> activeDownloads,
       required final List<DownloadItem> pendingDownloads,
       this.errorMessage,
-      this.failedDownloadTitle})
+      this.failedDownloadTitle,
+      required this.saveToDeviceStatus,
+      this.savedToDeviceTitle})
       : _allDownloads = allDownloads,
         _completedDownloads = completedDownloads,
         _activeDownloads = activeDownloads,
@@ -3916,9 +4297,17 @@ class _$DownloadStateImpl implements _DownloadState {
   @override
   final String? failedDownloadTitle;
 
+  /// Save to device operation status
+  @override
+  final ApiStatus saveToDeviceStatus;
+
+  /// Title of the file that was saved to device (for success message)
+  @override
+  final String? savedToDeviceTitle;
+
   @override
   String toString() {
-    return 'DownloadState(fetchOptionsStatus: $fetchOptionsStatus, fetchDownloadsStatus: $fetchDownloadsStatus, downloadOptions: $downloadOptions, allDownloads: $allDownloads, completedDownloads: $completedDownloads, activeDownloads: $activeDownloads, pendingDownloads: $pendingDownloads, errorMessage: $errorMessage, failedDownloadTitle: $failedDownloadTitle)';
+    return 'DownloadState(fetchOptionsStatus: $fetchOptionsStatus, fetchDownloadsStatus: $fetchDownloadsStatus, downloadOptions: $downloadOptions, allDownloads: $allDownloads, completedDownloads: $completedDownloads, activeDownloads: $activeDownloads, pendingDownloads: $pendingDownloads, errorMessage: $errorMessage, failedDownloadTitle: $failedDownloadTitle, saveToDeviceStatus: $saveToDeviceStatus, savedToDeviceTitle: $savedToDeviceTitle)';
   }
 
   @override
@@ -3943,7 +4332,11 @@ class _$DownloadStateImpl implements _DownloadState {
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage) &&
             (identical(other.failedDownloadTitle, failedDownloadTitle) ||
-                other.failedDownloadTitle == failedDownloadTitle));
+                other.failedDownloadTitle == failedDownloadTitle) &&
+            (identical(other.saveToDeviceStatus, saveToDeviceStatus) ||
+                other.saveToDeviceStatus == saveToDeviceStatus) &&
+            (identical(other.savedToDeviceTitle, savedToDeviceTitle) ||
+                other.savedToDeviceTitle == savedToDeviceTitle));
   }
 
   @override
@@ -3957,7 +4350,9 @@ class _$DownloadStateImpl implements _DownloadState {
       const DeepCollectionEquality().hash(_activeDownloads),
       const DeepCollectionEquality().hash(_pendingDownloads),
       errorMessage,
-      failedDownloadTitle);
+      failedDownloadTitle,
+      saveToDeviceStatus,
+      savedToDeviceTitle);
 
   /// Create a copy of DownloadState
   /// with the given fields replaced by the non-null parameter values.
@@ -3978,7 +4373,9 @@ abstract class _DownloadState implements DownloadState {
       required final List<DownloadItem> activeDownloads,
       required final List<DownloadItem> pendingDownloads,
       final String? errorMessage,
-      final String? failedDownloadTitle}) = _$DownloadStateImpl;
+      final String? failedDownloadTitle,
+      required final ApiStatus saveToDeviceStatus,
+      final String? savedToDeviceTitle}) = _$DownloadStateImpl;
 
   /// Status of fetching download options
   @override
@@ -4015,6 +4412,14 @@ abstract class _DownloadState implements DownloadState {
   /// Title of the failed download (for snackbar display)
   @override
   String? get failedDownloadTitle;
+
+  /// Save to device operation status
+  @override
+  ApiStatus get saveToDeviceStatus;
+
+  /// Title of the file that was saved to device (for success message)
+  @override
+  String? get savedToDeviceTitle;
 
   /// Create a copy of DownloadState
   /// with the given fields replaced by the non-null parameter values.

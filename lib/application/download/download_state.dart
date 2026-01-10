@@ -29,6 +29,12 @@ class DownloadState with _$DownloadState {
 
     /// Title of the failed download (for snackbar display)
     String? failedDownloadTitle,
+
+    /// Save to device operation status
+    required ApiStatus saveToDeviceStatus,
+
+    /// Title of the file that was saved to device (for success message)
+    String? savedToDeviceTitle,
   }) = _DownloadState;
 
   factory DownloadState.initial() => const DownloadState(
@@ -41,5 +47,7 @@ class DownloadState with _$DownloadState {
         pendingDownloads: [],
         errorMessage: null,
         failedDownloadTitle: null,
+        saveToDeviceStatus: ApiStatus.initial,
+        savedToDeviceTitle: null,
       );
 }

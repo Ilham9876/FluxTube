@@ -76,4 +76,9 @@ class DownloadEvent with _$DownloadEvent {
 
   /// Clear download options
   const factory DownloadEvent.clearDownloadOptions() = _ClearDownloadOptions;
+
+  /// Save downloaded file to device storage (gallery/downloads)
+  const factory DownloadEvent.saveToDevice({
+    required DownloadItem downloadItem,
+  }) = _SaveToDevice;
 }
