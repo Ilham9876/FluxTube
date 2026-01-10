@@ -214,11 +214,12 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
 
       _currentQualityLabel = targetQuality;
 
+      // Update global player controller state for PiP support
+      // IMPORTANT: Set video ID BEFORE setupMediaSource so notification can be updated
+      _globalPlayer.setCurrentVideoId(widget.videoId);
+
       // Setup media source
       await _setupMediaSource(targetQuality);
-
-      // Update global player controller state for PiP support
-      _globalPlayer.setCurrentVideoId(widget.videoId);
 
       // Check if widget is still mounted before calling setState
       if (mounted) {
@@ -288,6 +289,18 @@ class _InvidiousMediaKitPlayerState extends State<InvidiousMediaKitPlayer> {
 
       // Start playback first
       await _player.play();
+
+      // Update media notification for background playback controls
+      await _globalPlayer.updateMediaNotification(
+        title: widget.watchInfo.title ?? 'Video',
+        artist: widget.watchInfo.author ?? 'Unknown',
+        thumbnailUrl: widget.watchInfo.videoThumbnails?.isNotEmpty == true
+            ? widget.watchInfo.videoThumbnails!.first.url
+            : null,
+        duration: widget.watchInfo.lengthSeconds != null
+            ? Duration(seconds: widget.watchInfo.lengthSeconds!)
+            : null,
+      );
 
       // Seek AFTER playback has started to avoid codec issues
       if (widget.playbackPosition > 0 && !isLive) {

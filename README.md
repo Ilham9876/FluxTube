@@ -68,7 +68,7 @@ If you select "NewPipe Extractor" as your YouTube service in FluxTube, it uses t
 | **Fallback Options**  | Switch service if one breaks                       | Wait for app update           |
 | **SponsorBlock**      | Built-in                                           | Requires fork (e.g., Tubular) |
 | **Multiple Profiles** | Yes                                                | No                            |
-| **Download**          | No                                                 | Yes                           |
+| **Download**          | Yes                                                | Yes                           |
 
 **TL;DR:** FluxTube gives you options. If NewPipe Extractor stops working tomorrow, you can switch to Piped or Invidious and keep watching. NewPipe app is more feature-complete for downloading, but you're stuck with one backend. The UIs are different too.
 
@@ -95,8 +95,8 @@ For the best experience:
 - [X] NewPipe-Compatible Backup/Restore
 - [X] Deep Linking / Share Intent
 - [X] Search History
-- [ ] Download Videos
-- [ ] Background Playback Notification Controls
+- [X] Download Videos
+- [X] Background Playback Notification Controls
 
 ## Translations
 

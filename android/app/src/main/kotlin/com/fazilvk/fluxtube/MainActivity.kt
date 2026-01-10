@@ -5,12 +5,12 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Build
 import android.util.Rational
-import io.flutter.embedding.android.FlutterActivity
+import com.ryanheise.audioservice.AudioServiceFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import com.fazilvk.fluxtube.newpipe.NewPipeMethodHandler
 
-class MainActivity: FlutterActivity() {
+class MainActivity: AudioServiceFragmentActivity() {
     companion object {
         private const val NEWPIPE_CHANNEL = "com.fazilvk.fluxtube/newpipe"
         private const val PIP_CHANNEL = "com.fazilvk.fluxtube/pip"

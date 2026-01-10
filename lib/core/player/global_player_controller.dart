@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:fluxtube/core/services/pip_service.dart';
+import 'package:fluxtube/core/services/audio_handler_service.dart';
 
 /// Global player controller singleton that persists across navigation
 /// This prevents the player from being recreated/disposed when navigating
@@ -403,6 +404,9 @@ class GlobalPlayerController extends ChangeNotifier {
     // Notify native side that video stopped (for auto-PiP)
     await _pipService.setVideoPlaying(false);
 
+    // Clear media notification
+    await clearMediaNotification();
+
     log('[GlobalPlayer] IMMEDIATELY cleared video ID: $stoppingVideoId');
     notifyListeners();
 
@@ -447,4 +451,38 @@ class GlobalPlayerController extends ChangeNotifier {
 
   /// Is buffering
   bool get isBuffering => _player?.state.buffering ?? false;
+
+  /// Update media notification with current video info
+  /// Call this when starting a new video to show notification controls
+  Future<void> updateMediaNotification({
+    required String title,
+    required String artist,
+    String? thumbnailUrl,
+    Duration? duration,
+  }) async {
+    // Ensure audio service is initialized before updating notification
+    final audioHandler = await ensureAudioServiceInitialized();
+    log('[GlobalPlayer] updateMediaNotification called - audioHandler: ${audioHandler != null}, videoId: $_currentVideoId');
+    if (audioHandler != null && _currentVideoId != null) {
+      await audioHandler.setMediaItem(
+        id: _currentVideoId!,
+        title: title,
+        artist: artist,
+        artUri: thumbnailUrl,
+        duration: duration,
+      );
+      log('[GlobalPlayer] Updated media notification: $title by $artist');
+    } else {
+      log('[GlobalPlayer] Cannot update notification - audioHandler: ${audioHandler != null}, videoId: $_currentVideoId');
+    }
+  }
+
+  /// Clear media notification
+  Future<void> clearMediaNotification() async {
+    final audioHandler = getAudioHandler();
+    if (audioHandler != null) {
+      await audioHandler.clearMedia();
+      log('[GlobalPlayer] Cleared media notification');
+    }
+  }
 }

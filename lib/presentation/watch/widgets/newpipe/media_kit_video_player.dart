@@ -284,6 +284,10 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         return;
       }
 
+      // Update global player controller state for PiP support
+      // IMPORTANT: Set video ID BEFORE setupMediaSource so notification can be updated
+      _globalPlayer.setCurrentVideoId(widget.videoId);
+
       // Setup media source
       await _setupMediaSource(_currentConfig!);
 
@@ -292,9 +296,6 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
         debugPrint('[NewPipePlayer] Widget disposed during initialization (after setupMediaSource)');
         return;
       }
-
-      // Update global player controller state for PiP support
-      _globalPlayer.setCurrentVideoId(widget.videoId);
 
       // Enable auto-PiP based on settings (only on Android)
       await _globalPlayer.enableAutoPip(widget.isAutoPipEnabled);
@@ -415,6 +416,16 @@ class _NewPipeMediaKitPlayerState extends State<NewPipeMediaKitPlayer> {
 
       // Notify native side that video is playing (for auto-PiP)
       await _globalPlayer.updatePlaybackStateForPip();
+
+      // Update media notification for background playback controls
+      await _globalPlayer.updateMediaNotification(
+        title: widget.watchInfo.title ?? 'Video',
+        artist: widget.watchInfo.uploaderName ?? 'Unknown',
+        thumbnailUrl: widget.watchInfo.thumbnailUrl,
+        duration: widget.watchInfo.duration != null
+            ? Duration(seconds: widget.watchInfo.duration!)
+            : null,
+      );
 
       // Check mounted after play
       if (!mounted) return;

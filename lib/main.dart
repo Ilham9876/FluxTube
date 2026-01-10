@@ -20,6 +20,7 @@ import 'package:fluxtube/infrastructure/settings/setting_impl.dart';
 import 'package:fluxtube/presentation/routes/app_routes.dart';
 import 'package:fluxtube/presentation/routes/bloc_observer.dart';
 import 'package:fluxtube/presentation/watch/widgets/global_pip_overlay.dart';
+import 'package:fluxtube/core/services/audio_handler_service.dart';
 import 'package:media_kit/media_kit.dart';
 
 import 'core/di/injectable.dart';
@@ -50,10 +51,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Initialize notification service after the first frame
+    // Initialize services after the first frame
     // This ensures the Activity is fully attached and can show permission dialogs
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DownloadNotificationService().initialize();
+      // Initialize audio service for background playback notification controls
+      initAudioService();
     });
   }
 

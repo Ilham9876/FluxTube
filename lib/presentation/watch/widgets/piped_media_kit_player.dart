@@ -223,11 +223,12 @@ class _PipedMediaKitPlayerState extends State<PipedMediaKitPlayer> {
 
       _currentQualityLabel = targetQuality;
 
+      // Update global player controller state for PiP support
+      // IMPORTANT: Set video ID BEFORE setupMediaSource so notification can be updated
+      _globalPlayer.setCurrentVideoId(widget.videoId);
+
       // Setup media source
       await _setupMediaSource(targetQuality);
-
-      // Update global player controller state for PiP support
-      _globalPlayer.setCurrentVideoId(widget.videoId);
 
       // Check if widget is still mounted before calling setState
       if (mounted) {
@@ -298,6 +299,16 @@ class _PipedMediaKitPlayerState extends State<PipedMediaKitPlayer> {
 
       // Start playback first
       await _player.play();
+
+      // Update media notification for background playback controls
+      await _globalPlayer.updateMediaNotification(
+        title: widget.watchInfo.title ?? 'Video',
+        artist: widget.watchInfo.uploader ?? 'Unknown',
+        thumbnailUrl: widget.watchInfo.thumbnailUrl,
+        duration: widget.watchInfo.duration != null
+            ? Duration(seconds: widget.watchInfo.duration!)
+            : null,
+      );
 
       // Seek AFTER playback has started to avoid codec issues
       if (widget.playbackPosition > 0 && !isLive) {
