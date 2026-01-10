@@ -4,6 +4,7 @@ import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/strings.dart';
 import 'package:fluxtube/domain/saved/models/local_store.dart';
 import 'package:fluxtube/domain/watch/models/piped/video/watch_resp.dart';
+import 'package:fluxtube/domain/watch/playback/piped_stream_helper.dart';
 import 'package:fluxtube/presentation/download/widgets/download_options_sheet.dart';
 import 'package:fluxtube/presentation/settings/utils/launch_url.dart';
 import 'package:fluxtube/presentation/watch/widgets/redesigned/action_buttons_row.dart';
@@ -93,7 +94,11 @@ class LikeSection extends StatelessWidget {
                 );
               },
               onTapDownload: () {
-                DownloadOptionsSheet.show(
+                // Convert Piped streams to NewPipe format for download compatibility
+                final separated = PipedStreamHelper.separateVideoStreams(watchInfo.videoStreams);
+                final audioStreams = PipedStreamHelper.convertAudioStreams(watchInfo.audioStreams);
+
+                DownloadOptionsSheet.showWithStreams(
                   context,
                   videoId: id,
                   title: watchInfo.title ?? '',
@@ -101,6 +106,9 @@ class LikeSection extends StatelessWidget {
                   thumbnailUrl: watchInfo.thumbnailUrl,
                   duration: watchInfo.duration,
                   serviceType: settingsState.ytService,
+                  videoStreams: separated.muxed,
+                  videoOnlyStreams: separated.videoOnly,
+                  audioStreams: audioStreams,
                 );
               },
               onTapYoutube: () async => await urlLaunchWithSettings(context, '$kYTBaseUrl$id'),

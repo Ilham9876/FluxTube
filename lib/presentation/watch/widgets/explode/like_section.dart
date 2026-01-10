@@ -4,6 +4,7 @@ import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/strings.dart';
 import 'package:fluxtube/domain/saved/models/local_store.dart';
 import 'package:fluxtube/domain/watch/models/explode/explode_watch.dart';
+import 'package:fluxtube/domain/watch/playback/explode_stream_helper.dart';
 import 'package:fluxtube/presentation/download/widgets/download_options_sheet.dart';
 import 'package:fluxtube/presentation/settings/utils/launch_url.dart';
 import 'package:fluxtube/presentation/watch/widgets/redesigned/action_buttons_row.dart';
@@ -91,16 +92,40 @@ class ExplodeLikeSection extends StatelessWidget {
                   ),
                 );
               },
-              onTapDownload: () {
-                DownloadOptionsSheet.show(
-                  context,
-                  videoId: id,
-                  title: watchInfo.title,
-                  channelName: watchInfo.author,
-                  thumbnailUrl: watchInfo.thumbnailUrl,
-                  duration: watchInfo.duration.inSeconds,
-                  serviceType: settingsState.ytService,
+              onTapDownload: () async {
+                // Show loading indicator while fetching streams
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => const Center(child: CircularProgressIndicator()),
                 );
+
+                try {
+                  // Fetch and convert Explode streams to NewPipe format
+                  final streams = await ExplodeStreamHelper.getDownloadStreams(id);
+
+                  if (!context.mounted) return;
+                  Navigator.pop(context); // Close loading dialog
+
+                  DownloadOptionsSheet.showWithStreams(
+                    context,
+                    videoId: id,
+                    title: watchInfo.title,
+                    channelName: watchInfo.author,
+                    thumbnailUrl: watchInfo.thumbnailUrl,
+                    duration: watchInfo.duration.inSeconds,
+                    serviceType: settingsState.ytService,
+                    videoStreams: streams.videoStreams,
+                    videoOnlyStreams: streams.videoOnlyStreams,
+                    audioStreams: streams.audioStreams,
+                  );
+                } catch (e) {
+                  if (!context.mounted) return;
+                  Navigator.pop(context); // Close loading dialog
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to fetch download options: $e')),
+                  );
+                }
               },
               onTapYoutube: () async => await urlLaunchWithSettings(context, '$kYTBaseUrl$id'),
               onTapPip: pipClicked,
