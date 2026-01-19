@@ -29,4 +29,43 @@ abstract class SettingsService {
       {required YouTubeServices service});
   Future<Either<MainFailure, bool>> togglePipPlayer(
       {required bool isPipDisabled});
+  Future<Either<MainFailure, String>> findWorkingPipedInstance({
+    required List<Instance> instances,
+    String? preferredInstanceApi,
+    void Function(String instanceName)? onTestingInstance,
+  });
+  Future<bool> testInstanceConnection(String apiUrl);
+  Future<Either<MainFailure, String>> findWorkingInvidiousInstance({
+    required List<Instance> instances,
+    String? preferredInstanceApi,
+    void Function(String instanceName)? onTestingInstance,
+  });
+  Future<bool> testInvidiousInstanceConnection(String apiUrl);
+  // New methods for additional features
+  Future<Either<MainFailure, String>> setSearchFilter({required String filter});
+  Future<Either<MainFailure, String>> setVideoFitMode({required String fitMode});
+  Future<Either<MainFailure, int>> setSkipInterval({required int seconds});
+  Future<Either<MainFailure, bool>> toggleSponsorBlock({required bool isEnabled});
+  Future<Either<MainFailure, List<String>>> setSponsorBlockCategories(
+      {required List<String> categories});
+  Future<Either<MainFailure, bool>> toggleOpenLinksInBrowser(
+      {required bool openInBrowser});
+  Future<Either<MainFailure, String>> setHomeFeedMode({required String mode});
+  Future<Either<MainFailure, bool>> toggleAudioFocus({required bool isEnabled});
+  // Profile methods
+  Future<Either<MainFailure, List<String>>> addProfile({required String profileName});
+  Future<Either<MainFailure, List<String>>> deleteProfile({required String profileName});
+  Future<Either<MainFailure, String>> switchProfile({required String profileName});
+  Future<Either<MainFailure, List<String>>> renameProfile({required String oldName, required String newName});
+  Future<Either<MainFailure, List<String>>> getProfiles();
+  // Import/Export methods
+  Future<Either<MainFailure, String>> exportSubscriptions({String profileName = 'default'});
+  Future<Either<MainFailure, int>> importSubscriptions({required String filePath, String profileName = 'default'});
+  // Subtitle size
+  Future<Either<MainFailure, double>> setSubtitleSize({required double size});
+  // Search history privacy
+  Future<Either<MainFailure, bool>> toggleSearchHistoryEnabled({required bool isEnabled});
+  Future<Either<MainFailure, bool>> toggleSearchHistoryVisibility({required bool isVisible});
+  // Auto PiP
+  Future<Either<MainFailure, bool>> toggleAutoPip({required bool isEnabled});
 }

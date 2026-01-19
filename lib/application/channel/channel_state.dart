@@ -12,9 +12,25 @@ class ChannelState with _$ChannelState {
     required ChannelResp? pipedChannelResp,
     required ApiStatus moreChannelDetailsFetchStatus,
 
+    // PIPED TABS
+    required int selectedTabIndex,
+    required ApiStatus tabContentFetchStatus,
+    required TabContent? selectedTabContent,
+
+    // Separate tab content for shorts and playlists
+    required ApiStatus shortsTabFetchStatus,
+    required TabContent? shortsTabContent,
+    required ApiStatus playlistsTabFetchStatus,
+    required TabContent? playlistsTabContent,
+
     // INVIDIOUS
 
     required InvidiousChannelResp? invidiousChannelResp,
+    required int invidiousPage,
+
+    // NEWPIPE
+
+    required NewPipeChannelResp? newPipeChannelResp,
   }) = _ChannelState;
 
   factory ChannelState.initialize() => ChannelState(
@@ -26,9 +42,23 @@ class ChannelState with _$ChannelState {
         pipedChannelResp: null,
         channelDetailsFetchStatus: ApiStatus.initial,
 
-        // EXPLODE
+        // PIPED TABS
+        selectedTabIndex: 0,
+        tabContentFetchStatus: ApiStatus.initial,
+        selectedTabContent: null,
+        shortsTabFetchStatus: ApiStatus.initial,
+        shortsTabContent: null,
+        playlistsTabFetchStatus: ApiStatus.initial,
+        playlistsTabContent: null,
+
+        // INVIDIOUS
 
         invidiousChannelResp: null,
         moreChannelDetailsFetchStatus: ApiStatus.initial,
+        invidiousPage: 1,
+
+        // NEWPIPE
+
+        newPipeChannelResp: null,
       );
 }

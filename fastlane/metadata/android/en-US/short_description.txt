@@ -1,1 +1,1 @@
-Ad-free YouTube client using piped API
+Ad-free YouTube client with downloads, background play, PiP & multiple backends

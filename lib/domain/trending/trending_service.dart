@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fluxtube/domain/core/failure/main_failure.dart';
 import 'package:fluxtube/domain/trending/models/invidious/invidious_trending_resp.dart';
+import 'package:fluxtube/domain/trending/models/newpipe/newpipe_trending_resp.dart';
 import 'package:fluxtube/domain/trending/models/piped/trending_resp.dart';
 
 abstract class TrendingService {
@@ -11,4 +12,8 @@ abstract class TrendingService {
   ///[getInvidiousTrendingData] used to fetch Trending data from Invidious.
   Future<Either<MainFailure, List<InvidiousTrendingResp>>>
       getInvidiousTrendingData({required String region});
+
+  ///[getNewPipeTrendingData] used to fetch Trending data from NewPipe Extractor.
+  Future<Either<MainFailure, List<NewPipeTrendingResp>>>
+      getNewPipeTrendingData({required String region});
 }

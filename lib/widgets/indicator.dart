@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget cIndicator(context) {
+Widget cIndicator(BuildContext context) {
   return Center(
-    child: CupertinoActivityIndicator(
-      color: Theme.of(context).indicatorColor,
+    child: CircularProgressIndicator(
+      color: Theme.of(context).colorScheme.primary,
+      strokeWidth: 2.5,
     ),
   );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
+import 'package:fluxtube/core/player/global_player_controller.dart';
 import 'package:fluxtube/domain/subscribes/models/subscribe.dart';
 import 'package:fluxtube/domain/watch/models/piped/video/watch_resp.dart';
 import 'package:fluxtube/generated/l10n.dart';
@@ -29,11 +30,20 @@ class ChannelInfoSection extends StatelessWidget {
           final bool isSubscribed = subscribeState.channelInfo?.id == channelId;
 
           return GestureDetector(
-            onTap: () => context.goNamed('channel', pathParameters: {
-              'channelId': channelId,
-            }, queryParameters: {
-              'avtarUrl': watchInfo.uploaderAvatar,
-            }),
+            onTap: () {
+              // Enable PiP mode when navigating away from watch screen
+              final settingsState = context.read<SettingsBloc>().state;
+              if (!settingsState.isPipDisabled) {
+                GlobalPlayerController().enterPipMode();
+                BlocProvider.of<WatchBloc>(context)
+                    .add(WatchEvent.togglePip(value: true));
+              }
+              context.pushNamed('channel', pathParameters: {
+                'channelId': channelId,
+              }, queryParameters: {
+                'avatarUrl': watchInfo.uploaderAvatar,
+              });
+            },
             child: SubscribeRowWidget(
               subscribed: isSubscribed,
               uploaderUrl: watchInfo.uploaderAvatar,
@@ -51,8 +61,8 @@ class ChannelInfoSection extends StatelessWidget {
                               id: channelId,
                               channelName:
                                   watchInfo.uploader ?? locals.noUploaderName,
-                              isVerified:
-                                  watchInfo.uploaderVerified ?? false)));
+                              isVerified: watchInfo.uploaderVerified ?? false,
+                              avatarUrl: watchInfo.uploaderAvatar)));
                 }
               },
             ),

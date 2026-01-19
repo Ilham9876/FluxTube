@@ -19,11 +19,22 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   void _initializeSettings() {
-    // Initialize the settings bloc
+    // Initialize the settings bloc first
+    // Subscriptions will be loaded after settings are initialized (in _handleState)
     BlocProvider.of<SettingsBloc>(context)
         .add(SettingsEvent.initializeSettings());
+  }
+
+  bool _subscriptionsLoaded = false;
+
+  void _loadProfileData(String profileName) {
+    if (_subscriptionsLoaded) return;
+    _subscriptionsLoaded = true;
+
     BlocProvider.of<SubscribeBloc>(context)
-        .add(const SubscribeEvent.getAllSubscribeList());
+        .add(SubscribeEvent.getAllSubscribeList(profileName: profileName));
+    BlocProvider.of<SavedBloc>(context)
+        .add(SavedEvent.getAllVideoInfoList(profileName: profileName));
   }
 
   @override
@@ -32,23 +43,56 @@ class SplashScreenState extends State<SplashScreen> {
       body: BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
         return BlocBuilder<SubscribeBloc, SubscribeState>(
           builder: (context, subscribeState) {
-            if (state.settingsStatus == ApiStatus.loading ||
-                subscribeState.subscribeStatus == ApiStatus.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state.settingsStatus == ApiStatus.loaded &&
-                subscribeState.subscribeStatus == ApiStatus.loaded) {
-              _handleState(state, subscribeState);
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              _handleState(state, subscribeState);
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+            _handleState(state, subscribeState);
+
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 24),
+                  // Show connection status when testing instances
+                  if (state.isTestingConnection && state.connectingToInstance != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Connecting to API...',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            state.connectingToInstance!,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    )
+                  else if (state.settingsStatus == ApiStatus.loading)
+                    Text(
+                      'Loading settings...',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                    )
+                  else if (subscribeState.subscribeStatus == ApiStatus.loading)
+                    Text(
+                      'Loading subscriptions...',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                    ),
+                ],
+              ),
+            );
           },
         );
       }),
@@ -58,34 +102,65 @@ class SplashScreenState extends State<SplashScreen> {
   void _handleState(SettingsState state, SubscribeState subscribeState) async {
     final settingsBloc = BlocProvider.of<SettingsBloc>(context);
 
-    if (state.ytService != YouTubeServices.piped.name && state.initialized) {
-      if (state.invidiousInstances.isEmpty &&
-          state.invidiousInstanceStatus != ApiStatus.loading) {
-        settingsBloc.add(SettingsEvent.fetchInvidiousInstances());
-      }
-    } else if (state.ytService == YouTubeServices.piped.name &&
-        state.initialized) {
-      if (state.pipedInstances.isEmpty &&
-          state.pipedInstanceStatus != ApiStatus.loading) {
-        settingsBloc.add(SettingsEvent.fetchPipedInstances());
-      }
-    }
+    if (!state.initialized) return;
 
-    // go to home screen
-    if ((state.settingsStatus == ApiStatus.loaded ||
-            state.settingsStatus == ApiStatus.error) &&
-        (state.pipedInstanceStatus == ApiStatus.loaded ||
-            state.invidiousInstanceStatus == ApiStatus.loaded) &&
-        (subscribeState.subscribeStatus == ApiStatus.loaded ||
-            subscribeState.subscribeStatus == ApiStatus.error)) {
-      {
+    // Load profile data once settings are initialized
+    _loadProfileData(state.currentProfile);
+
+    final bool isNewPipe = state.ytService == YouTubeServices.newpipe.name;
+    final bool isInvidious = state.ytService == YouTubeServices.invidious.name;
+
+    // NewPipe doesn't need instance selection - skip directly
+    if (isNewPipe) {
+      if ((state.settingsStatus == ApiStatus.loaded ||
+              state.settingsStatus == ApiStatus.error) &&
+          (subscribeState.subscribeStatus == ApiStatus.loaded ||
+              subscribeState.subscribeStatus == ApiStatus.error)) {
         await Future.delayed(const Duration());
         if (mounted) {
           Router.neglect(context, () {
-            context
-                .goNamed('main');
+            context.goNamed('main');
           });
         }
+      }
+      return;
+    }
+
+    // For other services, fetch instances
+    if (isInvidious) {
+      if (state.invidiousInstances.isEmpty &&
+          state.invidiousInstanceStatus == ApiStatus.initial) {
+        settingsBloc.add(SettingsEvent.fetchInvidiousInstances());
+        return;
+      }
+    } else {
+      if (state.pipedInstances.isEmpty &&
+          state.pipedInstanceStatus == ApiStatus.initial) {
+        settingsBloc.add(SettingsEvent.fetchPipedInstances());
+        return;
+      }
+    }
+
+    final bool instancesReady;
+    if (isInvidious) {
+      instancesReady = state.invidiousInstanceStatus == ApiStatus.loaded ||
+          state.invidiousInstanceStatus == ApiStatus.error;
+    } else {
+      instancesReady = state.pipedInstanceStatus == ApiStatus.loaded ||
+          state.pipedInstanceStatus == ApiStatus.error;
+    }
+
+    if ((state.settingsStatus == ApiStatus.loaded ||
+            state.settingsStatus == ApiStatus.error) &&
+        instancesReady &&
+        !state.isTestingConnection &&
+        (subscribeState.subscribeStatus == ApiStatus.loaded ||
+            subscribeState.subscribeStatus == ApiStatus.error)) {
+      await Future.delayed(const Duration());
+      if (mounted) {
+        Router.neglect(context, () {
+          context.goNamed('main');
+        });
       }
     }
   }

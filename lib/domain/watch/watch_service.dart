@@ -3,6 +3,8 @@ import 'package:fluxtube/domain/core/failure/main_failure.dart';
 import 'package:fluxtube/domain/watch/models/explode/explode_watch.dart';
 import 'package:fluxtube/domain/watch/models/invidious/comments/invidious_comments_resp.dart';
 import 'package:fluxtube/domain/watch/models/invidious/video/invidious_watch_resp.dart';
+import 'package:fluxtube/domain/watch/models/newpipe/newpipe_watch_resp.dart';
+import 'package:fluxtube/domain/watch/models/newpipe/newpipe_comments_resp.dart';
 import 'package:fluxtube/domain/watch/models/piped/video/watch_resp.dart';
 
 import 'models/piped/comments/comments_resp.dart';
@@ -84,5 +86,35 @@ abstract class WatchService {
   Future<Either<MainFailure, InvidiousCommentsResp>> getInvidiousMoreCommentsData({
     required String id,
     required String continuation,
+  });
+
+  //NewPipe
+
+  ///[getNewPipeVideoData] used to fetch video data from NewPipe Extractor.
+  Future<Either<MainFailure, NewPipeWatchResp>> getNewPipeVideoData({
+    required String id,
+  });
+
+  ///[getNewPipeVideoDataFast] used to fetch video data quickly from NewPipe Extractor.
+  ///This returns only essential data for playback, excluding related videos.
+  Future<Either<MainFailure, NewPipeWatchResp>> getNewPipeVideoDataFast({
+    required String id,
+  });
+
+  ///[getNewPipeCommentsData] used to fetch comments data from NewPipe Extractor.
+  Future<Either<MainFailure, NewPipeCommentsResp>> getNewPipeCommentsData({
+    required String id,
+  });
+
+  ///[getNewPipeMoreCommentsData] used to fetch more comments data from NewPipe Extractor.
+  Future<Either<MainFailure, NewPipeCommentsResp>> getNewPipeMoreCommentsData({
+    required String id,
+    required String nextPage,
+  });
+
+  ///[getNewPipeCommentRepliesData] used to fetch comment replies from NewPipe Extractor.
+  Future<Either<MainFailure, NewPipeCommentsResp>> getNewPipeCommentRepliesData({
+    required String videoId,
+    required String repliesPage,
   });
 }

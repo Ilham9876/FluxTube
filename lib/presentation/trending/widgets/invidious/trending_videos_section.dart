@@ -8,7 +8,7 @@ import 'package:fluxtube/generated/l10n.dart';
 import 'package:fluxtube/presentation/trending/widgets/invidious/home_video_info_card_widget.dart';
 import 'package:go_router/go_router.dart';
 
-class InvidiousTrendingVideosSection extends StatelessWidget {
+class InvidiousTrendingVideosSection extends StatefulWidget {
   const InvidiousTrendingVideosSection({
     super.key,
     required this.locals,
@@ -19,22 +19,81 @@ class InvidiousTrendingVideosSection extends StatelessWidget {
   final TrendingState state;
 
   @override
+  State<InvidiousTrendingVideosSection> createState() =>
+      _InvidiousTrendingVideosSectionState();
+}
+
+class _InvidiousTrendingVideosSectionState
+    extends State<InvidiousTrendingVideosSection> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<TrendingBloc>().add(
+            const TrendingEvent.loadMoreInvidiousTrending(),
+          );
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll - 200);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final displayCount = widget.state.invidiousTrendingDisplayCount;
+    final totalCount = widget.state.invidiousTrendingResult.length;
+    final itemCount = displayCount.clamp(0, totalCount);
+    final hasMore = displayCount < totalCount;
+    final isLoading = widget.state.isLoadingMoreInvidiousTrending;
+
     return BlocBuilder<SubscribeBloc, SubscribeState>(
       buildWhen: (previous, current) =>
           previous.subscribedChannels != current.subscribedChannels,
       builder: (context, subscribeState) {
         return ListView.separated(
+          controller: _scrollController,
+          cacheExtent: 500,
           separatorBuilder: (context, index) => kHeightBox10,
           itemBuilder: (context, index) {
-            final trending = state.invidiousTrendingResult[index];
-            final String videoId = trending.videoId!;
+            // Show loading indicator at the end
+            if (index >= itemCount) {
+              return _buildLoadingIndicator(hasMore, isLoading);
+            }
 
-            final String channelId = trending.authorId!;
+            final trending = widget.state.invidiousTrendingResult[index];
+            final String videoId = trending.videoId ?? '';
+
+            if (videoId.isEmpty) {
+              return const SizedBox.shrink();
+            }
+
+            final String channelId = trending.authorId ?? '';
+
+            if (channelId.isEmpty) {
+              return const SizedBox.shrink();
+            }
+
             final bool isSubscribed = subscribeState.subscribedChannels
-                .where((channel) => channel.id == channelId)
-                .isNotEmpty;
+                .any((channel) => channel.id == channelId);
             return GestureDetector(
+              key: ValueKey('trending_$videoId'),
               onTap: () {
                 BlocProvider.of<WatchBloc>(context).add(
                     WatchEvent.setSelectedVideoBasicDetails(
@@ -64,17 +123,35 @@ class InvidiousTrendingVideosSection extends StatelessWidget {
                         SubscribeEvent.addSubscribe(
                             channelInfo: Subscribe(
                                 id: channelId,
-                                channelName:
-                                    trending.author ?? locals.noUploaderName,
+                                channelName: trending.author ??
+                                    widget.locals.noUploaderName,
                                 isVerified: trending.authorVerified ?? false)));
                   }
                 },
               ),
             );
           },
-          itemCount: state.invidiousTrendingResult.length,
+          itemCount: hasMore ? itemCount + 1 : itemCount,
         );
       },
+    );
+  }
+
+  Widget _buildLoadingIndicator(bool hasMore, bool isLoading) {
+    if (!hasMore) {
+      return const SizedBox.shrink();
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Center(
+        child: isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const SizedBox.shrink(),
+      ),
     );
   }
 }

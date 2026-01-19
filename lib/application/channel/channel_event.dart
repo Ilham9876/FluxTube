@@ -11,4 +11,11 @@ class ChannelEvent with _$ChannelEvent {
     required String channelId,
     required String? nextPage,
   }) = GetMoreChannelVideos;
+  const factory ChannelEvent.getChannelTabContent({
+    required String tabData,
+    required String tabName,
+  }) = GetChannelTabContent;
+  const factory ChannelEvent.selectTab({
+    required int index,
+  }) = SelectTab;
 }

@@ -22,6 +22,39 @@ class SettingsState with _$SettingsState {
     required bool initialized,
     required ApiStatus settingsStatus,
     required bool isPipDisabled,
+    // Connection status tracking for UI feedback
+    required String? connectingToInstance,
+    required bool isTestingConnection,
+    // Track if user's preferred instance failed (for showing snackbar)
+    required bool userInstanceFailed,
+    required String? failedInstanceName,
+    // Search filter
+    required String searchFilter,
+    // Video fit mode (contain, cover, fill, fitWidth, fitHeight)
+    required String videoFitMode,
+    // Skip interval in seconds (for double-tap skip)
+    required int skipInterval,
+    // SponsorBlock settings
+    required bool isSponsorBlockEnabled,
+    required List<String> sponsorBlockCategories,
+    // Open links in external browser
+    required bool openLinksInBrowser,
+    // Home feed display mode
+    required String homeFeedMode,
+    // Audio focus / pause on interruption
+    required bool isAudioFocusEnabled,
+    // Profiles
+    required String currentProfile,
+    required List<String> profiles,
+    // Subtitle size (font size in pixels)
+    required double subtitleSize,
+    // Last exported file path (for sharing)
+    required String? lastExportedFilePath,
+    // Search history privacy
+    required bool isSearchHistoryEnabled,
+    required bool isSearchHistoryVisible,
+    // Auto PiP (enter PiP when pressing home button while video is playing)
+    required bool isAutoPipEnabled,
   }) = _Initial;
 
   factory SettingsState.initialize() => SettingsState(
@@ -41,9 +74,29 @@ class SettingsState with _$SettingsState {
         instance: BaseUrl.kBaseUrl,
         invidiousInstances: [],
         invidiousInstanceStatus: ApiStatus.initial,
-        ytService: YouTubeServices.iframe.name,
+        ytService: YouTubeServices.newpipe.name,
         initialized: false,
         settingsStatus: ApiStatus.initial,
         isPipDisabled: false,
+        connectingToInstance: null,
+        isTestingConnection: false,
+        userInstanceFailed: false,
+        failedInstanceName: null,
+        // New settings
+        searchFilter: 'all',
+        videoFitMode: 'contain',
+        skipInterval: 10,
+        isSponsorBlockEnabled: false,
+        sponsorBlockCategories: ['sponsor', 'intro', 'outro', 'selfpromo'],
+        openLinksInBrowser: false,
+        homeFeedMode: HomeFeedMode.feedOrTrending.name,
+        isAudioFocusEnabled: true,
+        currentProfile: 'default',
+        profiles: ['default'],
+        subtitleSize: 32.0,
+        lastExportedFilePath: null,
+        isSearchHistoryEnabled: true,
+        isSearchHistoryVisible: true,
+        isAutoPipEnabled: true,
       );
 }

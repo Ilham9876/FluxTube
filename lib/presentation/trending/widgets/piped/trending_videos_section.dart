@@ -8,7 +8,7 @@ import 'package:fluxtube/generated/l10n.dart';
 import 'package:fluxtube/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-class TrendingVideosSection extends StatelessWidget {
+class TrendingVideosSection extends StatefulWidget {
   const TrendingVideosSection({
     super.key,
     required this.locals,
@@ -19,22 +19,84 @@ class TrendingVideosSection extends StatelessWidget {
   final TrendingState state;
 
   @override
+  State<TrendingVideosSection> createState() => _TrendingVideosSectionState();
+}
+
+class _TrendingVideosSectionState extends State<TrendingVideosSection> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<TrendingBloc>().add(
+            const TrendingEvent.loadMoreTrending(serviceType: 'piped'),
+          );
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll - 200);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final displayCount = widget.state.trendingDisplayCount;
+    final totalCount = widget.state.trendingResult.length;
+    final itemCount = displayCount.clamp(0, totalCount);
+    final hasMore = displayCount < totalCount;
+    final isLoading = widget.state.isLoadingMoreTrending;
+
     return BlocBuilder<SubscribeBloc, SubscribeState>(
       buildWhen: (previous, current) =>
           previous.subscribedChannels != current.subscribedChannels,
       builder: (context, subscribeState) {
         return ListView.separated(
+          controller: _scrollController,
+          cacheExtent: 500,
           separatorBuilder: (context, index) => kHeightBox10,
           itemBuilder: (context, index) {
-            final trending = state.trendingResult[index];
-            final String videoId = trending.url!.split('=').last;
+            // Show loading indicator at the end
+            if (index >= itemCount) {
+              return _buildLoadingIndicator(hasMore, isLoading);
+            }
 
-            final String channelId = trending.uploaderUrl!.split("/").last;
+            final trending = widget.state.trendingResult[index];
+            final String videoId = trending.url?.split('=').last ?? '';
+
+            if (videoId.isEmpty) {
+              return const SizedBox.shrink();
+            }
+
+            final String channelId =
+                trending.uploaderUrl?.split("/").last ?? '';
+
+            if (channelId.isEmpty) {
+              return const SizedBox.shrink();
+            }
+
             final bool isSubscribed = subscribeState.subscribedChannels
-                .where((channel) => channel.id == channelId)
-                .isNotEmpty;
-            return GestureDetector(
+                .any((channel) => channel.id == channelId);
+            return HomeVideoInfoCardWidget(
+              key: ValueKey('trending_$videoId'),
+              channelId: channelId,
+              cardInfo: trending,
+              isSubscribed: isSubscribed,
+              index: index,
               onTap: () {
                 BlocProvider.of<WatchBloc>(context).add(
                     WatchEvent.setSelectedVideoBasicDetails(
@@ -51,31 +113,44 @@ class TrendingVideosSection extends StatelessWidget {
                   'channelId': channelId,
                 });
               },
-              child: HomeVideoInfoCardWidget(
-                channelId: channelId,
-                cardInfo: trending,
-                isSubscribed: isSubscribed,
-                onSubscribeTap: () {
-                  if (isSubscribed) {
-                    BlocProvider.of<SubscribeBloc>(context)
-                        .add(SubscribeEvent.deleteSubscribeInfo(id: channelId));
-                  } else {
-                    BlocProvider.of<SubscribeBloc>(context).add(
-                        SubscribeEvent.addSubscribe(
-                            channelInfo: Subscribe(
-                                id: channelId,
-                                channelName: trending.uploaderName ??
-                                    locals.noUploaderName,
-                                isVerified:
-                                    trending.uploaderVerified ?? false)));
-                  }
-                },
-              ),
+              onSubscribeTap: () {
+                if (isSubscribed) {
+                  BlocProvider.of<SubscribeBloc>(context)
+                      .add(SubscribeEvent.deleteSubscribeInfo(id: channelId));
+                } else {
+                  BlocProvider.of<SubscribeBloc>(context).add(
+                      SubscribeEvent.addSubscribe(
+                          channelInfo: Subscribe(
+                              id: channelId,
+                              channelName: trending.uploaderName ??
+                                  widget.locals.noUploaderName,
+                              isVerified:
+                                  trending.uploaderVerified ?? false)));
+                }
+              },
             );
           },
-          itemCount: state.trendingResult.length,
+          itemCount: hasMore ? itemCount + 1 : itemCount,
         );
       },
+    );
+  }
+
+  Widget _buildLoadingIndicator(bool hasMore, bool isLoading) {
+    if (!hasMore) {
+      return const SizedBox.shrink();
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Center(
+        child: isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const SizedBox.shrink(),
+      ),
     );
   }
 }

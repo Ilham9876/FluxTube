@@ -60,6 +60,836 @@ class S {
     );
   }
 
+  /// `System`
+  String get themeSystem {
+    return Intl.message(
+      'System',
+      name: 'themeSystem',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light`
+  String get themeLight {
+    return Intl.message(
+      'Light',
+      name: 'themeLight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark`
+  String get themeDark {
+    return Intl.message(
+      'Dark',
+      name: 'themeDark',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `YouTube Service`
+  String get youtubeService {
+    return Intl.message(
+      'YouTube Service',
+      name: 'youtubeService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Piped`
+  String get servicePiped {
+    return Intl.message(
+      'Piped',
+      name: 'servicePiped',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Explode`
+  String get serviceExplode {
+    return Intl.message(
+      'Explode',
+      name: 'serviceExplode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invidious`
+  String get serviceInvidious {
+    return Intl.message(
+      'Invidious',
+      name: 'serviceInvidious',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `NewPipe Extractor`
+  String get serviceNewPipe {
+    return Intl.message(
+      'NewPipe Extractor',
+      name: 'serviceNewPipe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `144p`
+  String get quality144p {
+    return Intl.message(
+      '144p',
+      name: 'quality144p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `240p`
+  String get quality240p {
+    return Intl.message(
+      '240p',
+      name: 'quality240p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `360p`
+  String get quality360p {
+    return Intl.message(
+      '360p',
+      name: 'quality360p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `480p`
+  String get quality480p {
+    return Intl.message(
+      '480p',
+      name: 'quality480p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `720p`
+  String get quality720p {
+    return Intl.message(
+      '720p',
+      name: 'quality720p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1080p`
+  String get quality1080p {
+    return Intl.message(
+      '1080p',
+      name: 'quality1080p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1440p`
+  String get quality1440p {
+    return Intl.message(
+      '1440p',
+      name: 'quality1440p',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filters`
+  String get searchFilters {
+    return Intl.message(
+      'Filters',
+      name: 'searchFilters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get filterAll {
+    return Intl.message(
+      'All',
+      name: 'filterAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Videos`
+  String get filterVideos {
+    return Intl.message(
+      'Videos',
+      name: 'filterVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Channels`
+  String get filterChannels {
+    return Intl.message(
+      'Channels',
+      name: 'filterChannels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Playlists`
+  String get filterPlaylists {
+    return Intl.message(
+      'Playlists',
+      name: 'filterPlaylists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Playlist`
+  String get playlist {
+    return Intl.message(
+      'Playlist',
+      name: 'playlist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Music`
+  String get filterMusic {
+    return Intl.message(
+      'Music',
+      name: 'filterMusic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Video Fit`
+  String get videoFit {
+    return Intl.message(
+      'Video Fit',
+      name: 'videoFit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contain`
+  String get videoFitContain {
+    return Intl.message(
+      'Contain',
+      name: 'videoFitContain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cover`
+  String get videoFitCover {
+    return Intl.message(
+      'Cover',
+      name: 'videoFitCover',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fill`
+  String get videoFitFill {
+    return Intl.message(
+      'Fill',
+      name: 'videoFitFill',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fit Width`
+  String get videoFitFitWidth {
+    return Intl.message(
+      'Fit Width',
+      name: 'videoFitFitWidth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fit Height`
+  String get videoFitFitHeight {
+    return Intl.message(
+      'Fit Height',
+      name: 'videoFitFitHeight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip Interval`
+  String get skipInterval {
+    return Intl.message(
+      'Skip Interval',
+      name: 'skipInterval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Double-tap skip duration in seconds`
+  String get skipIntervalDescription {
+    return Intl.message(
+      'Double-tap skip duration in seconds',
+      name: 'skipIntervalDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `seconds`
+  String get seconds {
+    return Intl.message(
+      'seconds',
+      name: 'seconds',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SponsorBlock`
+  String get sponsorBlock {
+    return Intl.message(
+      'SponsorBlock',
+      name: 'sponsorBlock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip sponsored segments automatically`
+  String get sponsorBlockDescription {
+    return Intl.message(
+      'Skip sponsored segments automatically',
+      name: 'sponsorBlockDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip Categories`
+  String get sponsorBlockCategories {
+    return Intl.message(
+      'Skip Categories',
+      name: 'sponsorBlockCategories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sponsor`
+  String get sponsor {
+    return Intl.message(
+      'Sponsor',
+      name: 'sponsor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Intro`
+  String get intro {
+    return Intl.message(
+      'Intro',
+      name: 'intro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outro`
+  String get outro {
+    return Intl.message(
+      'Outro',
+      name: 'outro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Self Promotion`
+  String get selfPromotion {
+    return Intl.message(
+      'Self Promotion',
+      name: 'selfPromotion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Interaction`
+  String get interaction {
+    return Intl.message(
+      'Interaction',
+      name: 'interaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Music: Non-Music`
+  String get musicOfftopic {
+    return Intl.message(
+      'Music: Non-Music',
+      name: 'musicOfftopic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open in Browser`
+  String get openInBrowser {
+    return Intl.message(
+      'Open in Browser',
+      name: 'openInBrowser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open links in external browser`
+  String get openLinksExternally {
+    return Intl.message(
+      'Open links in external browser',
+      name: 'openLinksExternally',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Data`
+  String get exportData {
+    return Intl.message(
+      'Export Data',
+      name: 'exportData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import Data`
+  String get importData {
+    return Intl.message(
+      'Import Data',
+      name: 'importData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Subscriptions`
+  String get exportSubscriptions {
+    return Intl.message(
+      'Export Subscriptions',
+      name: 'exportSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import Subscriptions`
+  String get importSubscriptions {
+    return Intl.message(
+      'Import Subscriptions',
+      name: 'importSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup & Restore`
+  String get backupRestore {
+    return Intl.message(
+      'Backup & Restore',
+      name: 'backupRestore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export or import your subscriptions`
+  String get backupRestoreDescription {
+    return Intl.message(
+      'Export or import your subscriptions',
+      name: 'backupRestoreDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export successful`
+  String get exportSuccess {
+    return Intl.message(
+      'Export successful',
+      name: 'exportSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import successful`
+  String get importSuccess {
+    return Intl.message(
+      'Import successful',
+      name: 'importSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import failed`
+  String get importError {
+    return Intl.message(
+      'Import failed',
+      name: 'importError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select File`
+  String get selectFile {
+    return Intl.message(
+      'Select File',
+      name: 'selectFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home Feed`
+  String get homeFeedMode {
+    return Intl.message(
+      'Home Feed',
+      name: 'homeFeedMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto`
+  String get homeFeedModeAuto {
+    return Intl.message(
+      'Auto',
+      name: 'homeFeedModeAuto',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscriptions`
+  String get homeFeedModeFeedOnly {
+    return Intl.message(
+      'Subscriptions',
+      name: 'homeFeedModeFeedOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Trending`
+  String get homeFeedModeTrendingOnly {
+    return Intl.message(
+      'Trending',
+      name: 'homeFeedModeTrendingOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show subscriptions if available, otherwise trending`
+  String get homeFeedModeAutoHint {
+    return Intl.message(
+      'Show subscriptions if available, otherwise trending',
+      name: 'homeFeedModeAutoHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only show videos from subscribed channels`
+  String get homeFeedModeFeedOnlyHint {
+    return Intl.message(
+      'Only show videos from subscribed channels',
+      name: 'homeFeedModeFeedOnlyHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Always show trending videos only`
+  String get homeFeedModeTrendingOnlyHint {
+    return Intl.message(
+      'Always show trending videos only',
+      name: 'homeFeedModeTrendingOnlyHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Subscriptions`
+  String get noSubscriptions {
+    return Intl.message(
+      'No Subscriptions',
+      name: 'noSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscribe to channels to see their videos here`
+  String get noSubscriptionsHint {
+    return Intl.message(
+      'Subscribe to channels to see their videos here',
+      name: 'noSubscriptionsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profiles`
+  String get profiles {
+    return Intl.message(
+      'Profiles',
+      name: 'profiles',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create separate profiles for different accounts or preferences`
+  String get profilesDescription {
+    return Intl.message(
+      'Create separate profiles for different accounts or preferences',
+      name: 'profilesDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Profile`
+  String get addProfile {
+    return Intl.message(
+      'Add Profile',
+      name: 'addProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Profile`
+  String get deleteProfile {
+    return Intl.message(
+      'Delete Profile',
+      name: 'deleteProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rename Profile`
+  String get renameProfile {
+    return Intl.message(
+      'Rename Profile',
+      name: 'renameProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch Profile`
+  String get switchProfile {
+    return Intl.message(
+      'Switch Profile',
+      name: 'switchProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile Name`
+  String get profileName {
+    return Intl.message(
+      'Profile Name',
+      name: 'profileName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Profile Name`
+  String get newProfileName {
+    return Intl.message(
+      'New Profile Name',
+      name: 'newProfileName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default`
+  String get defaultProfile {
+    return Intl.message(
+      'Default',
+      name: 'defaultProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get profileInUse {
+    return Intl.message(
+      'Active',
+      name: 'profileInUse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot delete default profile`
+  String get cannotDeleteDefault {
+    return Intl.message(
+      'Cannot delete default profile',
+      name: 'cannotDeleteDefault',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot rename default profile`
+  String get cannotRenameDefault {
+    return Intl.message(
+      'Cannot rename default profile',
+      name: 'cannotRenameDefault',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Audio Focus`
+  String get audioFocus {
+    return Intl.message(
+      'Audio Focus',
+      name: 'audioFocus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pause playback on interruptions`
+  String get audioFocusDescription {
+    return Intl.message(
+      'Pause playback on interruptions',
+      name: 'audioFocusDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pause on Phone Call`
+  String get pauseOnCall {
+    return Intl.message(
+      'Pause on Phone Call',
+      name: 'pauseOnCall',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pause on Headphone Disconnect`
+  String get pauseOnHeadphones {
+    return Intl.message(
+      'Pause on Headphone Disconnect',
+      name: 'pauseOnHeadphones',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subtitle Size`
+  String get subtitleSize {
+    return Intl.message(
+      'Subtitle Size',
+      name: 'subtitleSize',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adjust the size of subtitles on video`
+  String get subtitleSizeDescription {
+    return Intl.message(
+      'Adjust the size of subtitles on video',
+      name: 'subtitleSizeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Small`
+  String get subtitleSizeSmall {
+    return Intl.message(
+      'Small',
+      name: 'subtitleSizeSmall',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium`
+  String get subtitleSizeMedium {
+    return Intl.message(
+      'Medium',
+      name: 'subtitleSizeMedium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Large`
+  String get subtitleSizeLarge {
+    return Intl.message(
+      'Large',
+      name: 'subtitleSizeLarge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Extra Large`
+  String get subtitleSizeExtraLarge {
+    return Intl.message(
+      'Extra Large',
+      name: 'subtitleSizeExtraLarge',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Trending`
   String get trending {
     return Intl.message(
@@ -630,12 +1460,932 @@ class S {
     );
   }
 
+  /// `Comments are disabled`
+  String get commentsDisabled {
+    return Intl.message(
+      'Comments are disabled',
+      name: 'commentsDisabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Replies are not available yet`
+  String get repliesNotSupported {
+    return Intl.message(
+      'Replies are not available yet',
+      name: 'repliesNotSupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pinned`
+  String get pinned {
+    return Intl.message(
+      'Pinned',
+      name: 'pinned',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Disable PIP player`
   String get disablePipPlayer {
     return Intl.message(
       'Disable PIP player',
       name: 'disablePipPlayer',
       desc: '',
+      args: [],
+    );
+  }
+
+  /// `Videos`
+  String get videos {
+    return Intl.message(
+      'Videos',
+      name: 'videos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shorts`
+  String get shorts {
+    return Intl.message(
+      'Shorts',
+      name: 'shorts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Playlists`
+  String get playlists {
+    return Intl.message(
+      'Playlists',
+      name: 'playlists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No shorts available`
+  String get noShorts {
+    return Intl.message(
+      'No shorts available',
+      name: 'noShorts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No playlists available`
+  String get noPlaylists {
+    return Intl.message(
+      'No playlists available',
+      name: 'noPlaylists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Library`
+  String get library {
+    return Intl.message(
+      'Library',
+      name: 'library',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort by`
+  String get sortBy {
+    return Intl.message(
+      'Sort by',
+      name: 'sortBy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date added`
+  String get dateAdded {
+    return Intl.message(
+      'Date added',
+      name: 'dateAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title`
+  String get title {
+    return Intl.message(
+      'Title',
+      name: 'title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Duration`
+  String get duration {
+    return Intl.message(
+      'Duration',
+      name: 'duration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `selected`
+  String get selected {
+    return Intl.message(
+      'selected',
+      name: 'selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select all`
+  String get selectAll {
+    return Intl.message(
+      'Select all',
+      name: 'selectAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort`
+  String get sort {
+    return Intl.message(
+      'Sort',
+      name: 'sort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select videos`
+  String get selectVideos {
+    return Intl.message(
+      'Select videos',
+      name: 'selectVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear all saved`
+  String get clearAllSaved {
+    return Intl.message(
+      'Clear all saved',
+      name: 'clearAllSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear all history`
+  String get clearAllHistory {
+    return Intl.message(
+      'Clear all history',
+      name: 'clearAllHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to remove all saved videos?`
+  String get clearAllSavedConfirm {
+    return Intl.message(
+      'Are you sure you want to remove all saved videos?',
+      name: 'clearAllSavedConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to clear all watch history?`
+  String get clearAllHistoryConfirm {
+    return Intl.message(
+      'Are you sure you want to clear all watch history?',
+      name: 'clearAllHistoryConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear all`
+  String get clearAll {
+    return Intl.message(
+      'Clear all',
+      name: 'clearAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search saved videos...`
+  String get searchSavedVideos {
+    return Intl.message(
+      'Search saved videos...',
+      name: 'searchSavedVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No saved videos`
+  String get noSavedVideos {
+    return Intl.message(
+      'No saved videos',
+      name: 'noSavedVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start saving videos to watch later`
+  String get startSavingVideos {
+    return Intl.message(
+      'Start saving videos to watch later',
+      name: 'startSavingVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No watch history`
+  String get noHistory {
+    return Intl.message(
+      'No watch history',
+      name: 'noHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Videos you watch will appear here`
+  String get watchSomeVideos {
+    return Intl.message(
+      'Videos you watch will appear here',
+      name: 'watchSomeVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete video`
+  String get deleteVideo {
+    return Intl.message(
+      'Delete video',
+      name: 'deleteVideo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to remove this video?`
+  String get deleteVideoConfirm {
+    return Intl.message(
+      'Are you sure you want to remove this video?',
+      name: 'deleteVideoConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from saved`
+  String get removeFromSaved {
+    return Intl.message(
+      'Remove from saved',
+      name: 'removeFromSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from history`
+  String get removeFromHistory {
+    return Intl.message(
+      'Remove from history',
+      name: 'removeFromHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `views`
+  String get views {
+    return Intl.message(
+      'views',
+      name: 'views',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscriptions`
+  String get subscriptions {
+    return Intl.message(
+      'Subscriptions',
+      name: 'subscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Channels`
+  String get channels {
+    return Intl.message(
+      'Channels',
+      name: 'channels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search subscriptions...`
+  String get searchSubscriptions {
+    return Intl.message(
+      'Search subscriptions...',
+      name: 'searchSubscriptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No videos found`
+  String get noVideosFound {
+    return Intl.message(
+      'No videos found',
+      name: 'noVideosFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pull down to refresh`
+  String get refreshToLoad {
+    return Intl.message(
+      'Pull down to refresh',
+      name: 'refreshToLoad',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unsubscribe`
+  String get unsubscribe {
+    return Intl.message(
+      'Unsubscribe',
+      name: 'unsubscribe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unsubscribe from this channel?`
+  String get unsubscribeConfirm {
+    return Intl.message(
+      'Unsubscribe from this channel?',
+      name: 'unsubscribeConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message(
+      'Search',
+      name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search YouTube...`
+  String get searchYouTube {
+    return Intl.message(
+      'Search YouTube...',
+      name: 'searchYouTube',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search for videos, channels, and playlists`
+  String get searchForVideosChannels {
+    return Intl.message(
+      'Search for videos, channels, and playlists',
+      name: 'searchForVideosChannels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent searches`
+  String get recentSearches {
+    return Intl.message(
+      'Recent searches',
+      name: 'recentSearches',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Search History`
+  String get searchHistoryEnabled {
+    return Intl.message(
+      'Save Search History',
+      name: 'searchHistoryEnabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save your search queries for quick access`
+  String get searchHistoryEnabledDescription {
+    return Intl.message(
+      'Save your search queries for quick access',
+      name: 'searchHistoryEnabledDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Search History`
+  String get showSearchHistory {
+    return Intl.message(
+      'Show Search History',
+      name: 'showSearchHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Display your recent searches in search screen`
+  String get showSearchHistoryDescription {
+    return Intl.message(
+      'Display your recent searches in search screen',
+      name: 'showSearchHistoryDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy link`
+  String get copyLink {
+    return Intl.message(
+      'Copy link',
+      name: 'copyLink',
+      desc: 'Copy link button label',
+      args: [],
+    );
+  }
+
+  /// `Share via`
+  String get shareVia {
+    return Intl.message(
+      'Share via',
+      name: 'shareVia',
+      desc: 'Share via apps button label',
+      args: [],
+    );
+  }
+
+  /// `Copied to clipboard`
+  String get copiedToClipboard {
+    return Intl.message(
+      'Copied to clipboard',
+      name: 'copiedToClipboard',
+      desc: 'Snackbar message when link is copied',
+      args: [],
+    );
+  }
+
+  /// `Like`
+  String get like {
+    return Intl.message(
+      'Like',
+      name: 'like',
+      desc: 'Like button label when count is unavailable',
+      args: [],
+    );
+  }
+
+  /// `Dislike`
+  String get dislike {
+    return Intl.message(
+      'Dislike',
+      name: 'dislike',
+      desc: 'Dislike button label when count is unavailable',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get download {
+    return Intl.message(
+      'Download',
+      name: 'download',
+      desc: 'Download button label',
+      args: [],
+    );
+  }
+
+  /// `Downloads`
+  String get downloads {
+    return Intl.message(
+      'Downloads',
+      name: 'downloads',
+      desc: 'Downloads screen title',
+      args: [],
+    );
+  }
+
+  /// `Downloading`
+  String get downloading {
+    return Intl.message(
+      'Downloading',
+      name: 'downloading',
+      desc: 'Downloading status label',
+      args: [],
+    );
+  }
+
+  /// `Completed`
+  String get completed {
+    return Intl.message(
+      'Completed',
+      name: 'completed',
+      desc: 'Completed status label',
+      args: [],
+    );
+  }
+
+  /// `Pending`
+  String get pending {
+    return Intl.message(
+      'Pending',
+      name: 'pending',
+      desc: 'Pending status label',
+      args: [],
+    );
+  }
+
+  /// `Paused`
+  String get paused {
+    return Intl.message(
+      'Paused',
+      name: 'paused',
+      desc: 'Paused status label',
+      args: [],
+    );
+  }
+
+  /// `Failed`
+  String get failed {
+    return Intl.message(
+      'Failed',
+      name: 'failed',
+      desc: 'Failed status label',
+      args: [],
+    );
+  }
+
+  /// `Cancelled`
+  String get cancelled {
+    return Intl.message(
+      'Cancelled',
+      name: 'cancelled',
+      desc: 'Cancelled status label',
+      args: [],
+    );
+  }
+
+  /// `Merging`
+  String get merging {
+    return Intl.message(
+      'Merging',
+      name: 'merging',
+      desc: 'Merging audio and video status',
+      args: [],
+    );
+  }
+
+  /// `Downloading video`
+  String get downloadingVideo {
+    return Intl.message(
+      'Downloading video',
+      name: 'downloadingVideo',
+      desc: 'Phase indicator when downloading video track',
+      args: [],
+    );
+  }
+
+  /// `Downloading audio`
+  String get downloadingAudio {
+    return Intl.message(
+      'Downloading audio',
+      name: 'downloadingAudio',
+      desc: 'Phase indicator when downloading audio track',
+      args: [],
+    );
+  }
+
+  /// `No Downloads`
+  String get noDownloads {
+    return Intl.message(
+      'No Downloads',
+      name: 'noDownloads',
+      desc: 'Empty downloads state title',
+      args: [],
+    );
+  }
+
+  /// `Downloaded videos will appear here`
+  String get noDownloadsHint {
+    return Intl.message(
+      'Downloaded videos will appear here',
+      name: 'noDownloadsHint',
+      desc: 'Empty downloads state hint',
+      args: [],
+    );
+  }
+
+  /// `Download Type`
+  String get downloadType {
+    return Intl.message(
+      'Download Type',
+      name: 'downloadType',
+      desc: 'Download type selector label',
+      args: [],
+    );
+  }
+
+  /// `Video + Audio`
+  String get videoWithAudio {
+    return Intl.message(
+      'Video + Audio',
+      name: 'videoWithAudio',
+      desc: 'Video with audio download type',
+      args: [],
+    );
+  }
+
+  /// `Video Only`
+  String get videoOnly {
+    return Intl.message(
+      'Video Only',
+      name: 'videoOnly',
+      desc: 'Video only download type',
+      args: [],
+    );
+  }
+
+  /// `Audio Only`
+  String get audioOnly {
+    return Intl.message(
+      'Audio Only',
+      name: 'audioOnly',
+      desc: 'Audio only download type',
+      args: [],
+    );
+  }
+
+  /// `Audio`
+  String get audio {
+    return Intl.message(
+      'Audio',
+      name: 'audio',
+      desc: 'Audio badge label',
+      args: [],
+    );
+  }
+
+  /// `Video+Audio`
+  String get videoAudio {
+    return Intl.message(
+      'Video+Audio',
+      name: 'videoAudio',
+      desc: 'Video with audio badge label',
+      args: [],
+    );
+  }
+
+  /// `Video Quality`
+  String get videoQuality {
+    return Intl.message(
+      'Video Quality',
+      name: 'videoQuality',
+      desc: 'Video quality selector label',
+      args: [],
+    );
+  }
+
+  /// `Audio Quality`
+  String get audioQuality {
+    return Intl.message(
+      'Audio Quality',
+      name: 'audioQuality',
+      desc: 'Audio quality selector label',
+      args: [],
+    );
+  }
+
+  /// `Start Download`
+  String get startDownload {
+    return Intl.message(
+      'Start Download',
+      name: 'startDownload',
+      desc: 'Start download button label',
+      args: [],
+    );
+  }
+
+  /// `Download started`
+  String get downloadStarted {
+    return Intl.message(
+      'Download started',
+      name: 'downloadStarted',
+      desc: 'Download started snackbar message',
+      args: [],
+    );
+  }
+
+  /// `Delete Download`
+  String get deleteDownload {
+    return Intl.message(
+      'Delete Download',
+      name: 'deleteDownload',
+      desc: 'Delete download dialog title',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this download?`
+  String get deleteDownloadConfirm {
+    return Intl.message(
+      'Are you sure you want to delete this download?',
+      name: 'deleteDownloadConfirm',
+      desc: 'Delete download confirmation message',
+      args: [],
+    );
+  }
+
+  /// `Pause`
+  String get pause {
+    return Intl.message(
+      'Pause',
+      name: 'pause',
+      desc: 'Pause button label',
+      args: [],
+    );
+  }
+
+  /// `Resume`
+  String get resume {
+    return Intl.message(
+      'Resume',
+      name: 'resume',
+      desc: 'Resume button label',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get all {
+    return Intl.message(
+      'All',
+      name: 'all',
+      desc: 'All tab label',
+      args: [],
+    );
+  }
+
+  /// `An unknown error occurred`
+  String get unknownError {
+    return Intl.message(
+      'An unknown error occurred',
+      name: 'unknownError',
+      desc: 'Unknown error message',
+      args: [],
+    );
+  }
+
+  /// `Failed to open file`
+  String get failedToOpenFile {
+    return Intl.message(
+      'Failed to open file',
+      name: 'failedToOpenFile',
+      desc: 'Error message when file cannot be opened',
+      args: [],
+    );
+  }
+
+  /// `File not found`
+  String get fileNotFound {
+    return Intl.message(
+      'File not found',
+      name: 'fileNotFound',
+      desc: 'Error message when downloaded file is missing',
+      args: [],
+    );
+  }
+
+  /// `Download failed: {title}`
+  String downloadFailed(String title) {
+    return Intl.message(
+      'Download failed: $title',
+      name: 'downloadFailed',
+      desc: 'Error message when download fails',
+      args: [title],
+    );
+  }
+
+  /// `Auto Picture-in-Picture`
+  String get autoPip {
+    return Intl.message(
+      'Auto Picture-in-Picture',
+      name: 'autoPip',
+      desc: 'Setting to enable auto PiP when pressing home button',
+      args: [],
+    );
+  }
+
+  /// `Automatically enter PiP mode when pressing home button while video is playing`
+  String get autoPipDescription {
+    return Intl.message(
+      'Automatically enter PiP mode when pressing home button while video is playing',
+      name: 'autoPipDescription',
+      desc: 'Description for auto PiP setting',
+      args: [],
+    );
+  }
+
+  /// `Save to Device`
+  String get saveToDevice {
+    return Intl.message(
+      'Save to Device',
+      name: 'saveToDevice',
+      desc: 'Save downloaded file to device storage',
+      args: [],
+    );
+  }
+
+  /// `Saving to device...`
+  String get savingToDevice {
+    return Intl.message(
+      'Saving to device...',
+      name: 'savingToDevice',
+      desc: 'Message shown while saving file to device',
+      args: [],
+    );
+  }
+
+  /// `Saved to device`
+  String get savedToDevice {
+    return Intl.message(
+      'Saved to device',
+      name: 'savedToDevice',
+      desc: 'Success message when file is saved to device',
+      args: [],
+    );
+  }
+
+  /// `Failed to save to device`
+  String get saveToDeviceFailed {
+    return Intl.message(
+      'Failed to save to device',
+      name: 'saveToDeviceFailed',
+      desc: 'Error message when save to device fails',
       args: [],
     );
   }

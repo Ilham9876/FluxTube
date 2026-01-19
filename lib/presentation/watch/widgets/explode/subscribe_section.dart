@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
+import 'package:fluxtube/core/player/global_player_controller.dart';
 import 'package:fluxtube/domain/subscribes/models/subscribe.dart';
 import 'package:fluxtube/domain/watch/models/explode/explode_watch.dart';
 import 'package:fluxtube/generated/l10n.dart';
@@ -29,11 +30,21 @@ class ExplodeChannelInfoSection extends StatelessWidget {
           final bool isSubscribed = subscribeState.channelInfo?.id == channelId;
 
           return GestureDetector(
-            onTap: () => context.goNamed('channel', pathParameters: {
-              'channelId': channelId,
-            }, queryParameters: {
-              'avtarUrl': state.selectedVideoBasicDetails?.channelThumbnailUrl,
-            }),
+            onTap: () {
+              // Enable PiP mode when navigating away from watch screen
+              final settingsState = context.read<SettingsBloc>().state;
+              if (!settingsState.isPipDisabled) {
+                GlobalPlayerController().enterPipMode();
+                BlocProvider.of<WatchBloc>(context)
+                    .add(WatchEvent.togglePip(value: true));
+              }
+              context.pushNamed('channel', pathParameters: {
+                'channelId': channelId,
+              }, queryParameters: {
+                'avatarUrl':
+                    state.selectedVideoBasicDetails?.channelThumbnailUrl,
+              });
+            },
             child: SubscribeRowWidget(
               subscribed: isSubscribed,
               uploaderUrl: state.selectedVideoBasicDetails?.channelThumbnailUrl,
@@ -54,6 +65,8 @@ class ExplodeChannelInfoSection extends StatelessWidget {
                     isVerified:
                         state.selectedVideoBasicDetails?.uploaderVerified ??
                             false,
+                    avatarUrl:
+                        state.selectedVideoBasicDetails?.channelThumbnailUrl,
                   )));
                 }
               },

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Disable NullSafeMutableLiveData lint check that crashes with newer Kotlin/Gradle versions -->
+    <!-- This is a known issue with the androidx.lifecycle.lint detector -->
+    <issue id="NullSafeMutableLiveData" severity="ignore" />
+</lint>

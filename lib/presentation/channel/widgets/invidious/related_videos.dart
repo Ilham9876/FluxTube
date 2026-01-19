@@ -12,7 +12,7 @@ import 'package:fluxtube/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class InvidiousChannelRelatedVideoSection extends StatelessWidget {
-  InvidiousChannelRelatedVideoSection({
+  const InvidiousChannelRelatedVideoSection({
     super.key,
     required this.channelId,
     required this.locals,
@@ -25,85 +25,97 @@ class InvidiousChannelRelatedVideoSection extends StatelessWidget {
   final ChannelState state;
   final InvidiousChannelResp channelInfo;
 
-  final _scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
-    // _scrollController.addListener(() {
-    //   if (_scrollController.position.pixels ==
-    //           _scrollController.position.maxScrollExtent &&
-    //       !(state.moreChannelDetailsFetchStatus == ApiStatus.loading) &&
-    //       !state.isMoreFetchCompleted) {
-    //     BlocProvider.of<ChannelBloc>(context).add(
-    //         ChannelEvent.getMoreChannelVideos(
-    //             channelId: channelId, nextPage: state.pipedChannelResp?.nextpage));
-    //   }
-    // });
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            locals.relatedTitle,
-            style: TextStyle(
-                color: Theme.of(context).textTheme.labelMedium!.color,
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-          ),
-        ),
-        kHeightBox20,
-        Expanded(
-          child: ListView.separated(
-            controller: _scrollController,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              if (index < state.invidiousChannelResp!.latestVideos!.length) {
-                final LatestVideo videoInfo = channelInfo.latestVideos![index];
-                final String videoId = videoInfo.videoId!;
-                final String channelId = videoInfo.authorId!;
+    final videos = channelInfo.latestVideos ?? [];
 
-                return GestureDetector(
-                  onTap: () {
-                    BlocProvider.of<WatchBloc>(context).add(
-                        WatchEvent.setSelectedVideoBasicDetails(
-                            details: VideoBasicInfo(
-                                id: videoId,
-                                title: videoInfo.title,
-                                thumbnailUrl:
-                                    videoInfo.videoThumbnails!.last.url,
-                                channelName: videoInfo.author,
-                                channelThumbnailUrl:
-                                    channelInfo.authorThumbnails!.last.url!,
-                                channelId: channelId,
-                                uploaderVerified: videoInfo.authorVerified)));
-                    context.goNamed('watch', pathParameters: {
-                      'videoId': videoId,
-                      'channelId': channelId,
-                    });
-                  },
-                  child: InvidiousChannelRelatedVideoInfoCardWidget(
-                    channelId: channelId,
-                    latestVideo: videoInfo,
-                    autherUrl: channelInfo.authorThumbnails!.last.url,
-                    subscribeRowVisible: false,
-                  ),
-                );
-              } else {
-                if (state.moreChannelDetailsFetchStatus == ApiStatus.loading) {
-                  return cIndicator(context);
-                } else if (state.isMoreFetchCompleted) {
-                  return const SizedBox();
-                } else {
-                  return cIndicator(context);
-                }
-              }
-            },
-            separatorBuilder: (context, index) => kWidthBox10,
-            itemCount: channelInfo.latestVideos?.length ?? 0,
+    // Show empty state if no videos
+    if (videos.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.video_library_outlined,
+                size: 48,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                locals.noVideosFound,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      );
+    }
+
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollInfo) {
+        if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+            !(state.moreChannelDetailsFetchStatus == ApiStatus.loading) &&
+            !state.isMoreFetchCompleted) {
+          BlocProvider.of<ChannelBloc>(context).add(
+              ChannelEvent.getMoreChannelVideos(
+                  channelId: channelId,
+                  nextPage: null,
+                  serviceType: YouTubeServices.invidious.name));
+        }
+        return false;
+      },
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          if (index < videos.length) {
+            final LatestVideo videoInfo = videos[index];
+            final String videoId = videoInfo.videoId!;
+            final String channelId = videoInfo.authorId!;
+
+            return GestureDetector(
+              onTap: () {
+                BlocProvider.of<WatchBloc>(context).add(
+                    WatchEvent.setSelectedVideoBasicDetails(
+                        details: VideoBasicInfo(
+                            id: videoId,
+                            title: videoInfo.title,
+                            thumbnailUrl:
+                                videoInfo.videoThumbnails!.last.url,
+                            channelName: videoInfo.author,
+                            channelThumbnailUrl:
+                                channelInfo.authorThumbnails!.last.url!,
+                            channelId: channelId,
+                            uploaderVerified: videoInfo.authorVerified)));
+                context.pushNamed('watch', pathParameters: {
+                  'videoId': videoId,
+                  'channelId': channelId,
+                });
+              },
+              child: InvidiousChannelRelatedVideoInfoCardWidget(
+                channelId: channelId,
+                latestVideo: videoInfo,
+                authorUrl: channelInfo.authorThumbnails!.last.url,
+                subscribeRowVisible: false,
+              ),
+            );
+          } else {
+            // Only show loading indicator if there's more to load
+            if (state.moreChannelDetailsFetchStatus == ApiStatus.loading) {
+              return cIndicator(context);
+            } else {
+              return const SizedBox();
+            }
+          }
+        },
+        separatorBuilder: (context, index) => kWidthBox10,
+        // Only add extra item for loading indicator if not completed
+        itemCount: videos.length + (state.isMoreFetchCompleted ? 0 : 1),
+      ),
     );
   }
 }

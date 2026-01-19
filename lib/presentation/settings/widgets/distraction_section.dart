@@ -12,6 +12,9 @@ class DistractionFreeSettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final S locals = S.of(context);
     return BlocBuilder<SettingsBloc, SettingsState>(
+      buildWhen: (previous, current) =>
+          previous.isHideComments != current.isHideComments ||
+          previous.isHideRelated != current.isHideRelated,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

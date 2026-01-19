@@ -24,6 +24,20 @@ class SearchState with _$SearchState {
     required ApiStatus fetchMoreInvidiousSearchResultStatus,
     required bool isMoreInvidiousFetchCompleted,
     int? page,
+
+    // NEWPIPE
+
+    required ApiStatus fetchNewPipeSearchResultStatus,
+    required NewPipeSearchResp? newPipeSearchResult,
+    required ApiStatus fetchNewPipeSuggestionStatus,
+    required List newPipeSuggestionResult,
+    required ApiStatus fetchMoreNewPipeSearchResultStatus,
+    required bool isMoreNewPipeFetchCompleted,
+
+    // SEARCH HISTORY
+
+    required ApiStatus fetchSearchHistoryStatus,
+    required List<LocalSearchHistory> searchHistory,
   }) = _SearchState;
 
   factory SearchState.initialize() => const SearchState(
@@ -31,14 +45,14 @@ class SearchState with _$SearchState {
         isSuggestionDisplay: false,
 
         // PIPED
-        
+
         fetchSearchResultStatus: ApiStatus.initial,
         result: null,
         fetchSuggestionStatus: ApiStatus.initial,
         suggestions: [],
         fetchMoreSearchResultStatus: ApiStatus.initial,
         isMoreFetchCompleted: false,
-        
+
         // INVIDIOUS
 
         fetchInvidiousSearchResultStatus: ApiStatus.initial,
@@ -48,5 +62,19 @@ class SearchState with _$SearchState {
         fetchMoreInvidiousSearchResultStatus: ApiStatus.initial,
         isMoreInvidiousFetchCompleted: false,
         page: 2,
+
+        // NEWPIPE
+
+        fetchNewPipeSearchResultStatus: ApiStatus.initial,
+        newPipeSearchResult: null,
+        fetchNewPipeSuggestionStatus: ApiStatus.initial,
+        newPipeSuggestionResult: [],
+        fetchMoreNewPipeSearchResultStatus: ApiStatus.initial,
+        isMoreNewPipeFetchCompleted: false,
+
+        // SEARCH HISTORY
+
+        fetchSearchHistoryStatus: ApiStatus.initial,
+        searchHistory: [],
       );
 }

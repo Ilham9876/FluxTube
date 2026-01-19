@@ -10,3 +10,43 @@ const relatedVideoVisibility = 'related-video-visibility';
 const instanceApiUrl = 'instance-api';
 const youtubeService = 'yt-service';
 const pipDisabled = 'pip-disabled';
+
+// Search filters
+const searchFilterKey = 'search-filter';
+
+// Video fit mode
+const videoFitModeKey = 'video-fit-mode';
+
+// Skip interval (in seconds)
+const skipIntervalKey = 'skip-interval';
+
+// SponsorBlock settings
+const sponsorBlockEnabledKey = 'sponsorblock-enabled';
+const sponsorBlockCategoriesKey = 'sponsorblock-categories';
+
+// Open links in browser
+const openLinksInBrowserKey = 'open-links-browser';
+
+// Home feed mode (feedOrTrending, feedOnly, trendingOnly)
+const homeFeedModeKey = 'home-feed-mode';
+
+// Audio focus / pause on interruption
+const audioFocusEnabledKey = 'audio-focus-enabled';
+
+// Subtitle size (font size in pixels)
+const subtitleSizeKey = 'subtitle-size';
+
+// Profiles
+const currentProfileKey = 'current-profile';
+const profilesListKey = 'profiles-list';
+
+// Sync
+const syncEnabledKey = 'sync-enabled';
+const lastSyncedKey = 'last-synced';
+
+// Search history privacy
+const searchHistoryEnabledKey = 'search-history-enabled';
+const searchHistoryVisibilityKey = 'search-history-visibility';
+
+// Auto PiP (enter PiP when pressing home button while video is playing)
+const autoPipEnabledKey = 'auto-pip-enabled';

@@ -1,22 +1,60 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
 import 'package:fluxtube/core/colors.dart';
+import 'package:fluxtube/core/deep_link_handler.dart';
 import 'package:fluxtube/core/enums.dart';
+import 'package:fluxtube/core/player/global_player_controller.dart';
 import 'package:fluxtube/generated/l10n.dart';
-import 'package:fluxtube/presentation/watch/widgets/explode/pip_video_player.dart';
-import 'package:fluxtube/presentation/watch/widgets/iFrame/pip_video_player.dart';
-import 'package:fluxtube/presentation/watch/widgets/invidious/pip_video_player.dart';
-import 'package:fluxtube/presentation/watch/widgets/pip_video_player.dart';
 
+import '../download/screen_downloads.dart';
 import '../home/screen_home.dart';
 import '../saved/screen_saved.dart';
 import '../settings/screen_settings.dart';
+import '../subscriptions/screen_subscriptions.dart';
 import '../trending/screen_trending.dart';
 
 ValueNotifier<int> indexChangeNotifier = ValueNotifier(0);
+
+/// Notifier for downloads screen tab selection
+/// 0 = Downloading, 1 = Completed, 2 = All
+ValueNotifier<int?> downloadsTabNotifier = ValueNotifier(null);
+
+/// Pending navigation info
+String? _pendingNavigation;
+int? _pendingDownloadsTab;
+
+/// Navigate to the Downloads tab
+/// [downloadsTabIndex] - optional tab index within Downloads screen (0=Downloading, 1=Completed, 2=All)
+void navigateToDownloadsTab({int? downloadsTabIndex}) {
+  _pendingNavigation = 'downloads';
+  _pendingDownloadsTab = downloadsTabIndex;
+  // Set the downloads tab notifier if specified
+  if (downloadsTabIndex != null) {
+    downloadsTabNotifier.value = downloadsTabIndex;
+  }
+  // Set index to a known downloads position (will be adjusted by MainNavigation if needed)
+  // Downloads is at index 4 with trending, index 3 without
+  // Use index 4, the MainNavigation will handle pending navigation and find correct index
+  indexChangeNotifier.value = 4;
+}
+
+/// Get and clear pending navigation target
+String? consumePendingNavigation() {
+  final target = _pendingNavigation;
+  _pendingNavigation = null;
+  return target;
+}
+
+/// Get and clear pending downloads tab index
+int? consumePendingDownloadsTab() {
+  final tab = _pendingDownloadsTab;
+  _pendingDownloadsTab = null;
+  return tab;
+}
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -26,164 +64,210 @@ class MainNavigation extends StatefulWidget {
 }
 
 class MainNavigationState extends State<MainNavigation> {
-  final _pages = [
-    const ScreenHome(),
-    const ScreenTrending(),
-    const ScreenSaved(),
-    const ScreenSettings()
-  ];
+  bool _hasShownInstanceFailedSnackbar = false;
+  final DeepLinkHandler _deepLinkHandler = DeepLinkHandler();
+  bool? _previousShowTrending;
+
+  List<Widget> _getPages(bool showTrending) {
+    if (showTrending) {
+      return const [
+        ScreenHome(),
+        ScreenTrending(),
+        ScreenSubscriptions(),
+        ScreenSaved(),
+        ScreenDownloads(),
+        ScreenSettings(),
+      ];
+    } else {
+      return const [
+        ScreenHome(),
+        ScreenSubscriptions(),
+        ScreenSaved(),
+        ScreenDownloads(),
+        ScreenSettings(),
+      ];
+    }
+  }
+
+  List<TabItem> _getTabItems(S locals, bool showTrending) {
+    if (showTrending) {
+      return [
+        TabItem(icon: CupertinoIcons.house_fill, title: locals.home, key: "home"),
+        TabItem(icon: CupertinoIcons.flame_fill, title: locals.trending, key: "trending"),
+        TabItem(icon: CupertinoIcons.person_2_fill, title: locals.subscriptions, key: "subscriptions"),
+        TabItem(icon: CupertinoIcons.bookmark_fill, title: locals.saved, key: "saved"),
+        TabItem(icon: CupertinoIcons.arrow_down_circle_fill, title: locals.downloads, key: "downloads"),
+        TabItem(icon: CupertinoIcons.settings, title: locals.settings, key: "settings"),
+      ];
+    } else {
+      return [
+        TabItem(icon: CupertinoIcons.house_fill, title: locals.home, key: "home"),
+        TabItem(icon: CupertinoIcons.person_2_fill, title: locals.subscriptions, key: "subscriptions"),
+        TabItem(icon: CupertinoIcons.bookmark_fill, title: locals.saved, key: "saved"),
+        TabItem(icon: CupertinoIcons.arrow_down_circle_fill, title: locals.downloads, key: "downloads"),
+        TabItem(icon: CupertinoIcons.settings, title: locals.settings, key: "settings"),
+      ];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _deepLinkHandler.init(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    _deepLinkHandler.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final locals = S.of(context);
 
-    final List<TabItem> items = [
-      TabItem(icon: CupertinoIcons.house_fill, title: locals.home, key: "home"),
-      TabItem(
-          icon: CupertinoIcons.flame_fill,
-          title: locals.trending,
-          key: "trending"),
-      TabItem(
-          icon: CupertinoIcons.bookmark_fill,
-          title: locals.saved,
-          key: "saved"),
-      TabItem(
-          icon: CupertinoIcons.settings,
-          title: locals.settings,
-          key: "settings"),
-    ];
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      buildWhen: (previous, current) =>
+          previous.ytService != current.ytService ||
+          previous.userInstanceFailed != current.userInstanceFailed,
+      builder: (context, settingsState) {
+        // Disable trending tab for NewPipe Extractor service
+        final showTrending = settingsState.ytService != YouTubeServices.newpipe.name;
+        final pages = _getPages(showTrending);
+        final items = _getTabItems(locals, showTrending);
 
-    return ValueListenableBuilder(
-      valueListenable: indexChangeNotifier,
-      builder: (BuildContext context, int index, Widget? _) {
-        return Scaffold(
-          body: SafeArea(
-            child: BlocBuilder<SavedBloc, SavedState>(
-              builder: (context, savedState) {
-                return BlocBuilder<SettingsBloc, SettingsState>(
-                  builder: (context, settingsState) {
-                    return BlocBuilder<WatchBloc, WatchState>(
-                      builder: (context, state) {
-                        return Stack(
-                          children: [
-                            _pages[index],
+        final maxIndex = pages.length - 1;
 
-                            // Invidious pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.invidious.name &&
-                                !settingsState.isPipDisabled)
-                              Positioned(
-                                child: InvidiousPipVideoPlayerWidget(
-                                  watchInfo: state.invidiousWatchResp,
-                                  videoId: state.selectedVideoBasicDetails!.id,
-                                  playbackPosition: state.playBack,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  isHlsPlayer: settingsState.isHlsPlayer,
-                                  subtitles: state.subtitles,
-                                  watchState: state,
-                                ),
-                              ),
+        // Adjust index when transitioning between services with different tab counts
+        if (_previousShowTrending != null && _previousShowTrending != showTrending) {
+          final currentIndex = indexChangeNotifier.value;
+          int newIndex;
 
-                            // Piped pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.piped.name &&
-                                !settingsState.isPipDisabled)
-                              Positioned(
-                                child: PipVideoPlayerWidget(
-                                  watchInfo: state.watchResp,
-                                  videoId: state.selectedVideoBasicDetails!.id,
-                                  playbackPosition: state.playBack,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  isHlsPlayer: settingsState.isHlsPlayer,
-                                  subtitles: state.subtitles,
-                                  watchState: state,
-                                ),
-                              ),
+          if (showTrending && !_previousShowTrending!) {
+            // Switching FROM NewPipe (4 tabs) TO other service (5 tabs)
+            // Indices after Home need to shift up by 1 to account for Trending tab
+            // 0 (Home) -> 0 (Home)
+            // 1 (Subscriptions) -> 2 (Subscriptions)
+            // 2 (Saved) -> 3 (Saved)
+            // 3 (Settings) -> 4 (Settings)
+            newIndex = currentIndex == 0 ? 0 : currentIndex + 1;
+          } else {
+            // Switching FROM other service (5 tabs) TO NewPipe (4 tabs)
+            // Indices after Trending need to shift down by 1
+            // 0 (Home) -> 0 (Home)
+            // 1 (Trending) -> 0 (Home) - Trending doesn't exist, go to Home
+            // 2 (Subscriptions) -> 1 (Subscriptions)
+            // 3 (Saved) -> 2 (Saved)
+            // 4 (Settings) -> 3 (Settings)
+            if (currentIndex <= 1) {
+              newIndex = 0;
+            } else {
+              newIndex = currentIndex - 1;
+            }
+          }
 
-                            // IFrame pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.iframe.name &&
-                                !settingsState.isPipDisabled)
-                              Align(
-                                child: IFramePipVideoPlayer(
-                                  id: state.selectedVideoBasicDetails!.id,
-                                  isLive: state.explodeWatchResp.isLive,
-                                  channelId: state
-                                      .selectedVideoBasicDetails!.channelId!,
-                                  settingsState: settingsState,
-                                  watchState: state,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  savedState: savedState,
-                                  watchInfo: state.explodeWatchResp,
-                                  playBack: state.playBack,
-                                ),
-                              ),
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            indexChangeNotifier.value = newIndex;
+          });
+        }
+        _previousShowTrending = showTrending;
 
-                            // Explode pip video player
-                            if (state.isPipEnabled &&
-                                state.selectedVideoBasicDetails?.id != null &&
-                                settingsState.ytService ==
-                                    YouTubeServices.explode.name &&
-                                !settingsState.isPipDisabled)
-                              Positioned(
-                                child: ExplodePipVideoPlayerWidget(
-                                  watchInfo: state.explodeWatchResp,
-                                  videoId: state.selectedVideoBasicDetails!.id,
-                                  playbackPosition: state.playBack,
-                                  isSaved: (savedState.videoInfo?.id ==
-                                          state.selectedVideoBasicDetails?.id &&
-                                      savedState.videoInfo?.isSaved == true),
-                                  liveUrl: state.liveStreamUrl,
-                                  availableVideoTracks:
-                                      state.muxedStreams ?? [],
-                                  subtitles: state.subtitles,
-                                  watchState: state,
-                                ),
-                              ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          bottomNavigationBar: BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (context, state) {
-              return BottomBarSalomon(
-                items: items,
-                top: 25,
-                bottom: 25,
-                iconSize: 26,
-                heightItem: 50,
-                backgroundColor: kTransparentColor,
-                color: kGreyColor!,
-                colorSelected: kRedColor,
-                backgroundSelected: kGreyOpacityColor!,
-                indexSelected: indexChangeNotifier.value,
-                titleStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  overflow: TextOverflow.ellipsis,
+        return BlocListener<SettingsBloc, SettingsState>(
+          listenWhen: (previous, current) =>
+              !previous.userInstanceFailed && current.userInstanceFailed,
+          listener: (context, state) {
+            if (state.userInstanceFailed && !_hasShownInstanceFailedSnackbar) {
+              _hasShownInstanceFailedSnackbar = true;
+              final failedName = state.failedInstanceName ?? 'Your preferred instance';
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '$failedName is not responding. Switched to a working instance.',
+                  ),
+                  duration: const Duration(seconds: 4),
+                  behavior: SnackBarBehavior.floating,
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                  ),
                 ),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+              );
+            }
+          },
+          child: ValueListenableBuilder(
+            valueListenable: indexChangeNotifier,
+            builder: (BuildContext context, int index, Widget? _) {
+              // Check for pending navigation from notification tap
+              final pendingNav = consumePendingNavigation();
+              if (pendingNav == 'downloads') {
+                // Find downloads tab index by key
+                final downloadsIndex = items.indexWhere((item) => item.key == 'downloads');
+                if (downloadsIndex >= 0) {
+                  // Get the pending downloads tab before navigating
+                  final pendingDownloadsTab = consumePendingDownloadsTab();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    indexChangeNotifier.value = downloadsIndex;
+                    // Set the downloads tab after navigation
+                    if (pendingDownloadsTab != null) {
+                      downloadsTabNotifier.value = pendingDownloadsTab;
+                    }
+                  });
+                }
+              }
+
+              // Ensure index is within bounds
+              final safeIndex = index.clamp(0, maxIndex);
+              // Update the notifier if index was out of bounds (e.g., when trending tab is removed)
+              if (index != safeIndex) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  indexChangeNotifier.value = safeIndex;
+                });
+              }
+              return PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, _) async {
+                  if (didPop) return;
+                  // Stop the player before exiting to prevent FlutterJNI crash
+                  final globalPlayer = GlobalPlayerController();
+                  if (globalPlayer.hasActivePlayer) {
+                    globalPlayer.disposePlayer();
+                    // Small delay to ensure player is fully stopped
+                    await Future.delayed(const Duration(milliseconds: 100));
+                  }
+                  // Exit the app
+                  SystemNavigator.pop();
+                },
+                child: Scaffold(
+                  body: SafeArea(
+                    child: pages[safeIndex],
+                  ),
+                  bottomNavigationBar: BottomBarSalomon(
+                    items: items,
+                    top: 25,
+                    bottom: 25,
+                    iconSize: 26,
+                    heightItem: 50,
+                    backgroundColor: kTransparentColor,
+                    color: kGreyColor!,
+                    colorSelected: kRedColor,
+                    backgroundSelected: kGreyOpacityColor!,
+                    indexSelected: safeIndex,
+                    titleStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    onTap: (int index) => indexChangeNotifier.value = index,
+                  ),
                 ),
-                onTap: (int index) => indexChangeNotifier.value = index,
               );
             },
           ),

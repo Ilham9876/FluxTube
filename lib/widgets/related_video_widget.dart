@@ -1,82 +1,149 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluxtube/core/animations/animations.dart';
+import 'package:fluxtube/core/colors.dart';
+import 'package:fluxtube/core/constants.dart';
 import 'package:fluxtube/core/operations/math_operations.dart';
 
-import '../core/colors.dart';
-
 class RelatedVideoWidget extends StatelessWidget {
-  const RelatedVideoWidget(
-      {super.key,
-      required this.title,
-      required this.thumbnailUrl,
-      required this.duration,
-      this.isDeleteIcon = false,
-      this.onDeleteTap});
+  const RelatedVideoWidget({
+    super.key,
+    required this.title,
+    required this.thumbnailUrl,
+    required this.duration,
+    this.isDeleteIcon = false,
+    this.onDeleteTap,
+    this.onTap,
+    this.index = 0,
+  });
 
   final String title;
   final String? thumbnailUrl;
   final int? duration;
   final bool isDeleteIcon;
   final VoidCallback? onDeleteTap;
+  final VoidCallback? onTap;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final String durationStr = formatDuration(duration);
-    return SizedBox(
-      width: 275,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              width: 275,
-              height: 175,
-              decoration: BoxDecoration(
-                color: kGreyColor,
-                borderRadius: BorderRadius.circular(20),
-                image: thumbnailUrl != null
-                    ? DecorationImage(
-                        image: CachedNetworkImageProvider(thumbnailUrl!),
-                        fit: BoxFit.cover)
-                    : null,
-              ),
-              child: Stack(
-                children: [
-                  if (isDeleteIcon)
-                    Align(
-                        alignment: const Alignment(0.90, -0.90),
-                        child: IconButton(
-                            onPressed: onDeleteTap,
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    WidgetStatePropertyAll(kGreyOpacityColor)),
-                            icon: const Icon(
-                              CupertinoIcons.delete_solid,
-                              color: kRedColor,
-                            ))),
-                  Align(
-                      alignment: const Alignment(0.85, 0.85),
-                      child: Container(
-                          color:
-                              durationStr == "Live" ? kRedColor : kBlackColor,
-                          padding: const EdgeInsets.only(right: 5, left: 5),
+    final isLive = durationStr == "Live";
+
+    return AnimatedListItem(
+      index: index,
+      child: ScaleTap(
+        onTap: onTap,
+        scaleDown: 0.95,
+        child: SizedBox(
+          width: 275,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Thumbnail container
+              Container(
+                margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                width: 275,
+                height: 155,
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppColors.surfaceVariantDark
+                      : AppColors.surfaceVariant,
+                  borderRadius: AppRadius.borderMd,
+                ),
+                child: ClipRRect(
+                  borderRadius: AppRadius.borderMd,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Thumbnail image
+                      if (thumbnailUrl != null)
+                        CachedNetworkImage(
+                          imageUrl: thumbnailUrl!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: isDark
+                                ? AppColors.surfaceVariantDark
+                                : AppColors.surfaceVariant,
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: isDark
+                                ? AppColors.surfaceVariantDark
+                                : AppColors.surfaceVariant,
+                          ),
+                        ),
+
+                      // Delete button overlay
+                      if (isDeleteIcon)
+                        Positioned(
+                          top: AppSpacing.sm,
+                          right: AppSpacing.sm,
+                          child: ScaleTap(
+                            onTap: onDeleteTap,
+                            child: Container(
+                              padding: AppSpacing.paddingXs,
+                              decoration: BoxDecoration(
+                                color: AppColors.overlay,
+                                borderRadius: AppRadius.borderSm,
+                              ),
+                              child: Icon(
+                                CupertinoIcons.delete_solid,
+                                color: AppColors.error,
+                                size: AppIconSize.sm,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      // Duration badge
+                      Positioned(
+                        bottom: AppSpacing.sm,
+                        right: AppSpacing.sm,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.sm,
+                            vertical: AppSpacing.xxs,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isLive ? AppColors.youtubeRed : kBlackColor,
+                            borderRadius: AppRadius.borderXs,
+                          ),
                           child: Text(
                             durationStr,
-                            style: const TextStyle(color: kWhiteColor),
-                          ))),
-                ],
-              )),
-          Padding(
-            padding: const EdgeInsets.only(top: 5, left: 10),
-            child: Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15),
-            ),
-          )
-        ],
+                            style: TextStyle(
+                              color: kWhiteColor,
+                              fontSize: AppFontSize.caption,
+                              fontWeight:
+                                  isLive ? FontWeight.w600 : FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Title
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    height: 1.3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

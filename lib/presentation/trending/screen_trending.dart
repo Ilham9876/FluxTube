@@ -6,6 +6,7 @@ import 'package:fluxtube/core/constants.dart';
 import 'package:fluxtube/core/enums.dart';
 import 'package:fluxtube/generated/l10n.dart';
 import 'package:fluxtube/presentation/trending/widgets/invidious/trending_videos_section.dart';
+import 'package:fluxtube/presentation/trending/widgets/newpipe/trending_videos_section.dart';
 import 'package:fluxtube/presentation/trending/widgets/piped/trending_videos_section.dart';
 import 'package:fluxtube/widgets/widgets.dart';
 
@@ -23,6 +24,9 @@ class ScreenTrending extends StatelessWidget {
     // );
 
     return BlocBuilder<SettingsBloc, SettingsState>(
+      buildWhen: (previous, current) =>
+          previous.ytService != current.ytService ||
+          previous.defaultRegion != current.defaultRegion,
       builder: (
         context,
         settingsState,
@@ -51,8 +55,26 @@ class ScreenTrending extends StatelessWidget {
                             region: settingsState.defaultRegion));
                   },
                   child: BlocBuilder<TrendingBloc, TrendingState>(
+                    buildWhen: (previous, current) =>
+                        previous.fetchTrendingStatus != current.fetchTrendingStatus ||
+                        previous.fetchInvidiousTrendingStatus != current.fetchInvidiousTrendingStatus ||
+                        previous.fetchNewPipeTrendingStatus != current.fetchNewPipeTrendingStatus ||
+                        previous.trendingResult != current.trendingResult ||
+                        previous.invidiousTrendingResult != current.invidiousTrendingResult ||
+                        previous.newPipeTrendingResult != current.newPipeTrendingResult ||
+                        // Pagination state changes
+                        previous.trendingDisplayCount != current.trendingDisplayCount ||
+                        previous.isLoadingMoreTrending != current.isLoadingMoreTrending ||
+                        previous.newPipeTrendingDisplayCount != current.newPipeTrendingDisplayCount ||
+                        previous.isLoadingMoreNewPipeTrending != current.isLoadingMoreNewPipeTrending ||
+                        previous.invidiousTrendingDisplayCount != current.invidiousTrendingDisplayCount ||
+                        previous.isLoadingMoreInvidiousTrending != current.isLoadingMoreInvidiousTrending,
                     builder: (context, state) {
                       if (settingsState.ytService ==
+                          YouTubeServices.newpipe.name) {
+                        return _buildNewPipeTrendingSection(
+                            state, locals, context, settingsState);
+                      } else if (settingsState.ytService ==
                           YouTubeServices.invidious.name) {
                         return _buildInvidiousTrendingSection(
                             state, locals, context, settingsState);
@@ -65,6 +87,38 @@ class ScreenTrending extends StatelessWidget {
                 )));
       },
     );
+  }
+
+  Widget _buildNewPipeTrendingSection(
+      TrendingState state, S locals, context, SettingsState settingsState) {
+    if (state.fetchNewPipeTrendingStatus == ApiStatus.loading ||
+        state.fetchNewPipeTrendingStatus == ApiStatus.initial) {
+      return ListView.separated(
+        separatorBuilder: (context, index) => kHeightBox10,
+        itemBuilder: (context, index) {
+          return const ShimmerHomeVideoInfoCard();
+        },
+        itemCount: 10,
+      );
+    } else if (state.fetchNewPipeTrendingStatus == ApiStatus.error ||
+        state.newPipeTrendingResult.isEmpty) {
+      if (state.newPipeTrendingResult.isEmpty) {
+        Fluttertoast.showToast(
+          msg: locals.switchRegion,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
+      return ErrorRetryWidget(
+        lottie: 'assets/black-cat.zip',
+        onTap: () => BlocProvider.of<TrendingBloc>(context).add(
+            TrendingEvent.getForcedTrendingData(
+                serviceType: settingsState.ytService,
+                region: settingsState.defaultRegion)),
+      );
+    } else {
+      return NewPipeTrendingVideosSection(state: state, locals: locals);
+    }
   }
 
   Widget _buildPipedTrendingSection(

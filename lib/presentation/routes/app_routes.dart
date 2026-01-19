@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluxtube/presentation/channel/screen_channel.dart';
 import 'package:fluxtube/presentation/main_navigation/main_navigation.dart';
+import 'package:fluxtube/presentation/playlist/screen_playlist.dart';
 import 'package:fluxtube/presentation/settings/sub_screens/screen_instances.dart';
 import 'package:fluxtube/presentation/settings/sub_screens/screen_language.dart';
 import 'package:fluxtube/presentation/settings/sub_screens/screen_regions.dart';
@@ -41,7 +42,16 @@ final GoRouter router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             return ScreenChannel(
               channelId: state.pathParameters['channelId']!,
-              avtarUrl: state.uri.queryParameters['avtarUrl'],
+              avatarUrl: state.uri.queryParameters['avatarUrl'],
+            );
+          },
+        ),
+        GoRoute(
+          name: 'playlist',
+          path: 'playlist/:playlistId',
+          builder: (BuildContext context, GoRouterState state) {
+            return ScreenPlaylist(
+              playlistId: state.pathParameters['playlistId']!,
             );
           },
         ),

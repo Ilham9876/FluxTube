@@ -16,8 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ChannelEvent {
-  String get serviceType => throw _privateConstructorUsedError;
-  String get channelId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String serviceType, String channelId)
@@ -25,6 +23,9 @@ mixin _$ChannelEvent {
     required TResult Function(
             String serviceType, String channelId, String? nextPage)
         getMoreChannelVideos,
+    required TResult Function(String tabData, String tabName)
+        getChannelTabContent,
+    required TResult Function(int index) selectTab,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +33,8 @@ mixin _$ChannelEvent {
     TResult? Function(String serviceType, String channelId)? getChannelData,
     TResult? Function(String serviceType, String channelId, String? nextPage)?
         getMoreChannelVideos,
+    TResult? Function(String tabData, String tabName)? getChannelTabContent,
+    TResult? Function(int index)? selectTab,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -39,6 +42,8 @@ mixin _$ChannelEvent {
     TResult Function(String serviceType, String channelId)? getChannelData,
     TResult Function(String serviceType, String channelId, String? nextPage)?
         getMoreChannelVideos,
+    TResult Function(String tabData, String tabName)? getChannelTabContent,
+    TResult Function(int index)? selectTab,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -46,26 +51,26 @@ mixin _$ChannelEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(GetChannelData value) getChannelData,
     required TResult Function(GetMoreChannelVideos value) getMoreChannelVideos,
+    required TResult Function(GetChannelTabContent value) getChannelTabContent,
+    required TResult Function(SelectTab value) selectTab,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetChannelData value)? getChannelData,
     TResult? Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult? Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult? Function(SelectTab value)? selectTab,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetChannelData value)? getChannelData,
     TResult Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult Function(SelectTab value)? selectTab,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  /// Create a copy of ChannelEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ChannelEventCopyWith<ChannelEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -74,8 +79,6 @@ abstract class $ChannelEventCopyWith<$Res> {
   factory $ChannelEventCopyWith(
           ChannelEvent value, $Res Function(ChannelEvent) then) =
       _$ChannelEventCopyWithImpl<$Res, ChannelEvent>;
-  @useResult
-  $Res call({String serviceType, String channelId});
 }
 
 /// @nodoc
@@ -90,32 +93,13 @@ class _$ChannelEventCopyWithImpl<$Res, $Val extends ChannelEvent>
 
   /// Create a copy of ChannelEvent
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? serviceType = null,
-    Object? channelId = null,
-  }) {
-    return _then(_value.copyWith(
-      serviceType: null == serviceType
-          ? _value.serviceType
-          : serviceType // ignore: cast_nullable_to_non_nullable
-              as String,
-      channelId: null == channelId
-          ? _value.channelId
-          : channelId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$GetChannelDataImplCopyWith<$Res>
-    implements $ChannelEventCopyWith<$Res> {
+abstract class _$$GetChannelDataImplCopyWith<$Res> {
   factory _$$GetChannelDataImplCopyWith(_$GetChannelDataImpl value,
           $Res Function(_$GetChannelDataImpl) then) =
       __$$GetChannelDataImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String serviceType, String channelId});
 }
@@ -196,6 +180,9 @@ class _$GetChannelDataImpl implements GetChannelData {
     required TResult Function(
             String serviceType, String channelId, String? nextPage)
         getMoreChannelVideos,
+    required TResult Function(String tabData, String tabName)
+        getChannelTabContent,
+    required TResult Function(int index) selectTab,
   }) {
     return getChannelData(serviceType, channelId);
   }
@@ -206,6 +193,8 @@ class _$GetChannelDataImpl implements GetChannelData {
     TResult? Function(String serviceType, String channelId)? getChannelData,
     TResult? Function(String serviceType, String channelId, String? nextPage)?
         getMoreChannelVideos,
+    TResult? Function(String tabData, String tabName)? getChannelTabContent,
+    TResult? Function(int index)? selectTab,
   }) {
     return getChannelData?.call(serviceType, channelId);
   }
@@ -216,6 +205,8 @@ class _$GetChannelDataImpl implements GetChannelData {
     TResult Function(String serviceType, String channelId)? getChannelData,
     TResult Function(String serviceType, String channelId, String? nextPage)?
         getMoreChannelVideos,
+    TResult Function(String tabData, String tabName)? getChannelTabContent,
+    TResult Function(int index)? selectTab,
     required TResult orElse(),
   }) {
     if (getChannelData != null) {
@@ -229,6 +220,8 @@ class _$GetChannelDataImpl implements GetChannelData {
   TResult map<TResult extends Object?>({
     required TResult Function(GetChannelData value) getChannelData,
     required TResult Function(GetMoreChannelVideos value) getMoreChannelVideos,
+    required TResult Function(GetChannelTabContent value) getChannelTabContent,
+    required TResult Function(SelectTab value) selectTab,
   }) {
     return getChannelData(this);
   }
@@ -238,6 +231,8 @@ class _$GetChannelDataImpl implements GetChannelData {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetChannelData value)? getChannelData,
     TResult? Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult? Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult? Function(SelectTab value)? selectTab,
   }) {
     return getChannelData?.call(this);
   }
@@ -247,6 +242,8 @@ class _$GetChannelDataImpl implements GetChannelData {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetChannelData value)? getChannelData,
     TResult Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult Function(SelectTab value)? selectTab,
     required TResult orElse(),
   }) {
     if (getChannelData != null) {
@@ -261,26 +258,21 @@ abstract class GetChannelData implements ChannelEvent {
       {required final String serviceType,
       required final String channelId}) = _$GetChannelDataImpl;
 
-  @override
   String get serviceType;
-  @override
   String get channelId;
 
   /// Create a copy of ChannelEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetChannelDataImplCopyWith<_$GetChannelDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GetMoreChannelVideosImplCopyWith<$Res>
-    implements $ChannelEventCopyWith<$Res> {
+abstract class _$$GetMoreChannelVideosImplCopyWith<$Res> {
   factory _$$GetMoreChannelVideosImplCopyWith(_$GetMoreChannelVideosImpl value,
           $Res Function(_$GetMoreChannelVideosImpl) then) =
       __$$GetMoreChannelVideosImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String serviceType, String channelId, String? nextPage});
 }
@@ -374,6 +366,9 @@ class _$GetMoreChannelVideosImpl implements GetMoreChannelVideos {
     required TResult Function(
             String serviceType, String channelId, String? nextPage)
         getMoreChannelVideos,
+    required TResult Function(String tabData, String tabName)
+        getChannelTabContent,
+    required TResult Function(int index) selectTab,
   }) {
     return getMoreChannelVideos(serviceType, channelId, nextPage);
   }
@@ -384,6 +379,8 @@ class _$GetMoreChannelVideosImpl implements GetMoreChannelVideos {
     TResult? Function(String serviceType, String channelId)? getChannelData,
     TResult? Function(String serviceType, String channelId, String? nextPage)?
         getMoreChannelVideos,
+    TResult? Function(String tabData, String tabName)? getChannelTabContent,
+    TResult? Function(int index)? selectTab,
   }) {
     return getMoreChannelVideos?.call(serviceType, channelId, nextPage);
   }
@@ -394,6 +391,8 @@ class _$GetMoreChannelVideosImpl implements GetMoreChannelVideos {
     TResult Function(String serviceType, String channelId)? getChannelData,
     TResult Function(String serviceType, String channelId, String? nextPage)?
         getMoreChannelVideos,
+    TResult Function(String tabData, String tabName)? getChannelTabContent,
+    TResult Function(int index)? selectTab,
     required TResult orElse(),
   }) {
     if (getMoreChannelVideos != null) {
@@ -407,6 +406,8 @@ class _$GetMoreChannelVideosImpl implements GetMoreChannelVideos {
   TResult map<TResult extends Object?>({
     required TResult Function(GetChannelData value) getChannelData,
     required TResult Function(GetMoreChannelVideos value) getMoreChannelVideos,
+    required TResult Function(GetChannelTabContent value) getChannelTabContent,
+    required TResult Function(SelectTab value) selectTab,
   }) {
     return getMoreChannelVideos(this);
   }
@@ -416,6 +417,8 @@ class _$GetMoreChannelVideosImpl implements GetMoreChannelVideos {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GetChannelData value)? getChannelData,
     TResult? Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult? Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult? Function(SelectTab value)? selectTab,
   }) {
     return getMoreChannelVideos?.call(this);
   }
@@ -425,6 +428,8 @@ class _$GetMoreChannelVideosImpl implements GetMoreChannelVideos {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GetChannelData value)? getChannelData,
     TResult Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult Function(SelectTab value)? selectTab,
     required TResult orElse(),
   }) {
     if (getMoreChannelVideos != null) {
@@ -440,18 +445,345 @@ abstract class GetMoreChannelVideos implements ChannelEvent {
       required final String channelId,
       required final String? nextPage}) = _$GetMoreChannelVideosImpl;
 
-  @override
   String get serviceType;
-  @override
   String get channelId;
   String? get nextPage;
 
   /// Create a copy of ChannelEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetMoreChannelVideosImplCopyWith<_$GetMoreChannelVideosImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GetChannelTabContentImplCopyWith<$Res> {
+  factory _$$GetChannelTabContentImplCopyWith(_$GetChannelTabContentImpl value,
+          $Res Function(_$GetChannelTabContentImpl) then) =
+      __$$GetChannelTabContentImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String tabData, String tabName});
+}
+
+/// @nodoc
+class __$$GetChannelTabContentImplCopyWithImpl<$Res>
+    extends _$ChannelEventCopyWithImpl<$Res, _$GetChannelTabContentImpl>
+    implements _$$GetChannelTabContentImplCopyWith<$Res> {
+  __$$GetChannelTabContentImplCopyWithImpl(_$GetChannelTabContentImpl _value,
+      $Res Function(_$GetChannelTabContentImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChannelEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? tabData = null,
+    Object? tabName = null,
+  }) {
+    return _then(_$GetChannelTabContentImpl(
+      tabData: null == tabData
+          ? _value.tabData
+          : tabData // ignore: cast_nullable_to_non_nullable
+              as String,
+      tabName: null == tabName
+          ? _value.tabName
+          : tabName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$GetChannelTabContentImpl implements GetChannelTabContent {
+  const _$GetChannelTabContentImpl(
+      {required this.tabData, required this.tabName});
+
+  @override
+  final String tabData;
+  @override
+  final String tabName;
+
+  @override
+  String toString() {
+    return 'ChannelEvent.getChannelTabContent(tabData: $tabData, tabName: $tabName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetChannelTabContentImpl &&
+            (identical(other.tabData, tabData) || other.tabData == tabData) &&
+            (identical(other.tabName, tabName) || other.tabName == tabName));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, tabData, tabName);
+
+  /// Create a copy of ChannelEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GetChannelTabContentImplCopyWith<_$GetChannelTabContentImpl>
+      get copyWith =>
+          __$$GetChannelTabContentImplCopyWithImpl<_$GetChannelTabContentImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String serviceType, String channelId)
+        getChannelData,
+    required TResult Function(
+            String serviceType, String channelId, String? nextPage)
+        getMoreChannelVideos,
+    required TResult Function(String tabData, String tabName)
+        getChannelTabContent,
+    required TResult Function(int index) selectTab,
+  }) {
+    return getChannelTabContent(tabData, tabName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String serviceType, String channelId)? getChannelData,
+    TResult? Function(String serviceType, String channelId, String? nextPage)?
+        getMoreChannelVideos,
+    TResult? Function(String tabData, String tabName)? getChannelTabContent,
+    TResult? Function(int index)? selectTab,
+  }) {
+    return getChannelTabContent?.call(tabData, tabName);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String serviceType, String channelId)? getChannelData,
+    TResult Function(String serviceType, String channelId, String? nextPage)?
+        getMoreChannelVideos,
+    TResult Function(String tabData, String tabName)? getChannelTabContent,
+    TResult Function(int index)? selectTab,
+    required TResult orElse(),
+  }) {
+    if (getChannelTabContent != null) {
+      return getChannelTabContent(tabData, tabName);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetChannelData value) getChannelData,
+    required TResult Function(GetMoreChannelVideos value) getMoreChannelVideos,
+    required TResult Function(GetChannelTabContent value) getChannelTabContent,
+    required TResult Function(SelectTab value) selectTab,
+  }) {
+    return getChannelTabContent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetChannelData value)? getChannelData,
+    TResult? Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult? Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult? Function(SelectTab value)? selectTab,
+  }) {
+    return getChannelTabContent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetChannelData value)? getChannelData,
+    TResult Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult Function(SelectTab value)? selectTab,
+    required TResult orElse(),
+  }) {
+    if (getChannelTabContent != null) {
+      return getChannelTabContent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GetChannelTabContent implements ChannelEvent {
+  const factory GetChannelTabContent(
+      {required final String tabData,
+      required final String tabName}) = _$GetChannelTabContentImpl;
+
+  String get tabData;
+  String get tabName;
+
+  /// Create a copy of ChannelEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GetChannelTabContentImplCopyWith<_$GetChannelTabContentImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SelectTabImplCopyWith<$Res> {
+  factory _$$SelectTabImplCopyWith(
+          _$SelectTabImpl value, $Res Function(_$SelectTabImpl) then) =
+      __$$SelectTabImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int index});
+}
+
+/// @nodoc
+class __$$SelectTabImplCopyWithImpl<$Res>
+    extends _$ChannelEventCopyWithImpl<$Res, _$SelectTabImpl>
+    implements _$$SelectTabImplCopyWith<$Res> {
+  __$$SelectTabImplCopyWithImpl(
+      _$SelectTabImpl _value, $Res Function(_$SelectTabImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChannelEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? index = null,
+  }) {
+    return _then(_$SelectTabImpl(
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SelectTabImpl implements SelectTab {
+  const _$SelectTabImpl({required this.index});
+
+  @override
+  final int index;
+
+  @override
+  String toString() {
+    return 'ChannelEvent.selectTab(index: $index)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SelectTabImpl &&
+            (identical(other.index, index) || other.index == index));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, index);
+
+  /// Create a copy of ChannelEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SelectTabImplCopyWith<_$SelectTabImpl> get copyWith =>
+      __$$SelectTabImplCopyWithImpl<_$SelectTabImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String serviceType, String channelId)
+        getChannelData,
+    required TResult Function(
+            String serviceType, String channelId, String? nextPage)
+        getMoreChannelVideos,
+    required TResult Function(String tabData, String tabName)
+        getChannelTabContent,
+    required TResult Function(int index) selectTab,
+  }) {
+    return selectTab(index);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String serviceType, String channelId)? getChannelData,
+    TResult? Function(String serviceType, String channelId, String? nextPage)?
+        getMoreChannelVideos,
+    TResult? Function(String tabData, String tabName)? getChannelTabContent,
+    TResult? Function(int index)? selectTab,
+  }) {
+    return selectTab?.call(index);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String serviceType, String channelId)? getChannelData,
+    TResult Function(String serviceType, String channelId, String? nextPage)?
+        getMoreChannelVideos,
+    TResult Function(String tabData, String tabName)? getChannelTabContent,
+    TResult Function(int index)? selectTab,
+    required TResult orElse(),
+  }) {
+    if (selectTab != null) {
+      return selectTab(index);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetChannelData value) getChannelData,
+    required TResult Function(GetMoreChannelVideos value) getMoreChannelVideos,
+    required TResult Function(GetChannelTabContent value) getChannelTabContent,
+    required TResult Function(SelectTab value) selectTab,
+  }) {
+    return selectTab(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetChannelData value)? getChannelData,
+    TResult? Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult? Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult? Function(SelectTab value)? selectTab,
+  }) {
+    return selectTab?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetChannelData value)? getChannelData,
+    TResult Function(GetMoreChannelVideos value)? getMoreChannelVideos,
+    TResult Function(GetChannelTabContent value)? getChannelTabContent,
+    TResult Function(SelectTab value)? selectTab,
+    required TResult orElse(),
+  }) {
+    if (selectTab != null) {
+      return selectTab(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SelectTab implements ChannelEvent {
+  const factory SelectTab({required final int index}) = _$SelectTabImpl;
+
+  int get index;
+
+  /// Create a copy of ChannelEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SelectTabImplCopyWith<_$SelectTabImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -461,8 +793,20 @@ mixin _$ChannelState {
   ApiStatus get channelDetailsFetchStatus => throw _privateConstructorUsedError;
   ChannelResp? get pipedChannelResp => throw _privateConstructorUsedError;
   ApiStatus get moreChannelDetailsFetchStatus =>
+      throw _privateConstructorUsedError; // PIPED TABS
+  int get selectedTabIndex => throw _privateConstructorUsedError;
+  ApiStatus get tabContentFetchStatus => throw _privateConstructorUsedError;
+  TabContent? get selectedTabContent =>
+      throw _privateConstructorUsedError; // Separate tab content for shorts and playlists
+  ApiStatus get shortsTabFetchStatus => throw _privateConstructorUsedError;
+  TabContent? get shortsTabContent => throw _privateConstructorUsedError;
+  ApiStatus get playlistsTabFetchStatus => throw _privateConstructorUsedError;
+  TabContent? get playlistsTabContent =>
       throw _privateConstructorUsedError; // INVIDIOUS
   InvidiousChannelResp? get invidiousChannelResp =>
+      throw _privateConstructorUsedError;
+  int get invidiousPage => throw _privateConstructorUsedError; // NEWPIPE
+  NewPipeChannelResp? get newPipeChannelResp =>
       throw _privateConstructorUsedError;
 
   /// Create a copy of ChannelState
@@ -483,7 +827,16 @@ abstract class $ChannelStateCopyWith<$Res> {
       ApiStatus channelDetailsFetchStatus,
       ChannelResp? pipedChannelResp,
       ApiStatus moreChannelDetailsFetchStatus,
-      InvidiousChannelResp? invidiousChannelResp});
+      int selectedTabIndex,
+      ApiStatus tabContentFetchStatus,
+      TabContent? selectedTabContent,
+      ApiStatus shortsTabFetchStatus,
+      TabContent? shortsTabContent,
+      ApiStatus playlistsTabFetchStatus,
+      TabContent? playlistsTabContent,
+      InvidiousChannelResp? invidiousChannelResp,
+      int invidiousPage,
+      NewPipeChannelResp? newPipeChannelResp});
 }
 
 /// @nodoc
@@ -505,7 +858,16 @@ class _$ChannelStateCopyWithImpl<$Res, $Val extends ChannelState>
     Object? channelDetailsFetchStatus = null,
     Object? pipedChannelResp = freezed,
     Object? moreChannelDetailsFetchStatus = null,
+    Object? selectedTabIndex = null,
+    Object? tabContentFetchStatus = null,
+    Object? selectedTabContent = freezed,
+    Object? shortsTabFetchStatus = null,
+    Object? shortsTabContent = freezed,
+    Object? playlistsTabFetchStatus = null,
+    Object? playlistsTabContent = freezed,
     Object? invidiousChannelResp = freezed,
+    Object? invidiousPage = null,
+    Object? newPipeChannelResp = freezed,
   }) {
     return _then(_value.copyWith(
       isMoreFetchCompleted: null == isMoreFetchCompleted
@@ -524,10 +886,46 @@ class _$ChannelStateCopyWithImpl<$Res, $Val extends ChannelState>
           ? _value.moreChannelDetailsFetchStatus
           : moreChannelDetailsFetchStatus // ignore: cast_nullable_to_non_nullable
               as ApiStatus,
+      selectedTabIndex: null == selectedTabIndex
+          ? _value.selectedTabIndex
+          : selectedTabIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      tabContentFetchStatus: null == tabContentFetchStatus
+          ? _value.tabContentFetchStatus
+          : tabContentFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      selectedTabContent: freezed == selectedTabContent
+          ? _value.selectedTabContent
+          : selectedTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
+      shortsTabFetchStatus: null == shortsTabFetchStatus
+          ? _value.shortsTabFetchStatus
+          : shortsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      shortsTabContent: freezed == shortsTabContent
+          ? _value.shortsTabContent
+          : shortsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
+      playlistsTabFetchStatus: null == playlistsTabFetchStatus
+          ? _value.playlistsTabFetchStatus
+          : playlistsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      playlistsTabContent: freezed == playlistsTabContent
+          ? _value.playlistsTabContent
+          : playlistsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
       invidiousChannelResp: freezed == invidiousChannelResp
           ? _value.invidiousChannelResp
           : invidiousChannelResp // ignore: cast_nullable_to_non_nullable
               as InvidiousChannelResp?,
+      invidiousPage: null == invidiousPage
+          ? _value.invidiousPage
+          : invidiousPage // ignore: cast_nullable_to_non_nullable
+              as int,
+      newPipeChannelResp: freezed == newPipeChannelResp
+          ? _value.newPipeChannelResp
+          : newPipeChannelResp // ignore: cast_nullable_to_non_nullable
+              as NewPipeChannelResp?,
     ) as $Val);
   }
 }
@@ -545,7 +943,16 @@ abstract class _$$ChannelStateImplCopyWith<$Res>
       ApiStatus channelDetailsFetchStatus,
       ChannelResp? pipedChannelResp,
       ApiStatus moreChannelDetailsFetchStatus,
-      InvidiousChannelResp? invidiousChannelResp});
+      int selectedTabIndex,
+      ApiStatus tabContentFetchStatus,
+      TabContent? selectedTabContent,
+      ApiStatus shortsTabFetchStatus,
+      TabContent? shortsTabContent,
+      ApiStatus playlistsTabFetchStatus,
+      TabContent? playlistsTabContent,
+      InvidiousChannelResp? invidiousChannelResp,
+      int invidiousPage,
+      NewPipeChannelResp? newPipeChannelResp});
 }
 
 /// @nodoc
@@ -565,7 +972,16 @@ class __$$ChannelStateImplCopyWithImpl<$Res>
     Object? channelDetailsFetchStatus = null,
     Object? pipedChannelResp = freezed,
     Object? moreChannelDetailsFetchStatus = null,
+    Object? selectedTabIndex = null,
+    Object? tabContentFetchStatus = null,
+    Object? selectedTabContent = freezed,
+    Object? shortsTabFetchStatus = null,
+    Object? shortsTabContent = freezed,
+    Object? playlistsTabFetchStatus = null,
+    Object? playlistsTabContent = freezed,
     Object? invidiousChannelResp = freezed,
+    Object? invidiousPage = null,
+    Object? newPipeChannelResp = freezed,
   }) {
     return _then(_$ChannelStateImpl(
       isMoreFetchCompleted: null == isMoreFetchCompleted
@@ -584,10 +1000,46 @@ class __$$ChannelStateImplCopyWithImpl<$Res>
           ? _value.moreChannelDetailsFetchStatus
           : moreChannelDetailsFetchStatus // ignore: cast_nullable_to_non_nullable
               as ApiStatus,
+      selectedTabIndex: null == selectedTabIndex
+          ? _value.selectedTabIndex
+          : selectedTabIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      tabContentFetchStatus: null == tabContentFetchStatus
+          ? _value.tabContentFetchStatus
+          : tabContentFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      selectedTabContent: freezed == selectedTabContent
+          ? _value.selectedTabContent
+          : selectedTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
+      shortsTabFetchStatus: null == shortsTabFetchStatus
+          ? _value.shortsTabFetchStatus
+          : shortsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      shortsTabContent: freezed == shortsTabContent
+          ? _value.shortsTabContent
+          : shortsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
+      playlistsTabFetchStatus: null == playlistsTabFetchStatus
+          ? _value.playlistsTabFetchStatus
+          : playlistsTabFetchStatus // ignore: cast_nullable_to_non_nullable
+              as ApiStatus,
+      playlistsTabContent: freezed == playlistsTabContent
+          ? _value.playlistsTabContent
+          : playlistsTabContent // ignore: cast_nullable_to_non_nullable
+              as TabContent?,
       invidiousChannelResp: freezed == invidiousChannelResp
           ? _value.invidiousChannelResp
           : invidiousChannelResp // ignore: cast_nullable_to_non_nullable
               as InvidiousChannelResp?,
+      invidiousPage: null == invidiousPage
+          ? _value.invidiousPage
+          : invidiousPage // ignore: cast_nullable_to_non_nullable
+              as int,
+      newPipeChannelResp: freezed == newPipeChannelResp
+          ? _value.newPipeChannelResp
+          : newPipeChannelResp // ignore: cast_nullable_to_non_nullable
+              as NewPipeChannelResp?,
     ));
   }
 }
@@ -600,7 +1052,16 @@ class _$ChannelStateImpl implements _ChannelState {
       required this.channelDetailsFetchStatus,
       required this.pipedChannelResp,
       required this.moreChannelDetailsFetchStatus,
-      required this.invidiousChannelResp});
+      required this.selectedTabIndex,
+      required this.tabContentFetchStatus,
+      required this.selectedTabContent,
+      required this.shortsTabFetchStatus,
+      required this.shortsTabContent,
+      required this.playlistsTabFetchStatus,
+      required this.playlistsTabContent,
+      required this.invidiousChannelResp,
+      required this.invidiousPage,
+      required this.newPipeChannelResp});
 
 //
   @override
@@ -612,13 +1073,34 @@ class _$ChannelStateImpl implements _ChannelState {
   final ChannelResp? pipedChannelResp;
   @override
   final ApiStatus moreChannelDetailsFetchStatus;
+// PIPED TABS
+  @override
+  final int selectedTabIndex;
+  @override
+  final ApiStatus tabContentFetchStatus;
+  @override
+  final TabContent? selectedTabContent;
+// Separate tab content for shorts and playlists
+  @override
+  final ApiStatus shortsTabFetchStatus;
+  @override
+  final TabContent? shortsTabContent;
+  @override
+  final ApiStatus playlistsTabFetchStatus;
+  @override
+  final TabContent? playlistsTabContent;
 // INVIDIOUS
   @override
   final InvidiousChannelResp? invidiousChannelResp;
+  @override
+  final int invidiousPage;
+// NEWPIPE
+  @override
+  final NewPipeChannelResp? newPipeChannelResp;
 
   @override
   String toString() {
-    return 'ChannelState(isMoreFetchCompleted: $isMoreFetchCompleted, channelDetailsFetchStatus: $channelDetailsFetchStatus, pipedChannelResp: $pipedChannelResp, moreChannelDetailsFetchStatus: $moreChannelDetailsFetchStatus, invidiousChannelResp: $invidiousChannelResp)';
+    return 'ChannelState(isMoreFetchCompleted: $isMoreFetchCompleted, channelDetailsFetchStatus: $channelDetailsFetchStatus, pipedChannelResp: $pipedChannelResp, moreChannelDetailsFetchStatus: $moreChannelDetailsFetchStatus, selectedTabIndex: $selectedTabIndex, tabContentFetchStatus: $tabContentFetchStatus, selectedTabContent: $selectedTabContent, shortsTabFetchStatus: $shortsTabFetchStatus, shortsTabContent: $shortsTabContent, playlistsTabFetchStatus: $playlistsTabFetchStatus, playlistsTabContent: $playlistsTabContent, invidiousChannelResp: $invidiousChannelResp, invidiousPage: $invidiousPage, newPipeChannelResp: $newPipeChannelResp)';
   }
 
   @override
@@ -637,8 +1119,27 @@ class _$ChannelStateImpl implements _ChannelState {
                     moreChannelDetailsFetchStatus) ||
                 other.moreChannelDetailsFetchStatus ==
                     moreChannelDetailsFetchStatus) &&
+            (identical(other.selectedTabIndex, selectedTabIndex) ||
+                other.selectedTabIndex == selectedTabIndex) &&
+            (identical(other.tabContentFetchStatus, tabContentFetchStatus) ||
+                other.tabContentFetchStatus == tabContentFetchStatus) &&
+            (identical(other.selectedTabContent, selectedTabContent) ||
+                other.selectedTabContent == selectedTabContent) &&
+            (identical(other.shortsTabFetchStatus, shortsTabFetchStatus) ||
+                other.shortsTabFetchStatus == shortsTabFetchStatus) &&
+            (identical(other.shortsTabContent, shortsTabContent) ||
+                other.shortsTabContent == shortsTabContent) &&
+            (identical(
+                    other.playlistsTabFetchStatus, playlistsTabFetchStatus) ||
+                other.playlistsTabFetchStatus == playlistsTabFetchStatus) &&
+            (identical(other.playlistsTabContent, playlistsTabContent) ||
+                other.playlistsTabContent == playlistsTabContent) &&
             (identical(other.invidiousChannelResp, invidiousChannelResp) ||
-                other.invidiousChannelResp == invidiousChannelResp));
+                other.invidiousChannelResp == invidiousChannelResp) &&
+            (identical(other.invidiousPage, invidiousPage) ||
+                other.invidiousPage == invidiousPage) &&
+            (identical(other.newPipeChannelResp, newPipeChannelResp) ||
+                other.newPipeChannelResp == newPipeChannelResp));
   }
 
   @override
@@ -648,7 +1149,16 @@ class _$ChannelStateImpl implements _ChannelState {
       channelDetailsFetchStatus,
       pipedChannelResp,
       moreChannelDetailsFetchStatus,
-      invidiousChannelResp);
+      selectedTabIndex,
+      tabContentFetchStatus,
+      selectedTabContent,
+      shortsTabFetchStatus,
+      shortsTabContent,
+      playlistsTabFetchStatus,
+      playlistsTabContent,
+      invidiousChannelResp,
+      invidiousPage,
+      newPipeChannelResp);
 
   /// Create a copy of ChannelState
   /// with the given fields replaced by the non-null parameter values.
@@ -665,7 +1175,16 @@ abstract class _ChannelState implements ChannelState {
           required final ApiStatus channelDetailsFetchStatus,
           required final ChannelResp? pipedChannelResp,
           required final ApiStatus moreChannelDetailsFetchStatus,
-          required final InvidiousChannelResp? invidiousChannelResp}) =
+          required final int selectedTabIndex,
+          required final ApiStatus tabContentFetchStatus,
+          required final TabContent? selectedTabContent,
+          required final ApiStatus shortsTabFetchStatus,
+          required final TabContent? shortsTabContent,
+          required final ApiStatus playlistsTabFetchStatus,
+          required final TabContent? playlistsTabContent,
+          required final InvidiousChannelResp? invidiousChannelResp,
+          required final int invidiousPage,
+          required final NewPipeChannelResp? newPipeChannelResp}) =
       _$ChannelStateImpl;
 
 //
@@ -676,9 +1195,28 @@ abstract class _ChannelState implements ChannelState {
   @override
   ChannelResp? get pipedChannelResp;
   @override
-  ApiStatus get moreChannelDetailsFetchStatus; // INVIDIOUS
+  ApiStatus get moreChannelDetailsFetchStatus; // PIPED TABS
+  @override
+  int get selectedTabIndex;
+  @override
+  ApiStatus get tabContentFetchStatus;
+  @override
+  TabContent?
+      get selectedTabContent; // Separate tab content for shorts and playlists
+  @override
+  ApiStatus get shortsTabFetchStatus;
+  @override
+  TabContent? get shortsTabContent;
+  @override
+  ApiStatus get playlistsTabFetchStatus;
+  @override
+  TabContent? get playlistsTabContent; // INVIDIOUS
   @override
   InvidiousChannelResp? get invidiousChannelResp;
+  @override
+  int get invidiousPage; // NEWPIPE
+  @override
+  NewPipeChannelResp? get newPipeChannelResp;
 
   /// Create a copy of ChannelState
   /// with the given fields replaced by the non-null parameter values.

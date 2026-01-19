@@ -31,12 +31,21 @@ class CustomAppBar extends StatelessWidget {
       automaticallyImplyLeading: false,
       title: Padding(
         padding: const EdgeInsets.only(left: 10),
-        child: Text(
-          title,
-          style: const TextStyle(fontFamily: 'Knewave', color: kRedColor),
-          // style: GoogleFonts.knewave(
-          //   color: kRedColor,
-          // ),
+        child: ShaderMask(
+          shaderCallback: (bounds) => const LinearGradient(
+            colors: [Color(0xFFFF4444), Color(0xFFCC0000)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ).createShader(bounds),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 24,
+              letterSpacing: -0.5,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
       actions: _isSearchVisible

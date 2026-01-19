@@ -135,8 +135,6 @@ class SubscribeRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
-
     var _formattedSubCount = formatCount(subcount ?? '0');
 
     return Row(
@@ -151,83 +149,78 @@ class SubscribeRowWidget extends StatelessWidget {
                 : null,
           ),
         spacing ?? kWidthBox10,
-        subcount == null || subcount == '-1'
-            ? Row(
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: 50, maxWidth: _size.width * 0.2),
-                    child: Text(
-                      uploader ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      style: subTextStyle ??
-                          TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyMedium!.color,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
-                    ),
-                  ),
-                  kWidthBox5,
-                  isVerified ?? false
-                      ? const Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: Icon(
-                            Icons.verified,
-                            color: kRedColor,
-                            size: 20,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ],
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            minWidth: 50, maxWidth: _size.width * 0.2),
-                        child: Text(
-                          uploader ?? '',
-                          overflow: TextOverflow.ellipsis,
-                          style: subTextStyle ??
-                              TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .color,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
-                        ),
+        Expanded(
+          child: subcount == null || subcount == '-1'
+              ? Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        uploader ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        style: subTextStyle ??
+                            TextStyle(
+                                color:
+                                    Theme.of(context).textTheme.bodyMedium!.color,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
                       ),
-                      kWidthBox5,
-                      isVerified ?? false
-                          ? const Icon(
+                    ),
+                    kWidthBox5,
+                    isVerified ?? false
+                        ? const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Icon(
                               Icons.verified,
                               color: kRedColor,
                               size: 20,
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: 50, maxWidth: _size.width * 0.37),
-                    child: Text(
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            uploader ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: subTextStyle ??
+                                TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .color,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                          ),
+                        ),
+                        kWidthBox5,
+                        isVerified ?? false
+                            ? const Icon(
+                                Icons.verified,
+                                color: kRedColor,
+                                size: 20,
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                    Text(
                       '${_formattedSubCount == '0' ? '' : _formattedSubCount} ${S.of(context).channelSubscribers(int.tryParse(subcount!) ?? 0)}',
+                      overflow: TextOverflow.ellipsis,
                       style: subCountTextStyle ??
                           TextStyle(
                               color: kGreyColor,
                               fontSize: 12,
                               overflow: TextOverflow.ellipsis),
-                    ),
-                  )
-                ],
-              ),
-        const Spacer(),
+                    )
+                  ],
+                ),
+        ),
+        kWidthBox10,
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           height: 40,

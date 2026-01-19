@@ -20,9 +20,9 @@ class WatchState with _$WatchState {
     required ApiStatus fetchCommentsStatus,
     required ApiStatus fetchCommentRepliesStatus,
     required ApiStatus fetchMoreCommentsStatus,
-    required bool isMoreCommetsFetchCompleted,
+    required bool isMoreCommentsFetchCompleted,
     required ApiStatus fetchMoreCommentRepliesStatus,
-    required bool isMoreReplyCommetsFetchCompleted,
+    required bool isMoreReplyCommentsFetchCompleted,
 
     //EXPLODE
     
@@ -46,9 +46,26 @@ class WatchState with _$WatchState {
     required InvidiousCommentsResp invidiousCommentReplies,
     required ApiStatus fetchInvidiousCommentRepliesStatus,
     required ApiStatus fetchMoreInvidiousCommentsStatus,
-    required bool isMoreInvidiousCommetsFetchCompleted,
+    required bool isMoreInvidiousCommentsFetchCompleted,
     required ApiStatus fetchMoreInvidiousCommentRepliesStatus,
-    required bool isMoreInvidiousReplyCommetsFetchCompleted,
+    required bool isMoreInvidiousReplyCommentsFetchCompleted,
+
+    // NEWPIPE
+    required NewPipeWatchResp newPipeWatchResp,
+    required ApiStatus fetchNewPipeWatchInfoStatus,
+    String? newPipeErrorMessage,
+    required NewPipeCommentsResp newPipeComments,
+    required ApiStatus fetchNewPipeCommentsStatus,
+    required ApiStatus fetchMoreNewPipeCommentsStatus,
+    required bool isMoreNewPipeCommentsFetchCompleted,
+    required NewPipeCommentsResp newPipeCommentReplies,
+    required ApiStatus fetchNewPipeCommentRepliesStatus,
+    required ApiStatus fetchMoreNewPipeCommentRepliesStatus,
+    required bool isMoreNewPipeReplyCommentsFetchCompleted,
+
+    // SPONSORBLOCK
+    required List<SponsorSegment> sponsorSegments,
+    required ApiStatus fetchSponsorSegmentsStatus,
 
   }) = _Initial;
 
@@ -71,10 +88,10 @@ class WatchState with _$WatchState {
         fetchWatchInfoStatus: ApiStatus.initial,
         fetchCommentsStatus: ApiStatus.initial,
         fetchCommentRepliesStatus: ApiStatus.initial,
-        isMoreCommetsFetchCompleted: false,
+        isMoreCommentsFetchCompleted: false,
         fetchMoreCommentsStatus: ApiStatus.initial,
         fetchMoreCommentRepliesStatus: ApiStatus.initial,
-        isMoreReplyCommetsFetchCompleted: false,
+        isMoreReplyCommentsFetchCompleted: false,
         
         // EXPLODE
         
@@ -96,9 +113,26 @@ class WatchState with _$WatchState {
         invidiousCommentReplies: InvidiousCommentsResp(),
         fetchInvidiousCommentRepliesStatus: ApiStatus.initial,
         fetchMoreInvidiousCommentsStatus: ApiStatus.initial,
-        isMoreInvidiousCommetsFetchCompleted: false,
+        isMoreInvidiousCommentsFetchCompleted: false,
         fetchMoreInvidiousCommentRepliesStatus: ApiStatus.initial,
-        isMoreInvidiousReplyCommetsFetchCompleted: false,
+        isMoreInvidiousReplyCommentsFetchCompleted: false,
+
+        // NEWPIPE
+        newPipeWatchResp: NewPipeWatchResp(),
+        fetchNewPipeWatchInfoStatus: ApiStatus.initial,
+        newPipeErrorMessage: null,
+        newPipeComments: NewPipeCommentsResp(),
+        fetchNewPipeCommentsStatus: ApiStatus.initial,
+        fetchMoreNewPipeCommentsStatus: ApiStatus.initial,
+        isMoreNewPipeCommentsFetchCompleted: false,
+        newPipeCommentReplies: NewPipeCommentsResp(),
+        fetchNewPipeCommentRepliesStatus: ApiStatus.initial,
+        fetchMoreNewPipeCommentRepliesStatus: ApiStatus.initial,
+        isMoreNewPipeReplyCommentsFetchCompleted: false,
+
+        // SPONSORBLOCK
+        sponsorSegments: [],
+        fetchSponsorSegmentsStatus: ApiStatus.initial,
 
       );
 }

@@ -17,7 +17,7 @@ class InvidiousChannelRelatedVideoInfoCardWidget extends StatelessWidget {
     this.onSubscribeTap,
     this.isLive = false,
     required this.channelId,
-    this.autherUrl,
+    this.authorUrl,
   });
 
   final String channelId;
@@ -26,7 +26,7 @@ class InvidiousChannelRelatedVideoInfoCardWidget extends StatelessWidget {
   final bool subscribeRowVisible;
   final VoidCallback? onSubscribeTap;
   final bool isLive;
-  final String? autherUrl;
+  final String? authorUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +85,9 @@ class InvidiousChannelRelatedVideoInfoCardWidget extends StatelessWidget {
                     ? GestureDetector(
                         onTap: () => context.goNamed('channel',
                             pathParameters: {'channelId': channelId},
-                            queryParameters: {'avtarUrl': autherUrl}),
+                            queryParameters: {'avatarUrl': authorUrl}),
                         child: SubscribeRowWidget(
-                          uploaderUrl: autherUrl ?? '',
+                          uploaderUrl: authorUrl ?? '',
                           uploader:
                               latestVideo?.author ?? locals.noUploaderName,
                           isVerified: latestVideo?.authorVerified,

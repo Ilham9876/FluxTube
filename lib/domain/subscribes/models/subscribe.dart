@@ -1,22 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:isar/isar.dart';
-
-import '../../../core/operations/math_operations.dart';
-
-part 'subscribe.g.dart';
 
 //--------SUBSCRIBE MODEL FOR LOCAL SAVING--------//
-// `flutter pub run build_runner build` to generate file
+// Domain model for channel subscriptions
 
-@Collection()
 class Subscribe {
   late String id;
-  Id get isarId => fastHash(id);
   late String channelName;
   late bool? isVerified;
+  String? avatarUrl;
+  String profileName;
+
   Subscribe({
     required this.id,
     required this.channelName,
     this.isVerified,
+    this.avatarUrl,
+    this.profileName = 'default',
   });
 }

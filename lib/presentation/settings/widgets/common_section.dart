@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/settings/settings_bloc.dart';
 import 'package:fluxtube/core/constants.dart';
+import 'package:fluxtube/core/enums.dart';
 import 'package:fluxtube/core/locals.dart';
 import 'package:fluxtube/core/model/language_model.dart';
 import 'package:fluxtube/core/model/region_model.dart';
@@ -9,18 +10,18 @@ import 'package:fluxtube/core/regions.dart';
 import 'package:fluxtube/generated/l10n.dart';
 import 'package:go_router/go_router.dart';
 
-final _themeModes = [
-  const DropdownMenuItem(
+List<DropdownMenuItem<String>> _getThemeModes(S locals) => [
+  DropdownMenuItem(
     value: "system",
-    child: Text("System"),
+    child: Text(locals.themeSystem),
   ),
-  const DropdownMenuItem(
+  DropdownMenuItem(
     value: "light",
-    child: Text("Light"),
+    child: Text(locals.themeLight),
   ),
-  const DropdownMenuItem(
+  DropdownMenuItem(
     value: "dark",
-    child: Text("Dark"),
+    child: Text(locals.themeDark),
   ),
 ];
 
@@ -71,20 +72,22 @@ class CommonSettingsSection extends StatelessWidget {
               leading: const Icon(Icons.flag),
               onTap: () => context.goNamed('regions'),
             ),
-            ListTile(
-              title: Text(locals.instances,
-                  style: Theme.of(context).textTheme.titleMedium),
-              subtitle: Text(state.instance),
-              leading: const Icon(Icons.web_stories),
-              onTap: () => context.goNamed('instances'),
-            ),
+            // Only show Instances option for services that use them (not NewPipe)
+            if (state.ytService != YouTubeServices.newpipe.name)
+              ListTile(
+                title: Text(locals.instances,
+                    style: Theme.of(context).textTheme.titleMedium),
+                subtitle: Text(state.instance),
+                leading: const Icon(Icons.web_stories),
+                onTap: () => context.goNamed('instances'),
+              ),
             ListTile(
               title: Text(locals.theme,
                   style: Theme.of(context).textTheme.titleMedium),
               leading: const Icon(Icons.dark_mode_rounded),
               trailing: DropdownButton(
                   value: state.themeMode,
-                  items: _themeModes,
+                  items: _getThemeModes(locals),
                   onChanged: (themeMode) =>
                       BlocProvider.of<SettingsBloc>(context).add(
                           SettingsEvent.changeTheme(

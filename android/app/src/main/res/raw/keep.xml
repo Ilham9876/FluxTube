@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification,@drawable/launch_background,@mipmap/launcher_icon,@drawable-hdpi/ic_notification,@drawable-mdpi/ic_notification,@drawable-xhdpi/ic_notification,@drawable-xxhdpi/ic_notification,@drawable-xxxhdpi/ic_notification"
+    tools:shrinkMode="safe" />

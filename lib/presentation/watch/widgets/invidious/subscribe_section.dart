@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluxtube/application/application.dart';
+import 'package:fluxtube/core/player/global_player_controller.dart';
 import 'package:fluxtube/domain/subscribes/models/subscribe.dart';
 import 'package:fluxtube/domain/watch/models/invidious/video/invidious_watch_resp.dart';
 import 'package:fluxtube/generated/l10n.dart';
@@ -29,11 +30,20 @@ class InvidiousChannelInfoSection extends StatelessWidget {
           final bool isSubscribed = subscribeState.channelInfo?.id == channelId;
 
           return GestureDetector(
-            onTap: () => context.goNamed('channel', pathParameters: {
-              'channelId': channelId,
-            }, queryParameters: {
-              'avtarUrl': watchInfo.authorThumbnails?.first.url,
-            }),
+            onTap: () {
+              // Enable PiP mode when navigating away from watch screen
+              final settingsState = context.read<SettingsBloc>().state;
+              if (!settingsState.isPipDisabled) {
+                GlobalPlayerController().enterPipMode();
+                BlocProvider.of<WatchBloc>(context)
+                    .add(WatchEvent.togglePip(value: true));
+              }
+              context.pushNamed('channel', pathParameters: {
+                'channelId': channelId,
+              }, queryParameters: {
+                'avatarUrl': watchInfo.authorThumbnails?.first.url,
+              });
+            },
             child: SubscribeRowWidget(
               subscribed: isSubscribed,
               uploaderUrl: watchInfo.authorThumbnails?.first.url,
@@ -51,7 +61,9 @@ class InvidiousChannelInfoSection extends StatelessWidget {
                               id: channelId,
                               channelName:
                                   watchInfo.author ?? locals.noUploaderName,
-                              isVerified: watchInfo.authorVerified ?? false)));
+                              isVerified: watchInfo.authorVerified ?? false,
+                              avatarUrl:
+                                  watchInfo.authorThumbnails?.first.url)));
                 }
               },
             ),

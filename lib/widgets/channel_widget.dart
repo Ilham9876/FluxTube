@@ -43,11 +43,10 @@ class ChannelWidget extends StatelessWidget {
           : context.goNamed('channel', pathParameters: {
               'channelId': _channelId,
             }, queryParameters: {
-              'avtarUrl': _thumbnail,
+              'avatarUrl': _thumbnail,
             }),
-      child: SizedBox(
-        height: 150,
-        width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: SubscribeRowWidget(
           uploader: _channelName,
           isVerified: _isVerified,
@@ -70,7 +69,8 @@ class ChannelWidget extends StatelessWidget {
                       channelInfo: Subscribe(
                           id: _channelId,
                           channelName: _channelName ?? locals.noUploaderName,
-                          isVerified: _isVerified ?? false)));
+                          isVerified: _isVerified ?? false,
+                          avatarUrl: _thumbnail)));
             }
           },
         ),

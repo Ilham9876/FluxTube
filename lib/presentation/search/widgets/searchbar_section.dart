@@ -9,10 +9,12 @@ class SearchBarSection extends StatelessWidget {
     super.key,
     required TextEditingController textEditingController,
     required this.theme,
+    this.selectedFilter = 'all',
   }) : _textEditingController = textEditingController;
 
   final TextEditingController _textEditingController;
   final ThemeData theme;
+  final String selectedFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class SearchBarSection extends StatelessWidget {
           EasyDebounce.cancel('suggestions');
           BlocProvider.of<SearchBloc>(context).add(SearchEvent.getSearchResult(
             query: _textEditingController.text,
-            filter: "all",
+            filter: selectedFilter,
             serviceType: settingsBloc.state.ytService,
           ));
         },

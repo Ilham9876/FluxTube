@@ -27,9 +27,17 @@ class ScreenSettings extends StatelessWidget {
               children: [
                 CommonSettingsSection(),
                 kHeightBox15,
+                ProfilesSettingsSection(),
+                kHeightBox15,
                 DistractionFreeSettingsSection(),
                 kHeightBox15,
-                VideoSettingsSecction(),
+                VideoSettingsSection(),
+                kHeightBox15,
+                PlaybackSettingsSection(),
+                kHeightBox15,
+                SponsorBlockSettingsSection(),
+                kHeightBox15,
+                BackupSettingsSection(),
                 kHeightBox15,
                 AboutSection()
               ],

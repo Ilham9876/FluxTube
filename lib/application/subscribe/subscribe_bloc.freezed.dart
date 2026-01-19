@@ -18,30 +18,32 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SubscribeEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Subscribe channelInfo) addSubscribe,
-    required TResult Function(String id) deleteSubscribeInfo,
-    required TResult Function() getAllSubscribeList,
-    required TResult Function(String id) checkSubscribeInfo,
+    required TResult Function(Subscribe channelInfo, String profileName)
+        addSubscribe,
+    required TResult Function(String id, String profileName)
+        deleteSubscribeInfo,
+    required TResult Function(String profileName) getAllSubscribeList,
+    required TResult Function(String id, String profileName) checkSubscribeInfo,
     required TResult Function(List<Subscribe> subscribedChannels)
         updateSubscribeOldList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Subscribe channelInfo)? addSubscribe,
-    TResult? Function(String id)? deleteSubscribeInfo,
-    TResult? Function()? getAllSubscribeList,
-    TResult? Function(String id)? checkSubscribeInfo,
+    TResult? Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult? Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult? Function(String profileName)? getAllSubscribeList,
+    TResult? Function(String id, String profileName)? checkSubscribeInfo,
     TResult? Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Subscribe channelInfo)? addSubscribe,
-    TResult Function(String id)? deleteSubscribeInfo,
-    TResult Function()? getAllSubscribeList,
-    TResult Function(String id)? checkSubscribeInfo,
+    TResult Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult Function(String profileName)? getAllSubscribeList,
+    TResult Function(String id, String profileName)? checkSubscribeInfo,
     TResult Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
     required TResult orElse(),
@@ -105,7 +107,7 @@ abstract class _$$AddSubscribeImplCopyWith<$Res> {
           _$AddSubscribeImpl value, $Res Function(_$AddSubscribeImpl) then) =
       __$$AddSubscribeImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({Subscribe channelInfo});
+  $Res call({Subscribe channelInfo, String profileName});
 }
 
 /// @nodoc
@@ -122,12 +124,17 @@ class __$$AddSubscribeImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? channelInfo = null,
+    Object? profileName = null,
   }) {
     return _then(_$AddSubscribeImpl(
       channelInfo: null == channelInfo
           ? _value.channelInfo
           : channelInfo // ignore: cast_nullable_to_non_nullable
               as Subscribe,
+      profileName: null == profileName
+          ? _value.profileName
+          : profileName // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -135,14 +142,18 @@ class __$$AddSubscribeImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AddSubscribeImpl implements AddSubscribe {
-  const _$AddSubscribeImpl({required this.channelInfo});
+  const _$AddSubscribeImpl(
+      {required this.channelInfo, this.profileName = 'default'});
 
   @override
   final Subscribe channelInfo;
+  @override
+  @JsonKey()
+  final String profileName;
 
   @override
   String toString() {
-    return 'SubscribeEvent.addSubscribe(channelInfo: $channelInfo)';
+    return 'SubscribeEvent.addSubscribe(channelInfo: $channelInfo, profileName: $profileName)';
   }
 
   @override
@@ -151,11 +162,13 @@ class _$AddSubscribeImpl implements AddSubscribe {
         (other.runtimeType == runtimeType &&
             other is _$AddSubscribeImpl &&
             (identical(other.channelInfo, channelInfo) ||
-                other.channelInfo == channelInfo));
+                other.channelInfo == channelInfo) &&
+            (identical(other.profileName, profileName) ||
+                other.profileName == profileName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, channelInfo);
+  int get hashCode => Object.hash(runtimeType, channelInfo, profileName);
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -168,42 +181,44 @@ class _$AddSubscribeImpl implements AddSubscribe {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Subscribe channelInfo) addSubscribe,
-    required TResult Function(String id) deleteSubscribeInfo,
-    required TResult Function() getAllSubscribeList,
-    required TResult Function(String id) checkSubscribeInfo,
+    required TResult Function(Subscribe channelInfo, String profileName)
+        addSubscribe,
+    required TResult Function(String id, String profileName)
+        deleteSubscribeInfo,
+    required TResult Function(String profileName) getAllSubscribeList,
+    required TResult Function(String id, String profileName) checkSubscribeInfo,
     required TResult Function(List<Subscribe> subscribedChannels)
         updateSubscribeOldList,
   }) {
-    return addSubscribe(channelInfo);
+    return addSubscribe(channelInfo, profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Subscribe channelInfo)? addSubscribe,
-    TResult? Function(String id)? deleteSubscribeInfo,
-    TResult? Function()? getAllSubscribeList,
-    TResult? Function(String id)? checkSubscribeInfo,
+    TResult? Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult? Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult? Function(String profileName)? getAllSubscribeList,
+    TResult? Function(String id, String profileName)? checkSubscribeInfo,
     TResult? Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
   }) {
-    return addSubscribe?.call(channelInfo);
+    return addSubscribe?.call(channelInfo, profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Subscribe channelInfo)? addSubscribe,
-    TResult Function(String id)? deleteSubscribeInfo,
-    TResult Function()? getAllSubscribeList,
-    TResult Function(String id)? checkSubscribeInfo,
+    TResult Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult Function(String profileName)? getAllSubscribeList,
+    TResult Function(String id, String profileName)? checkSubscribeInfo,
     TResult Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
     required TResult orElse(),
   }) {
     if (addSubscribe != null) {
-      return addSubscribe(channelInfo);
+      return addSubscribe(channelInfo, profileName);
     }
     return orElse();
   }
@@ -251,10 +266,12 @@ class _$AddSubscribeImpl implements AddSubscribe {
 }
 
 abstract class AddSubscribe implements SubscribeEvent {
-  const factory AddSubscribe({required final Subscribe channelInfo}) =
-      _$AddSubscribeImpl;
+  const factory AddSubscribe(
+      {required final Subscribe channelInfo,
+      final String profileName}) = _$AddSubscribeImpl;
 
   Subscribe get channelInfo;
+  String get profileName;
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -269,7 +286,7 @@ abstract class _$$DeleteSubscribeInfoImplCopyWith<$Res> {
           $Res Function(_$DeleteSubscribeInfoImpl) then) =
       __$$DeleteSubscribeInfoImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String id});
+  $Res call({String id, String profileName});
 }
 
 /// @nodoc
@@ -286,11 +303,16 @@ class __$$DeleteSubscribeInfoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? profileName = null,
   }) {
     return _then(_$DeleteSubscribeInfoImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      profileName: null == profileName
+          ? _value.profileName
+          : profileName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -299,14 +321,18 @@ class __$$DeleteSubscribeInfoImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DeleteSubscribeInfoImpl implements DeleteSubscribeInfo {
-  const _$DeleteSubscribeInfoImpl({required this.id});
+  const _$DeleteSubscribeInfoImpl(
+      {required this.id, this.profileName = 'default'});
 
   @override
   final String id;
+  @override
+  @JsonKey()
+  final String profileName;
 
   @override
   String toString() {
-    return 'SubscribeEvent.deleteSubscribeInfo(id: $id)';
+    return 'SubscribeEvent.deleteSubscribeInfo(id: $id, profileName: $profileName)';
   }
 
   @override
@@ -314,11 +340,13 @@ class _$DeleteSubscribeInfoImpl implements DeleteSubscribeInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DeleteSubscribeInfoImpl &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.profileName, profileName) ||
+                other.profileName == profileName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id);
+  int get hashCode => Object.hash(runtimeType, id, profileName);
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -332,42 +360,44 @@ class _$DeleteSubscribeInfoImpl implements DeleteSubscribeInfo {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Subscribe channelInfo) addSubscribe,
-    required TResult Function(String id) deleteSubscribeInfo,
-    required TResult Function() getAllSubscribeList,
-    required TResult Function(String id) checkSubscribeInfo,
+    required TResult Function(Subscribe channelInfo, String profileName)
+        addSubscribe,
+    required TResult Function(String id, String profileName)
+        deleteSubscribeInfo,
+    required TResult Function(String profileName) getAllSubscribeList,
+    required TResult Function(String id, String profileName) checkSubscribeInfo,
     required TResult Function(List<Subscribe> subscribedChannels)
         updateSubscribeOldList,
   }) {
-    return deleteSubscribeInfo(id);
+    return deleteSubscribeInfo(id, profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Subscribe channelInfo)? addSubscribe,
-    TResult? Function(String id)? deleteSubscribeInfo,
-    TResult? Function()? getAllSubscribeList,
-    TResult? Function(String id)? checkSubscribeInfo,
+    TResult? Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult? Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult? Function(String profileName)? getAllSubscribeList,
+    TResult? Function(String id, String profileName)? checkSubscribeInfo,
     TResult? Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
   }) {
-    return deleteSubscribeInfo?.call(id);
+    return deleteSubscribeInfo?.call(id, profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Subscribe channelInfo)? addSubscribe,
-    TResult Function(String id)? deleteSubscribeInfo,
-    TResult Function()? getAllSubscribeList,
-    TResult Function(String id)? checkSubscribeInfo,
+    TResult Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult Function(String profileName)? getAllSubscribeList,
+    TResult Function(String id, String profileName)? checkSubscribeInfo,
     TResult Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
     required TResult orElse(),
   }) {
     if (deleteSubscribeInfo != null) {
-      return deleteSubscribeInfo(id);
+      return deleteSubscribeInfo(id, profileName);
     }
     return orElse();
   }
@@ -415,10 +445,12 @@ class _$DeleteSubscribeInfoImpl implements DeleteSubscribeInfo {
 }
 
 abstract class DeleteSubscribeInfo implements SubscribeEvent {
-  const factory DeleteSubscribeInfo({required final String id}) =
-      _$DeleteSubscribeInfoImpl;
+  const factory DeleteSubscribeInfo(
+      {required final String id,
+      final String profileName}) = _$DeleteSubscribeInfoImpl;
 
   String get id;
+  String get profileName;
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -432,6 +464,8 @@ abstract class _$$GetAllSubscribeListImplCopyWith<$Res> {
   factory _$$GetAllSubscribeListImplCopyWith(_$GetAllSubscribeListImpl value,
           $Res Function(_$GetAllSubscribeListImpl) then) =
       __$$GetAllSubscribeListImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String profileName});
 }
 
 /// @nodoc
@@ -444,67 +478,96 @@ class __$$GetAllSubscribeListImplCopyWithImpl<$Res>
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? profileName = null,
+  }) {
+    return _then(_$GetAllSubscribeListImpl(
+      profileName: null == profileName
+          ? _value.profileName
+          : profileName // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$GetAllSubscribeListImpl implements GetAllSubscribeList {
-  const _$GetAllSubscribeListImpl();
+  const _$GetAllSubscribeListImpl({this.profileName = 'default'});
+
+  @override
+  @JsonKey()
+  final String profileName;
 
   @override
   String toString() {
-    return 'SubscribeEvent.getAllSubscribeList()';
+    return 'SubscribeEvent.getAllSubscribeList(profileName: $profileName)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GetAllSubscribeListImpl);
+            other is _$GetAllSubscribeListImpl &&
+            (identical(other.profileName, profileName) ||
+                other.profileName == profileName));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, profileName);
+
+  /// Create a copy of SubscribeEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GetAllSubscribeListImplCopyWith<_$GetAllSubscribeListImpl> get copyWith =>
+      __$$GetAllSubscribeListImplCopyWithImpl<_$GetAllSubscribeListImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Subscribe channelInfo) addSubscribe,
-    required TResult Function(String id) deleteSubscribeInfo,
-    required TResult Function() getAllSubscribeList,
-    required TResult Function(String id) checkSubscribeInfo,
+    required TResult Function(Subscribe channelInfo, String profileName)
+        addSubscribe,
+    required TResult Function(String id, String profileName)
+        deleteSubscribeInfo,
+    required TResult Function(String profileName) getAllSubscribeList,
+    required TResult Function(String id, String profileName) checkSubscribeInfo,
     required TResult Function(List<Subscribe> subscribedChannels)
         updateSubscribeOldList,
   }) {
-    return getAllSubscribeList();
+    return getAllSubscribeList(profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Subscribe channelInfo)? addSubscribe,
-    TResult? Function(String id)? deleteSubscribeInfo,
-    TResult? Function()? getAllSubscribeList,
-    TResult? Function(String id)? checkSubscribeInfo,
+    TResult? Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult? Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult? Function(String profileName)? getAllSubscribeList,
+    TResult? Function(String id, String profileName)? checkSubscribeInfo,
     TResult? Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
   }) {
-    return getAllSubscribeList?.call();
+    return getAllSubscribeList?.call(profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Subscribe channelInfo)? addSubscribe,
-    TResult Function(String id)? deleteSubscribeInfo,
-    TResult Function()? getAllSubscribeList,
-    TResult Function(String id)? checkSubscribeInfo,
+    TResult Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult Function(String profileName)? getAllSubscribeList,
+    TResult Function(String id, String profileName)? checkSubscribeInfo,
     TResult Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
     required TResult orElse(),
   }) {
     if (getAllSubscribeList != null) {
-      return getAllSubscribeList();
+      return getAllSubscribeList(profileName);
     }
     return orElse();
   }
@@ -552,7 +615,16 @@ class _$GetAllSubscribeListImpl implements GetAllSubscribeList {
 }
 
 abstract class GetAllSubscribeList implements SubscribeEvent {
-  const factory GetAllSubscribeList() = _$GetAllSubscribeListImpl;
+  const factory GetAllSubscribeList({final String profileName}) =
+      _$GetAllSubscribeListImpl;
+
+  String get profileName;
+
+  /// Create a copy of SubscribeEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GetAllSubscribeListImplCopyWith<_$GetAllSubscribeListImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -561,7 +633,7 @@ abstract class _$$CheckSubscribeInfoImplCopyWith<$Res> {
           $Res Function(_$CheckSubscribeInfoImpl) then) =
       __$$CheckSubscribeInfoImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String id});
+  $Res call({String id, String profileName});
 }
 
 /// @nodoc
@@ -578,11 +650,16 @@ class __$$CheckSubscribeInfoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? profileName = null,
   }) {
     return _then(_$CheckSubscribeInfoImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      profileName: null == profileName
+          ? _value.profileName
+          : profileName // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -591,14 +668,18 @@ class __$$CheckSubscribeInfoImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$CheckSubscribeInfoImpl implements CheckSubscribeInfo {
-  const _$CheckSubscribeInfoImpl({required this.id});
+  const _$CheckSubscribeInfoImpl(
+      {required this.id, this.profileName = 'default'});
 
   @override
   final String id;
+  @override
+  @JsonKey()
+  final String profileName;
 
   @override
   String toString() {
-    return 'SubscribeEvent.checkSubscribeInfo(id: $id)';
+    return 'SubscribeEvent.checkSubscribeInfo(id: $id, profileName: $profileName)';
   }
 
   @override
@@ -606,11 +687,13 @@ class _$CheckSubscribeInfoImpl implements CheckSubscribeInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CheckSubscribeInfoImpl &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.profileName, profileName) ||
+                other.profileName == profileName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id);
+  int get hashCode => Object.hash(runtimeType, id, profileName);
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -624,42 +707,44 @@ class _$CheckSubscribeInfoImpl implements CheckSubscribeInfo {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Subscribe channelInfo) addSubscribe,
-    required TResult Function(String id) deleteSubscribeInfo,
-    required TResult Function() getAllSubscribeList,
-    required TResult Function(String id) checkSubscribeInfo,
+    required TResult Function(Subscribe channelInfo, String profileName)
+        addSubscribe,
+    required TResult Function(String id, String profileName)
+        deleteSubscribeInfo,
+    required TResult Function(String profileName) getAllSubscribeList,
+    required TResult Function(String id, String profileName) checkSubscribeInfo,
     required TResult Function(List<Subscribe> subscribedChannels)
         updateSubscribeOldList,
   }) {
-    return checkSubscribeInfo(id);
+    return checkSubscribeInfo(id, profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Subscribe channelInfo)? addSubscribe,
-    TResult? Function(String id)? deleteSubscribeInfo,
-    TResult? Function()? getAllSubscribeList,
-    TResult? Function(String id)? checkSubscribeInfo,
+    TResult? Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult? Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult? Function(String profileName)? getAllSubscribeList,
+    TResult? Function(String id, String profileName)? checkSubscribeInfo,
     TResult? Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
   }) {
-    return checkSubscribeInfo?.call(id);
+    return checkSubscribeInfo?.call(id, profileName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Subscribe channelInfo)? addSubscribe,
-    TResult Function(String id)? deleteSubscribeInfo,
-    TResult Function()? getAllSubscribeList,
-    TResult Function(String id)? checkSubscribeInfo,
+    TResult Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult Function(String profileName)? getAllSubscribeList,
+    TResult Function(String id, String profileName)? checkSubscribeInfo,
     TResult Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
     required TResult orElse(),
   }) {
     if (checkSubscribeInfo != null) {
-      return checkSubscribeInfo(id);
+      return checkSubscribeInfo(id, profileName);
     }
     return orElse();
   }
@@ -707,10 +792,12 @@ class _$CheckSubscribeInfoImpl implements CheckSubscribeInfo {
 }
 
 abstract class CheckSubscribeInfo implements SubscribeEvent {
-  const factory CheckSubscribeInfo({required final String id}) =
-      _$CheckSubscribeInfoImpl;
+  const factory CheckSubscribeInfo(
+      {required final String id,
+      final String profileName}) = _$CheckSubscribeInfoImpl;
 
   String get id;
+  String get profileName;
 
   /// Create a copy of SubscribeEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -800,10 +887,12 @@ class _$UpdateSubscribeOldListImpl implements UpdateSubscribeOldList {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Subscribe channelInfo) addSubscribe,
-    required TResult Function(String id) deleteSubscribeInfo,
-    required TResult Function() getAllSubscribeList,
-    required TResult Function(String id) checkSubscribeInfo,
+    required TResult Function(Subscribe channelInfo, String profileName)
+        addSubscribe,
+    required TResult Function(String id, String profileName)
+        deleteSubscribeInfo,
+    required TResult Function(String profileName) getAllSubscribeList,
+    required TResult Function(String id, String profileName) checkSubscribeInfo,
     required TResult Function(List<Subscribe> subscribedChannels)
         updateSubscribeOldList,
   }) {
@@ -813,10 +902,10 @@ class _$UpdateSubscribeOldListImpl implements UpdateSubscribeOldList {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Subscribe channelInfo)? addSubscribe,
-    TResult? Function(String id)? deleteSubscribeInfo,
-    TResult? Function()? getAllSubscribeList,
-    TResult? Function(String id)? checkSubscribeInfo,
+    TResult? Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult? Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult? Function(String profileName)? getAllSubscribeList,
+    TResult? Function(String id, String profileName)? checkSubscribeInfo,
     TResult? Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
   }) {
@@ -826,10 +915,10 @@ class _$UpdateSubscribeOldListImpl implements UpdateSubscribeOldList {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Subscribe channelInfo)? addSubscribe,
-    TResult Function(String id)? deleteSubscribeInfo,
-    TResult Function()? getAllSubscribeList,
-    TResult Function(String id)? checkSubscribeInfo,
+    TResult Function(Subscribe channelInfo, String profileName)? addSubscribe,
+    TResult Function(String id, String profileName)? deleteSubscribeInfo,
+    TResult Function(String profileName)? getAllSubscribeList,
+    TResult Function(String id, String profileName)? checkSubscribeInfo,
     TResult Function(List<Subscribe> subscribedChannels)?
         updateSubscribeOldList,
     required TResult orElse(),

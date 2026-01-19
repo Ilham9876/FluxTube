@@ -84,7 +84,7 @@ class InvidiousSearchVideoInfoCardWidget extends StatelessWidget {
                             context.goNamed('channel', pathParameters: {
                           'channelId': channelId
                         }, queryParameters: {
-                          'avtarUrl': null,
+                          'avatarUrl': null,
                         }),
                         child: SubscribeRowWidget(
                           uploaderUrl: cardInfo?.authorThumbnails?.last.url,

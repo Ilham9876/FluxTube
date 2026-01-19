@@ -87,7 +87,7 @@ class InvidiousTrendingVideoInfoCardWidget extends StatelessWidget {
                             context.goNamed('channel', pathParameters: {
                           'channelId': channelId
                         }, queryParameters: {
-                          'avtarUrl': null,
+                          'avatarUrl': null,
                         }),
                         child: SubscribeRowWidget(
                           uploaderUrl: null,
