@@ -8,6 +8,7 @@
 <li><b>Download Videos:</b> Download videos and audio in multiple qualities with FFmpeg merging support.</li>
 <li><b>Background Playback:</b> Continue listening with notification controls (play/pause/seek).</li>
 <li><b>Picture-in-Picture:</b> System PiP mode - auto-enters when pressing home while playing.</li>
+<li><b>Audio Selection Supported:</b> You can now switch between audio tracks when multiple tracks are available (NewPipe Extractor and Piped).</li>
 <li><b>SponsorBlock:</b> Auto-skip sponsored segments, intros, outros, and more.</li>
 <li><b>Multiple Profiles:</b> Separate subscriptions, history, and saved videos per profile.</li>
 <li><b>Channel Subscriptions:</b> Subscribe to your favorite channels.</li>

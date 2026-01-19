@@ -40,6 +40,13 @@
   @com.google.gson.annotations.SerializedName <fields>;
 }
 
+# Jsoup and RE2J (regex engine used by jsoup)
+-keep class org.jsoup.** { *; }
+-keepclassmembers class org.jsoup.** { *; }
+-dontwarn org.jsoup.**
+-dontwarn com.google.re2j.**
+-keep class com.google.re2j.** { *; }
+
 # Kotlin Coroutines
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}

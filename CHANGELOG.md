@@ -19,6 +19,7 @@
   - Auto-enters PiP when pressing home while video is playing
   - Shows only video player in PiP window (no app UI)
   - Configurable in settings (enable/disable auto-PiP)
+- **Audio Selection Supported**: You can now switch between audio tracks when multiple tracks are available (NewPipe Extractor and Piped).
 - **Database Migration**: Migrated from Isar to Drift (SQLite) for better reliability and performance.
 - **SponsorBlock Integration**: Automatically skip sponsored segments, intros, outros, and more. Configurable categories in settings.
 - **Multiple User Profiles**: Create separate profiles with isolated subscriptions, history, and saved videos. Switch instantly between profiles.
@@ -34,6 +35,7 @@
 
 - **Unified MediaKit Player**: Consolidated video player across all backends for consistency.
 - **Video Fit Modes**: Choose from Contain, Cover, Fill, Fit Width, or Fit Height.
+- **Audio Selection Supported**: Switching audio tracks.
 - **Customizable Skip Interval**: Double-tap to skip 5, 10, 15, 30, or 60 seconds.
 - **Subtitle Size Settings**: Adjust subtitle size (Small, Medium, Large, Extra Large).
 - **Live Stream Support**: Improved handling and UI for live streams.
