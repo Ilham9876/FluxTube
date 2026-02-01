@@ -1,11 +1,11 @@
-name: Build Flutter APK (Release Mode)
+name: FluxTube Build APK
 
 on:
   push:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
-  workflow_dispatch: # Biar bisa di-trigger manual kalau lagi gabut
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,14 +16,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # [span_2](start_span)Setup Java 17 wajib banget karena sourceCompatibility lo set ke VERSION_17[span_2](end_span)
+      # Menggunakan Java 17 sesuai targetCompatibility & jvmTarget di build.gradle
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Setup Flutter versi 3.24.4 sesuai request lo
+      # Menggunakan Flutter 3.24.4 sesuai permintaan
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -34,15 +34,14 @@ jobs:
       - name: Get Dependencies
         run: flutter pub get
 
-      # HACK: Kita bikin keystore dummy biar build release gak error.
-      # [span_3](start_span)Soalnya di build.gradle lo maksa pake signingConfigs.release[span_3](end_span).
-      # Nanti outputnya tetep bisa lo resign ulang (zipalign + apksigner) di lokal.
-      - name: Create Dummy Keystore & Properties
+      # Membuat dummy keystore agar gradle tidak error saat build release
+      # Karena build.gradle kamu mewajibkan adanya signingConfigs.release
+      - name: Create Dummy Signing Files
         run: |
-          # Bikin dummy key.jks
-          keytool -genkey -v -keystore android/key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias keyAlias -storepass storePassword -keypass keyPassword -dname "CN=Dummy,O=Dummy,C=US"
+          # Buat dummy key.jks
+          keytool -genkey -v -keystore android/key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias keyAlias -storepass storePassword -keypass keyPassword -dname "CN=FluxTube, O=Fazilvk, C=ID"
           
-          # [span_4](start_span)Bikin dummy key.properties buat ngisi variabel di build.gradle[span_4](end_span)
+          # Buat file key.properties yang dibutuhkan oleh build.gradle
           echo "storePassword=storePassword" > android/key.properties
           echo "keyPassword=keyPassword" >> android/key.properties
           echo "keyAlias=keyAlias" >> android/key.properties
@@ -51,10 +50,9 @@ jobs:
       - name: Build APK Release
         run: flutter build apk --release
 
-      # Upload hasil APK biar bisa lo download
-      - name: Upload APK
+      # Mengunggah hasil APK agar bisa diunduh dari tab Actions
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: fluxtube-release-unsigned
+          name: FluxTube-APK
           path: build/app/outputs/flutter-apk/app-release.apk
-          retention-days: 7
