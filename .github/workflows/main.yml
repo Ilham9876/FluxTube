@@ -16,32 +16,29 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Menggunakan Java 17 sesuai targetCompatibility & jvmTarget di build.gradle
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          [span_3](start_span)java-version: '17' # Sesuai sourceCompatibility JavaVersion.VERSION_17[span_3](end_span)
 
-      # Menggunakan Flutter 3.24.4 sesuai permintaan
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.4'
+          [span_4](start_span)flutter-version: '3.24.4' # Sesuai permintaan dan log[span_4](end_span)
           channel: 'stable'
           cache: true
 
-      - name: Get Dependencies
-        run: flutter pub get
+      # [span_5](start_span)Langkah krusial untuk memperbaiki error "version solving failed" di log kamu[span_5](end_span)
+      - name: Fix Dependency Conflict
+        run: |
+          flutter pub add path:1.9.0 --dev
+          flutter pub get
 
-      # Membuat dummy keystore agar gradle tidak error saat build release
-      # Karena build.gradle kamu mewajibkan adanya signingConfigs.release
+      # [span_6](start_span)Membuat dummy signing agar build release tidak error mencari key.jks[span_6](end_span)
       - name: Create Dummy Signing Files
         run: |
-          # Buat dummy key.jks
           keytool -genkey -v -keystore android/key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias keyAlias -storepass storePassword -keypass keyPassword -dname "CN=FluxTube, O=Fazilvk, C=ID"
-          
-          # Buat file key.properties yang dibutuhkan oleh build.gradle
           echo "storePassword=storePassword" > android/key.properties
           echo "keyPassword=keyPassword" >> android/key.properties
           echo "keyAlias=keyAlias" >> android/key.properties
@@ -50,9 +47,8 @@ jobs:
       - name: Build APK Release
         run: flutter build apk --release
 
-      # Mengunggah hasil APK agar bisa diunduh dari tab Actions
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FluxTube-APK
+          name: FluxTube-Release-Unsigned
           path: build/app/outputs/flutter-apk/app-release.apk
